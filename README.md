@@ -2,6 +2,12 @@
   <img src="https://github.com/user-attachments/assets/da2c22a6-1fee-4c20-8ffc-9aa337d1a9ea" alt="gifgithubatualizado">
 </p>
 
+<div align="center">
+  <strong>🇧🇷 Português</strong>
+  <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+  <a href="./README.en.md">🇺🇸 English</a>
+</div>
+
 <br>
 
 <p align="center">
