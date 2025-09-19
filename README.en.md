@@ -126,8 +126,10 @@
 | Name | Function | Github |
 | :--------------: | :-----------: | :----------------------------------------------------------: |
 | Alisson Franco Gritti | Dev Team | <a href="https://github.com/alissonfatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a> |
+| Georgia Mantchev de Figueiredo Alves do Santos | Product Owner | <a href="https://github.com/Mantchev13"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a> |
 | Gustavo Henrique Ferreira Hammes | Dev Team | <a href="https://github.com/GustavoHammes"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a> |
 | Igor Santos Lima | Dev Team | <a href="https://github.com/IgorSantosL"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a> |
+| João Pedro Souza dos Anjos | Scrum Master | <a href="https://github.com/Shynj0"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a> |
 
 <span id="technologies">
 
