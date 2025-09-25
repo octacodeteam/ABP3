@@ -83,6 +83,30 @@
 | 2 | O tempo disponível para o desenvolvimento pelos alunos também será um fator restritivo, exigindo uma definição clara do escopo para garantir a conclusão de um produto mínimo viável. |
 | 3 | A disponibilidade de recursos computacionais e de armazenamento para o servidor pode ser uma restrição, caso seja necessária uma infraestrutura dedicada para processamento ou cache de dados. |
 
+
+### Tasks
+
+| Índice | Título    | Pontuação | Responsável | Condição       | Link |
+|--------|-----------|:---------:|-------------|----------------|------|
+| 001 - GAPS  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 002 - GAPS  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 003 - GAPS  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 004 - GAPS  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 005 - GAPS  |Planejamento  |     1     | Gustavo Hammes               | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 006 - GAPS  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 007 - GAPS  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 008 - GAPS  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 009 - GAPS  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) | 
+| 010 - GAPS  |Planejamento  |     1     | Gustavo                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 011 - GAPS  |Documentação do backlog|    4     | Georgia              | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/Backlog.pdf) |
+| 012 - GAPS  |Criação e organização do trello|     4   | João Pedro    | ✅ Concluído                                      | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) | 
+| 013 - IHC   |Criação do protótipo no figma|     4     | Alisson       | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+
+
+
+
+
+ 
 </p>
 </span>
 
@@ -122,10 +146,13 @@
 
 <br>
 
-## 📋Trello
+## 📋 Trello
 <p align="center">
+  <a href="https://trello.com/b/XUPTasD9/octacode-3sem" target="_blank">
+    <img src="https://img.shields.io/badge/Trello-Octacode--Board-026AA7?style=for-the-badge&logo=trello&logoColor=white" alt="Trello Board"/>
+  </a>
 </p>
-<br>
+
 
 ## 👨‍💻**Autores**
 
