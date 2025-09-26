@@ -57,14 +57,6 @@
 | 2 | O sistema deve retornar dinamicamente uma lista de satélites com dados gratuitos disponíveis para a área, detalhando suas resoluções espacial e temporal (ex: 10m, diário, semanal) e as variáveis geoespaciais oferecidas (como NDVI, EVI, temperatura da superfície, umidade do solo, etc.). |
 | 3 | Um requisito central é a capacidade de comparação de dados, onde o usuário pode selecionar duas ou mais séries temporais de variáveis similares (ex: NDVI do Sentinel-2 e Landsat-8) para a mesma área, visualizando-as lado a lado em gráficos ou pequenas representações visuais. |
 | 4 | A plataforma deve oferecer opções de filtragem por satélite, variável ou período, facilitando a navegação pelos dados e possibilitando a exportação dos metadados e dos dados brutos ou processados (se aplicável e permitido) para análise posterior. |
-| 5 | |
-| 6 | |
-| 7 | |
-| 8 | |
-| 9 | |
-| 10 | |
-| 11 | |
-| 12 | |
 
 ### Requisitos Não Funcionais
 
