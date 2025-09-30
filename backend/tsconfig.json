@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    /* Base Options */
+    "target": "ES2020",                       /* Versão do JavaScript final */
+    "module": "node16",                      /* Sistema de módulos a ser usado: CommonJS */
+    "lib": ["ES2020"],                         /* Bibliotecas incluídas na compilação */
+    "outDir": "./dist",                        /* Pasta de saída para o código compilado */
+    "rootDir": "./src",                        /* Pasta raiz dos seus arquivos .ts */
+    
+    /* Strict Checks */
+    "strict": true,                            /* Habilita todas as checagens de tipo estritas */
+    
+    /* Module Resolution */
+    "moduleResolution": "node16",                /* Como o TS encontra os módulos: o jeito do Node.js */
+    "baseUrl": "./",                           /* Diretório base para resolver imports não-relativos */
+    "esModuleInterop": true,                   /* ESSENCIAL: Permite compatibilidade entre CommonJS e ES Modules */
+    "forceConsistentCasingInFileNames": true,  /* Garante que os nomes de arquivos sejam consistentes */
+
+    /* Advanced Options */
+    "skipLibCheck": true                       /* Pula a checagem de tipos de arquivos de declaração (.d.ts) */
+  },
+  "include": ["src/**/*"],                     /* Quais arquivos incluir na compilação */
+  "exclude": ["node_modules"]                  /* Quais arquivos excluir */
+}
