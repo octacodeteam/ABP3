@@ -10,9 +10,11 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/leaflet": "^1.9.20",
     "axios": "^1.12.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
+    "leaflet": "^1.9.4",
     "mongoose": "^8.18.2"
   },
   "devDependencies": {
