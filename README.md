@@ -80,19 +80,27 @@
 
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
-| 001 - GAPS  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 002 - GAPS  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 003 - GAPS  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 004 - GAPS  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 005 - GAPS  |Planejamento  |     1     | Gustavo Hammes               | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 006 - GAPS  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 007 - GAPS  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 008 - GAPS  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 009 - GAPS  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) | 
-| 010 - GAPS  |Planejamento  |     1     | Gustavo                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 011 - GAPS  |Documentação do backlog|    4     | Georgia              | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/Backlog.pdf) |
-| 012 - GAPS  |Criação e organização do trello|     4   | João Pedro    | ✅ Concluído                                      | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) | 
-| 013 - IHC   |Criação do protótipo no figma|     4     | Alisson       | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 001 - GA  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 002 - GA  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 003 - GA  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 004 - GA  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 005 - GA  |Planejamento  |     1     | Gustavo Hammes               | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 006 - GA  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 007 - GA  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 008 - GA  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 009 - GA  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) | 
+| 010 - GA  |Planejamento  |     1     | Gustavo                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 011 - GA  |Documentação do backlog|    4     | Georgia              | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/Backlog.pdf) |
+| 012 - GA  |Criação e organização do trello|     4   | João Pedro    | ✅ Concluído                                      | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) | 
+| 013 - IH   |Criação do protótipo no figma|     4     | Alisson       | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 014 - DW   |Desenvolver o cabeçalho e rodapé fixos da aplicação web|     4     | Alisson       | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/08f347fc7a610c200828901f679bfbbef4982dd2) |
+| 015 - DW   |DW Criação da estrutura de pastas|     4     | Igor Lima| ⏳ Andamento                                      | [🔗 Ver](https://github.com/) |
+| 016 - TP   |Início da Migração do Consumo de API: de Python para TypeScript|     4     | Igor Lima | ⏳ Andamento                                      | [🔗 Ver](https://github.com/) |
+| 017 - GA   |Implementar a lógica para limpeza de campo|     4     | Georgia| ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 018 - DW   |Desenvolvimento placeholder|     4     | Gustavo |  ⏳ Andamento                                       | [🔗 Ver](https://github.com/) |
+| 019 - GA   |Pesquisar a documentação da API STAC|     4     | João Pedro |  ✅ Concluído                                       | [🔗 Ver](https://github.com/) |
+
+
 
 
 
