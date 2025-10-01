@@ -229,20 +229,21 @@ Agora é só acessar o endereço do frontend (http://localhost:5173) no navegado
 
 <span id="estorias-usuario">
 
-## 👥Estórias de Usuário
+## 👥 Estórias de Usuário
 
-| ID | Descrição |
-|-----------|----------------------------------------------------------------------------|
-| 1 | |
-| 2 | |
-| 3 | |
-| 4 | |
-| 5 | |
-| 6 | |
-| 7 | |
-| 8 | |
-| 9 | |
-| 10 | |
+| ID  | Descrição |
+|-----|-----------|
+| 1   | Como agricultor, quero selecionar minha área no mapa para descobrir quais satélites possuem dados disponíveis, para acompanhar minha lavoura sem buscar manualmente em várias fontes. |
+| 2   | Como agricultor, quero visualizar o NDVI (índice de vegetação) ao longo do tempo, para monitorar o desenvolvimento da plantação e identificar problemas como estresse hídrico. |
+| 3   | Como agricultor, quero comparar séries temporais de diferentes satélites, para identificar qual oferece informações mais úteis para minha área. |
+| 4   | Como pesquisador, quero acessar uma lista detalhada de satélites e variáveis (resolução, período, cobertura), para selecionar a fonte de dados mais adequada à minha pesquisa. |
+| 5   | Como pesquisador, quero baixar ou exportar os metadados e séries temporais em formatos abertos, para realizar análises mais avançadas em ferramentas externas. |
+| 6   | Como pesquisador, quero filtrar os dados por satélite, variável ou período de tempo, para focar apenas nas informações relevantes ao meu estudo. |
+| 7   | Como usuário sem experiência, quero uma interface simples e intuitiva, para conseguir visualizar informações sobre satélites sem precisar de conhecimento técnico. |
+| 8   | Como usuário geral, quero clicar em um ponto do mapa e receber resultados rápidos e claros, para entender rapidamente quais dados estão disponíveis para aquela região. |
+| 9   | Como usuário geral, quero navegar de forma fluida no mapa e nos gráficos, para não ter dificuldades em usar a ferramenta. |
+| 10  | Como usuário, quero que os dados exibidos sejam confiáveis e atualizados, para ter segurança nas análises e decisões. |
+
 
 </span>
 
