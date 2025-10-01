@@ -223,7 +223,16 @@ Agora é só acessar o endereço do frontend (http://localhost:5173) no navegado
 
 <span id="metodologia">
 
-## 📚Metodologia
+## 📚 Metodologia  
+
+O projeto está sendo desenvolvido com a **metodologia ágil**, utilizando o framework **Scrum**.  
+
+- 📌 O trabalho é organizado em **sprints** (ciclos curtos de desenvolvimento).  
+- 👥 O time realiza **reuniões rápidas (daily)** para alinhar o progresso.  
+- 📝 As tarefas são organizadas no **backlog** e priorizadas pelo Product Owner.  
+- ✅ Ao final de cada sprint há uma **review** para apresentar resultados e uma **retrospectiva** para melhorias.  
+
+Essa abordagem garante **entregas contínuas, colaboração do time e adaptação às necessidades do cliente**.  
 
 </span>
 
