@@ -114,9 +114,105 @@
 
 <span id="visao">
 
-## 💡Visão do Produto
-> [!TIP]
-> 
+## 💡Sobre o Produto
+
+
+## Passo a Passo para Configurar o Ambiente de Desenvolvimento
+
+1. Clonar o Repositório
+Primeiro, é preciso baixar o projeto do GitHub para a máquina local. Abra um terminal e rode o comando:
+
+```bash
+git clone <https://github.com/octacodeteam/ABP3.git>
+```
+
+Depois, entre na pasta do projeto:
+```bash
+cd ABP3 
+```
+
+2. Instalar as Dependências do Backend
+O backend tem suas próprias dependências. Precisamos instalá-las.
+
+### Navegue para a pasta do backend
+```bash
+cd backend
+```
+### Instale todas as dependências listadas no package.json
+```bash
+npm install
+```
+
+3. Instalar as Dependências do Frontend
+Agora, fazemos o mesmo para o frontend, que também tem suas próprias dependências.
+
+### Volte para a raiz do projeto e entre na pasta do frontend
+```bash
+cd ../frontend
+```
+
+### Instale todas as dependências listadas no package.json
+```bash
+npm install
+```
+
+## Resumo das Dependências 
+
+O comando npm install vai instalar automaticamente tudo que está listado nos arquivos package.json. Para conhecimento, estas são as principais dependências que usamos:
+
+### backend:
+
+Dependências de produção:
+
+express: Para criar o servidor web da API.
+
+axios: Para fazer as chamadas para a API do INPE.
+
+Dependências de desenvolvimento:
+
+typescript: Para poder escrever o código em TypeScript.
+
+ts-node-dev: Para rodar o servidor em modo de desenvolvimento, reiniciando automaticamente.
+
+@types/express: Para o TypeScript entender os tipos do Express.
+
+### frontend:
+
+Dependências de produção:
+
+leaflet: A biblioteca do mapa interativo.
+
+Dependências de desenvolvimento:
+
+vite: O servidor de desenvolvimento do frontend.
+
+typescript: Para poder escrever o código em TypeScript.
+
+@types/leaflet: Para o TypeScript entender os tipos do Leaflet.
+
+@types/geojson: (Opcional, mas recomendado) Para o TypeScript entender o formato dos dados geográficos.
+
+## Como Rodar o Projeto Completo
+Depois de instalar tudo, serão necessários dois terminais abertos ao mesmo tempo:
+
+Terminal 1 - Rodar o Backend:
+```bash
+cd backend
+npm run dev
+```
+
+Você deve ver a mensagem Servidor backend rodando em http://localhost:3000.
+
+Terminal 2 - Rodar o Frontend:
+```bash
+cd frontend
+npm run dev
+```
+
+Você deve ver a mensagem do Vite com o endereço local, como Local: http://localhost:5173/.
+
+Agora é só acessar o endereço do frontend (http://localhost:5173) no navegador para usar a aplicação.
+
 </span>
 
 <span id="metodologia">
