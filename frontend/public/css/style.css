@@ -12,21 +12,32 @@ body, html {
     background-color: #333;
 }
 
+/* Substitua o .container e .container.sidebar-hidden existentes por este bloco */
 .container {
     display: grid;
     grid-template-areas:
-        "header header"
-        "sidebar main"
-        "footer footer";
+        "header header header"
+        "sidebar main results"
+        "footer footer footer";
     grid-template-rows: 60px 1fr 40px;
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 280px 1fr 350px; /* Esquerda | Centro | Direita */
     height: 100vh;
     transition: grid-template-columns 0.3s ease;
 }
 
-/* Classe para quando a sidebar estiver escondida */
+/* Controla a sidebar da ESQUERDA */
 .container.sidebar-hidden {
-    grid-template-columns: 0 1fr;
+    grid-template-columns: 0 1fr 350px;
+}
+
+/* Controla a sidebar da DIREITA */
+.container.results-hidden {
+    grid-template-columns: 280px 1fr 0;
+}
+
+/* Controla AMBAS as sidebars */
+.container.sidebar-hidden.results-hidden {
+    grid-template-columns: 0 1fr 0;
 }
 
 /* --- Cabeçalho --- */
@@ -175,4 +186,60 @@ body, html {
     .title {
         display: none; /* Esconde o título para dar espaço */
     }
+}
+
+/* --- Estilos para a Área de Resultados --- */
+.results-container {
+    margin-top: 25px;
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.results-title {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.result-item {
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    border-left: 4px solid #007BFF;
+}
+
+.result-item h4 {
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    word-break: break-all;
+}
+
+.result-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.loading-message, .info-message {
+    color: #6c757d;
+    text-align: center;
+    padding: 20px;
+}
+
+/* --- NOVA Sidebar da Direita (Resultados) --- */
+.results-sidebar {
+    grid-area: results;
+    background-color: #f4f4f4;
+    padding: 20px;
+    overflow: hidden; /* Mudar para 'auto' se o conteúdo estourar */
+    border-left: 1px solid #ddd;
+    width: 350px;
+    transition: width 0.3s ease;
+}
+
+/* Ajusta a altura da lista para o novo container */
+#results-list {
+    max-height: calc(100vh - 180px); /* Altura mais generosa */
+    overflow-y: auto;
 }

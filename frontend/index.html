@@ -12,8 +12,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
 
+
+
 <body>
-    <div class="container">
+    <div class="container results-hidden">
         <header class="header">
             <div class="header-left">
                 <button id="toggle-sidebar" class="menu-icon">
@@ -52,6 +54,14 @@
             <div id="map"></div>
         </main>
 
+        <aside id="results-sidebar" class="results-sidebar">
+            <div class="results-container">
+                <h3 class="results-title">Dados Disponíveis</h3>
+                <div id="results-list">
+                </div>
+            </div>
+        </aside>
+
         <footer class="footer">
             <p>Copyright © 2025 OCTACODE</p>
             <a href="https://github.com/octacodeteam/ABP3" target="_blank" class="icon-link">
@@ -61,7 +71,6 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
     <script type="module" src="/src/main.ts"></script>
 </body>
 
