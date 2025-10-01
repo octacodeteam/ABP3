@@ -24,11 +24,17 @@
 
 <span id="objetivo">
 
-## 📌Objetivo do Projeto
-> [!IMPORTANT]
-> .
+## 🎯 Objetivo do Projeto  
 
-> **Status do Projeto: Em Andamento 🔜**
+Desenvolver uma aplicação web interativa que permita a **agricultores e pesquisadores** visualizar e comparar **dados geoespaciais gratuitos de satélites**.  
+
+O sistema terá como base um **mapa interativo**, onde o usuário poderá selecionar uma área de interesse e:  
+
+- 📌 Listar satélites disponíveis para aquela região, incluindo **resolução espacial**, **temporal** e **variáveis** (ex.: NDVI, umidade do solo, temperatura da superfície).  
+- 📊 Consultar e comparar **séries temporais de diferentes satélites** (ex.: NDVI do Sentinel-2 x Landsat-8) em gráficos lado a lado.  
+- 🔗 Integrar-se aos serviços **STAC** (catálogo de coleções de imagens) e **WTSS** (séries temporais).  
+
+O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**, que facilite a análise de dados geoespaciais e apoie a **tomada de decisão no setor agrícola**.  
 
 </span>
 
