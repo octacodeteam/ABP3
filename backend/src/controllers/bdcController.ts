@@ -52,17 +52,18 @@ export const getStacItems = async (req: Request, res: Response) => {
  * Função para o PASSO FUTURO (RF03 - Visualizar séries temporais)
  * Busca uma série temporal de dados para um ponto específico.
  */
+// Substitua a função getTimeSeries existente por esta
+// Use esta versão da função getTimeSeries
 export const getTimeSeries = async (req: Request, res: Response) => {
     try {
         const { latitude, longitude, coverage, attributes } = req.query;
 
-        // Validação da Entrada
         if (!latitude || !longitude || !coverage) {
             return res.status(400).json({ message: 'Parâmetros latitude, longitude e coverage são obrigatórios.' });
         }
 
-        // URL do serviço de Séries Temporais (WTSS)
-        const BDC_WTSS_URL = 'https://brazil-data-cube.dpi.inpe.br/wtss/v1';
+        // --- URL CORRETA E OFICIAL do WTSS ---
+        const BDC_WTSS_URL = 'https://brazil-data-cube.dpi.inpe.br/wtss';
 
         const response = await axios.get(`${BDC_WTSS_URL}/time_series`, {
             params: {
@@ -76,7 +77,9 @@ export const getTimeSeries = async (req: Request, res: Response) => {
         res.status(200).json(response.data);
 
     } catch (error) {
+        // Log detalhado do erro no terminal do backend
         console.error("Erro ao buscar série temporal:", error);
+        // Resposta genérica para o frontend
         res.status(500).json({ message: 'Erro no servidor ao contatar a API WTSS do BDC' });
     }
 };

@@ -46,3 +46,23 @@ export const fetchStacData = async (lat: number, lon: number): Promise<StacFeatu
         return [];
     }
 };
+
+// Adicione no final do arquivo: frontend/src/apiService.ts
+
+import { sampleTimeSeries } from './mockData'; // Importa os dados de exemplo
+
+/**
+ * Busca dados de série temporal para uma coleção e local específicos.
+ * ATENÇÃO: Esta função está retornando dados simulados (mock)
+ * devido a um bloqueio de rede que impede o acesso à API real do WTSS.
+ * @returns Uma promessa que resolve para os dados da série temporal.
+ */
+export const fetchTimeSeriesData = async (collection: string, lat: number, lon: number): Promise<any> => {
+    console.log(`Buscando série temporal (USANDO DADOS SIMULADOS) para: ${collection} em ${lat},${lon}`);
+
+    // Simula uma pequena demora, como se fosse uma chamada de rede real
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Retorna os nossos dados de exemplo prontos para o gráfico
+    return sampleTimeSeries.result;
+};

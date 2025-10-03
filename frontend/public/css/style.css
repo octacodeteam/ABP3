@@ -1,245 +1,306 @@
 /* Reset Básico e Estilos Globais */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
-body, html {
-    height: 100%;
-    overflow: hidden; /* Evita a rolagem da página inteira */
-    background-color: #333;
+body,
+html {
+  height: 100%;
+  overflow: hidden; /* Evita a rolagem da página inteira */
+  background-color: #fff; /* <-- Mantive do primeiro CSS */
 }
 
-/* Substitua o .container e .container.sidebar-hidden existentes por este bloco */
+/* Container principal */
 .container {
-    display: grid;
-    grid-template-areas:
-        "header header header"
-        "sidebar main results"
-        "footer footer footer";
-    grid-template-rows: 60px 1fr 40px;
-    grid-template-columns: 280px 1fr 350px; /* Esquerda | Centro | Direita */
-    height: 100vh;
-    transition: grid-template-columns 0.3s ease;
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar main results"
+    "footer footer footer";
+  grid-template-rows: 60px 1fr 40px;
+  grid-template-columns: 280px 1fr 350px; /* Esquerda | Centro | Direita */
+  height: 100vh;
+  transition: grid-template-columns 0.3s ease;
 }
 
-/* Controla a sidebar da ESQUERDA */
+/* Controla sidebars */
 .container.sidebar-hidden {
-    grid-template-columns: 0 1fr 350px;
+  grid-template-columns: 0 1fr 350px;
 }
 
-/* Controla a sidebar da DIREITA */
 .container.results-hidden {
-    grid-template-columns: 280px 1fr 0;
+  grid-template-columns: 280px 1fr 0;
 }
 
-/* Controla AMBAS as sidebars */
 .container.sidebar-hidden.results-hidden {
-    grid-template-columns: 0 1fr 0;
+  grid-template-columns: 0 1fr 0;
 }
 
 /* --- Cabeçalho --- */
 .header {
-    grid-area: header;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    background-color: #003366;
-    color: white;
-    border-bottom: 2px solid #0055a4;
+  grid-area: header;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #003366;
+  color: white;
+  border-bottom: 2px solid #0055a4;
 }
 
-.header-left, .header-center, .header-right {
-    display: flex;
-    align-items: center;
+.header-left,
+.header-center,
+.header-right {
+  display: flex;
+  align-items: center;
 }
 
 .menu-icon {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 1.5rem;
-    cursor: pointer;
-    margin-right: 15px;
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-right: 15px;
 }
 
 .title {
-    font-size: 1.2rem;
-    font-weight: normal;
+  font-size: 1.2rem;
+  font-weight: normal;
 }
 
 .logo {
-    height: 200px;
+  height: 200px;
 }
 
 .icon-link {
-    color: white;
-    font-size: 1.5rem;
-    text-decoration: none;
+  color: white;
+  font-size: 1.5rem;
+  text-decoration: none;
 }
 
-/* --- Barra Lateral (Filtros) --- */
+/* --- Sidebar da esquerda (Filtros) --- */
 .sidebar {
-    grid-area: sidebar;
-    background-color: #f4f4f4;
-    padding: 20px;
-    overflow-y: auto;
-    border-right: 1px solid #ddd;
-    transition: width 0.3s ease;
-    width: 280px; /* Largura fixa */
-    overflow-x: hidden;
+  grid-area: sidebar;
+  background-color: #f4f4f4;
+  padding: 20px;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
+  transition: width 0.3s ease;
+  width: 280px; /* Largura fixa */
+  overflow-x: hidden;
 }
 
 .sidebar-hidden .sidebar {
-    width: 0;
-    padding: 20px 0;
-    /* Esconde o conteúdo para não vazar durante a animação */
-    visibility: hidden;
+  width: 0;
+  padding: 20px 0;
+  visibility: hidden; /* Evita conteúdo visível durante animação */
 }
 
 .filter-group {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .filter-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
 }
 
-.filter-group input, .filter-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1rem;
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .filter-button {
-    width: 100%;
-    padding: 12px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff; /* Azul padrão */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .filter-button:hover {
-    background-color: #0056b3;
+  background-color: #0056b3;
 }
 
+.filter-button:disabled {
+  background-color: #a0a0a0;
+  cursor: not-allowed;
+}
 
 /* --- Conteúdo Principal (Mapa) --- */
 .main-content {
-    grid-area: main;
-    background-color: #1a1a1a; /* Cor de fundo para a área do mapa */
-    position: relative;
+  grid-area: main;
+  background-color: #1a1a1a; /* Fundo escuro p/ mapa */
+  position: relative;
 }
 
 #map {
-    width: 100%;
-    height: 100%;
-    /* A imagem de placeholder foi removida daqui */
+  width: 100%;
+  height: 100%;
 }
 
 /* --- Rodapé --- */
 .footer {
-    grid-area: footer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    background-color: #007BFF;
-    color: white;
-    font-size: 0.9rem;
+  grid-area: footer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 520px; /* <-- Mantive do primeiro CSS */
+  background-color: #003366e4; /* <-- Mantive do primeiro CSS */
+  color: white;
+  font-size: 0.9rem;
 }
 
 /* --- Responsividade --- */
 @media (max-width: 768px) {
-    .container {
-        grid-template-columns: 0 1fr; /* Esconde a sidebar por padrão */
-        /* Classe para mostrar a sidebar em modo "overlay" */
-        position: relative;
-    }
-    
-    .sidebar {
-        /* Posiciona a sidebar por cima de tudo */
-        position: absolute;
-        left: -280px; /* Começa fora da tela */
-        top: 60px; /* Abaixo do header */
-        bottom: 40px; /* Acima do footer */
-        z-index: 1000;
-        transition: left 0.3s ease;
-    }
+  .container {
+    grid-template-columns: 0 1fr; /* Esconde a sidebar por padrão */
+    position: relative;
+  }
 
-    .container.sidebar-visible .sidebar {
-        left: 0; /* Traz a sidebar para a tela */
-    }
+  .sidebar {
+    position: absolute;
+    left: -280px;
+    top: 60px; 
+    bottom: 40px; 
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
 
-    .title {
-        display: none; /* Esconde o título para dar espaço */
-    }
+  .container.sidebar-visible .sidebar {
+    left: 0; /* Sidebar entra na tela */
+  }
+
+  .title {
+    display: none; /* Esconde o título para caber no mobile */
+  }
 }
 
-/* --- Estilos para a Área de Resultados --- */
+/* --- Área de Resultados --- */
 .results-container {
-    margin-top: 25px;
-    border-top: 1px solid #ddd;
-    padding-top: 15px;
+  margin-top: 25px;
+  border-top: 1px solid #ddd;
+  padding-top: 15px;
 }
 
 .results-title {
-    font-size: 1.1rem;
-    color: #333;
-    margin-bottom: 15px;
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 15px;
 }
 
 .result-item {
-    background-color: #e9ecef;
-    padding: 10px;
-    border-radius: 4px;
-    margin-bottom: 10px;
-    border-left: 4px solid #007BFF;
+  background-color: #e9ecef;
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  border-left: 4px solid #007bff;
 }
 
 .result-item h4 {
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    word-break: break-all;
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+  word-break: break-all;
 }
 
 .result-item p {
-    margin: 0;
-    font-size: 0.9rem;
+  margin: 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.result-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.result-item-header h4 {
+  margin: 0;
+}
+
+.loading-message,
+.info-message {
+  color: #6c757d;
+  text-align: center;
+  padding: 20px;
+}
+
+/* --- Sidebar da direita (Resultados) --- */
+.results-sidebar {
+  grid-area: results;
+  background-color: #f4f4f4;
+  padding: 20px;
+  overflow: hidden; /* Se quiser, troque para 'auto' */
+  border-left: 1px solid #ddd;
+  width: 350px;
+  transition: width 0.3s ease;
+}
+
+/* Ajusta altura da lista */
+#results-list {
+  max-height: calc(100vh - 180px);
+  overflow-y: auto;
+}
+
+/* --- Estilos para o Modal de Gráficos --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 1200px;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
     color: #555;
 }
 
-.loading-message, .info-message {
-    color: #6c757d;
-    text-align: center;
-    padding: 20px;
-}
-
-/* --- NOVA Sidebar da Direita (Resultados) --- */
-.results-sidebar {
-    grid-area: results;
-    background-color: #f4f4f4;
-    padding: 20px;
-    overflow: hidden; /* Mudar para 'auto' se o conteúdo estourar */
-    border-left: 1px solid #ddd;
-    width: 350px;
-    transition: width 0.3s ease;
-}
-
-/* Ajusta a altura da lista para o novo container */
-#results-list {
-    max-height: calc(100vh - 180px); /* Altura mais generosa */
+.charts-container {
+    flex-grow: 1;
     overflow-y: auto;
 }

@@ -31,23 +31,21 @@
         </header>
 
         <aside id="sidebar" class="sidebar">
+
             <div class="filter-group">
-                <label for="filtro1">Filtro 1</label>
-                <input type="text" id="filtro1" placeholder="Digite aqui...">
-            </div>
-            <div class="filter-group">
-                <label for="filtro2">Filtro 2</label>
-                <select id="filtro2">
-                    <option value="">Selecione uma opção</option>
-                    <option value="opcao1">Opção 1</option>
-                    <option value="opcao2">Opção 2</option>
+                <label for="collection-filter">Filtrar por Coleção</label>
+                <select id="collection-filter">
+                    <option value="">Todas as Coleções</option>
                 </select>
             </div>
+
             <div class="filter-group">
-                <label for="filtro3">Filtro 3</label>
-                <input type="date" id="filtro3">
+                <label for="date-filter">Filtrar por Data</label>
+                <input type="date" id="date-filter">
             </div>
-            <button class="filter-button">Aplicar Filtros</button>
+
+            <button id="apply-filters-btn" class="filter-button">Aplicar Filtros</button>
+
         </aside>
 
         <main id="main-content" class="main-content">
@@ -57,6 +55,7 @@
         <aside id="results-sidebar" class="results-sidebar">
             <div class="results-container">
                 <h3 class="results-title">Dados Disponíveis</h3>
+                <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
                 <div id="results-list">
                 </div>
             </div>
@@ -70,6 +69,17 @@
         </footer>
     </div>
 
+    </div>
+    <div id="chart-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Comparação de Séries Temporais</h2>
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <div id="charts-container" class="charts-container">
+            </div>
+        </div>
+    </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="/src/main.ts"></script>
 </body>
