@@ -62,9 +62,66 @@ function setupFilters(): void {
     });
 }
 
+// =======================================================
+// INÍCIO DO CÓDIGO ADICIONADO
+// =======================================================
+
+/**
+ * Busca as coordenadas geográficas de um local usando a API Nominatim.
+ */
+async function handleLocationSearch(): Promise<void> {
+    const searchInput = document.getElementById('location-search-input') as HTMLInputElement;
+    const searchBtn = document.getElementById('location-search-btn') as HTMLButtonElement;
+    const locationQuery = searchInput.value;
+
+    if (!locationQuery) {
+        alert('Por favor, digite um local para pesquisar.');
+        return;
+    }
+
+    searchBtn.textContent = 'Buscando...';
+    searchBtn.disabled = true;
+
+    // API Gratuita do OpenStreetMap para transformar texto em coordenadas
+    const apiUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationQuery)}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Falha na resposta da rede.');
+        
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            const { lat, lon } = data[0];
+            mapManager.panToLocation(parseFloat(lat), parseFloat(lon));
+        } else {
+            alert('Local não encontrado. Tente ser mais específico.');
+        }
+    } catch (error) {
+        console.error('Erro ao buscar localização:', error);
+        alert('Ocorreu um erro ao buscar a localização.');
+    } finally {
+        searchBtn.textContent = 'Buscar Local';
+        searchBtn.disabled = false;
+    }
+}
+
+/**
+ * Configura o evento de clique do botão de busca por local.
+ */
+function setupLocationSearch(): void {
+    const searchBtn = document.getElementById('location-search-btn');
+    if (!searchBtn) return;
+
+    searchBtn.addEventListener('click', handleLocationSearch);
+}
+
+// =======================================================
+// FIM DO CÓDIGO ADICIONADO
+// =======================================================
+
 /**
  * Configura os eventos para a funcionalidade de comparação (checkboxes e botão).
- * Precisa ser chamado a cada clique no mapa para ter as coordenadas atualizadas.
  */
 export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     const resultsList = document.getElementById('results-list');
@@ -81,7 +138,6 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
 
     compareBtn.onclick = () => {
         const checkedBoxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
-
         const selectedItems: any[] = [];
         checkedBoxes.forEach(checkbox => {
             selectedItems.push({
@@ -89,7 +145,6 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
                 datetime: checkbox.dataset.datetime,
             });
         });
-
         renderComparisonCharts(selectedItems, coords);
     };
 }
@@ -128,7 +183,6 @@ export function showLoading(isLoading: boolean): void {
 function renderResultsList(features: any[]): void {
     const resultsList = document.getElementById('results-list');
     if (!resultsList) return;
-
     resultsList.innerHTML = '';
 
     if (features.length === 0) {
@@ -140,7 +194,6 @@ function renderResultsList(features: any[]): void {
         const collection = feature.collection;
         const date = new Date(feature.properties.datetime).toLocaleDateString('pt-BR');
         const cloudCover = feature.properties['eo:cloud_cover'];
-
         const item = document.createElement('div');
         item.className = 'result-item';
         item.innerHTML = `
@@ -197,4 +250,5 @@ export function initializeUI(): void {
     setupSidebarToggle();
     setupFilters();
     setupModal();
+    setupLocationSearch(); // <-- Adiciona a inicialização do novo filtro
 }
