@@ -67,6 +67,22 @@ class MapManager {
             this.map.invalidateSize();
         }, 300); // O delay corresponde à animação do CSS
     }
+    
+    // =======================================================
+    // INÍCIO DO CÓDIGO ADICIONADO
+    // =======================================================
+    /**
+     * Move o centro do mapa para as coordenadas especificadas.
+     * @param lat A latitude do novo centro.
+     * @param lon A longitude do novo centro.
+     */
+    public panToLocation(lat: number, lon: number): void {
+        const zoomLevel = 13; // Nível de zoom ideal para cidades
+        this.map.setView([lat, lon], zoomLevel);
+    }
+    // =======================================================
+    // FIM DO CÓDIGO ADICIONADO
+    // =======================================================
 }
 
 // Cria e exporta uma única instância do MapManager para ser usada em toda a aplicação
