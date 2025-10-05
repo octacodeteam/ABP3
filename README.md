@@ -86,16 +86,8 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
-| 001 - GA  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 002 - GA  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 003 - GA  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 004 - GA  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 005 - GA  |Planejamento  |     1     | Gustavo Hammes               | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
-| 006 - GA  |Planejamento  |     1     | Georgia                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 007 - GA  |Planejamento  |     1     | João Pedro                   | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 008 - GA  |Planejamento  |     1     | Igor                         | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
-| 009 - GA  |Planejamento  |     1     | Alisson                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) | 
-| 010 - GA  |Planejamento  |     1     | Gustavo                      | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
+| 001 a 005 - GA  |Planejamento  |     5     | Todos a equipe                     | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 006 a 010 - GA  |Planejamento  |     5     | Todos a equipe                     | ✅ Concluído                                      | [🔗 Ver]([https://github.com/](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf)) |
 | 011 - GA  |Documentação do backlog|    4     | Georgia              | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/Backlog.pdf) |
 | 012 - GA  |Criação e organização do trello|     4   | João Pedro    | ✅ Concluído                                      | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) | 
 | 013 - IH   |Criação do protótipo no figma|     4     | Alisson       | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
