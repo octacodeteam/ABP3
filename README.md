@@ -124,7 +124,9 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 
 ## 🔥Burndown
 
-
+<p align="center">
+  <img src="https://github.com/octacodeteam/ABP3/blob/main/assets/Burndown_Sprint1.png">
+</p>
 
 </span>
   
