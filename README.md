@@ -88,23 +88,23 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
 | 001 a 005 - GA  |Planejamento  |     3     | Toda a equipe                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
-| 006 a 010 - GA  |Planejamento  |     3     | Toda a equipe                     | ✅ Concluído                       | [🔗 Ver]([https://github.com/](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf)) |
+| 006 a 010 - GA  |Planejamento  |     3     | Toda a equipe                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/ATA's/ATA%2018-09-25%20(2).pdf) |
 | 011 - GA  |Documentação do backlog|    3     | Georgia              | ✅ Concluído                                  | [🔗 Ver](https://github.com/octacodeteam/ABP3/blob/DOCS/Backlog.pdf) |
 | 012 - GA  |Criação e organização do trello|     5   | João Pedro    | ✅ Concluído                                  | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) | 
 | 013 - IH  |Criação do protótipo no figma|     2     | Alisson       | ✅ Concluído                                  | [🔗 Ver](https://www.figma.com/design/q1W0mvIbWcwPwbUqHVlSwf/GeoInsight?node-id=0-1&p=f&t=EugiHkEg9QJdP4oz-0) |
 | 014 - DW  |Desenvolver o cabeçalho e rodapé fixos da aplicação web|     5     | Alisson       | ✅ Concluído        | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/08f347fc7a610c200828901f679bfbbef4982dd2) |
 | 015 - DW  |Criação da estrutura de pastas|     3     | Igor Lima| ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/322b0d90c74c90d3ccff631a84aa0c2a9440abff) |
-| 016 - TP  |Início da Migração do Consumo de API: de Python para TypeScript|     8     | Igor Lima | ✅ Concluído    | [🔗 Ver](https://github.com/) |
+| 016 - TP  |Início da Migração do Consumo de API: de Python para TypeScript|     8     | Igor Lima | ✅ Concluído    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/322b0d90c74c90d3ccff631a84aa0c2a9440abff) |
 | 017 - GA  |Implementar a lógica para limpeza de campo|     3     | Georgia| ✅ Concluído                            | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/e15214b1d80725d43a339b9d4452abdfab25bd74) |
 | 018 - DW  |Desenvolvimento placeholder|     2     | Gustavo |  ✅ Concluído                                         | [🔗 Ver](https://github.com/) |
 | 019 - GA  |Pesquisar a documentação da API STAC|     2     | João Pedro |  ✅ Concluído                             | [🔗 Ver](https://github.com/) |
 | 020 - GA  |Criação da planilha de TASKS| 2 | João Pedro | ✅ Concluído                                              | [🔗 Ver](https://github.com/) |
-| 021 - DW  |Estruturar a função de chamada para a API STAC| 5 | Georgia | ✅ Concluído                               | [🔗 Ver](https://github.com/) |
+| 021 - DW  |Estruturar a função de chamada para a API STAC| 5 | Georgia | ✅ Concluído                               | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
 | 022 - DW  |Integrar Leaflet ao código| 5 | Alisson | ✅ Concluído                                                   | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/98cb469bd7b852d77ddc63660d8e893549168296) |
-| 023 - DW  |Adicionar um marcador visual| 3 | Alisson | ✅ Concluído                                                 | [🔗 Ver](https://github.com/) |
+| 023 - DW  |Adicionar um marcador visual| 3 | Alisson | ✅ Concluído                                                 | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/98cb469bd7b852d77ddc63660d8e893549168296) |
 | 024 - GA  |Criar burndown| 3 | João Pedro | ✅ Concluído                                                            | [🔗 Ver](https://github.com/) |
-| 025 - DW  |Tratativa de erros na API| 5 | Alisson | ✅ Concluído                                                    | [🔗 Ver](https://github.com/) |
-| 026 - DW  |Implementar a renderização do mapa base| 5 | Georgia | ✅ Concluído                                      | [🔗 Ver](https://github.com/) |
+| 025 - DW  |Tratativa de erros na API| 5 | Alisson | ✅ Concluído                                                    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
+| 026 - DW  |Implementar a renderização do mapa base| 5 | Georgia | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/f35cb7d7ecef29101dd85b596ac7d15ed48f806e) |
 | 027 - DW  |Estilizar o mapa e os controles de zoom| 3 | Gustavo | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
 | 028 - DW  |Exibir a resolução espacial e temporal| 5 | Alisson | ✅ Concluído                                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
 | 029 - TP  |Implementação de graficos para comparação| 3 | Alisson | ✅ Concluído                                    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
