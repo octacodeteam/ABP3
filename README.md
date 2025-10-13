@@ -1,12 +1,8 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/da2c22a6-1fee-4c20-8ffc-9aa337d1a9ea" alt="gifgithubatualizado">
-</p>
+<h1 align="center"> 🌏 Sprint 1 - GeoInsight 🌏 </h1>
 
-<div align="center">
-  <strong>🇧🇷 Português</strong>
-  <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-  <a href="./README.en.md">🇺🇸 English</a>
-</div>
+**Início: 11/09/2025 - Fim: 07/10/2025**
+
+**Status do Projeto: Concluído✅**
 
 <br>
 
