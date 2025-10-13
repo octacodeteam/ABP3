@@ -1,9 +1,17 @@
 import { initializeUI } from './ui';
-// O mapManager é inicializado automaticamente quando é importado, então não precisamos chamar nada dele aqui.
 import { mapManager } from './map';
 
-// Garante que o código só rode depois que o HTML foi completamente carregado
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Aplicação iniciada!');
+
     initializeUI();
+
+    // Adiciona o listener para o botão do menu principal
+    const toggleButton = document.getElementById('toggle-sidebar');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', () => {
+            // Espera a animação do CSS e então atualiza o tamanho do mapa
+            setTimeout(() => mapManager.invalidateSize(), 300);
+        });
+    }
 });

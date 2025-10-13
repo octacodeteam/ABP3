@@ -304,3 +304,14 @@ html {
     flex-grow: 1;
     overflow-y: auto;
 }
+
+.result-item.disabled {
+    border-left-color: #aaa;
+    opacity: 0.6;
+}
+
+.incompatible-warning {
+    font-style: italic;
+    color: #888;
+    font-size: 0.8rem;
+}

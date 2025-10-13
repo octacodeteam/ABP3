@@ -16,53 +16,61 @@ interface StacFeature {
     // Adicione outros campos se precisar
 }
 
-
 /**
- * Busca os dados de satélite para uma coordenada específica.
- * @param lat A latitude do ponto.
- * @param lon A longitude do ponto.
- * @returns Uma promessa que resolve para um array de 'features' (itens) do STAC.
+ * Busca os dados de satélite (lista de features) para uma coordenada específica.
  */
-export const fetchStacData = async (lat: number, lon: number): Promise<StacFeature[]> => {
+export const fetchStacData = async (lat: number, lon: number): Promise<any[]> => {
     try {
-        // Monta a URL para o nosso próprio backend
         const apiUrl = `/api/stac/search?latitude=${lat}&longitude=${lon}`;
-
         const response = await fetch(apiUrl);
-
         if (!response.ok) {
-            // Se o backend retornar um erro (como 400 ou 500), ele entrará aqui
-            throw new Error(`Erro na resposta da API: ${response.statusText}`);
+            throw new Error(`Erro na resposta da API STAC: ${response.statusText}`);
         }
-
         const data = await response.json();
-
-        // A API retorna um objeto que contém uma lista chamada "features"
-        return data.features || []; // Retorna a lista ou um array vazio se não houver 'features'
-
+        return data.features || [];
     } catch (error) {
         console.error("Falha ao buscar dados do STAC no frontend:", error);
-        // Em caso de erro (ex: backend fora do ar), retorna um array vazio para não quebrar a aplicação
         return [];
     }
 };
 
-// Adicione no final do arquivo: frontend/src/apiService.ts
-
-import { sampleTimeSeries } from './mockData'; // Importa os dados de exemplo
-
 /**
- * Busca dados de série temporal para uma coleção e local específicos.
- * ATENÇÃO: Esta função está retornando dados simulados (mock)
- * devido a um bloqueio de rede que impede o acesso à API real do WTSS.
+ * Busca dados de série temporal do NOSSO backend (AGORA DE VERDADE).
  * @returns Uma promessa que resolve para os dados da série temporal.
  */
-export const fetchTimeSeriesData = async (collection: string, lat: number, lon: number): Promise<any> => {
-    console.log(`Buscando série temporal (USANDO DADOS SIMULADOS) para: ${collection} em ${lat},${lon}`);
+// Em frontend/src/apiService.ts
 
-    // Simula uma pequena demora, como se fosse uma chamada de rede real
-    await new Promise(resolve => setTimeout(resolve, 500));
+export const fetchTimeSeriesData = async (
+    collection: string,
+    lat: number,
+    lon: number,
+    startDate: string,
+    endDate: string
+): Promise<any> => {
+    try {
+        // Monta a URL para o nosso backend, agora incluindo as datas
+        let apiUrl = `/api/wtss/time-series?coverage=${collection}&attributes=ndvi&latitude=${lat}&longitude=${lon}`;
 
-    // Retorna os nossos dados de exemplo prontos para o gráfico
-    return sampleTimeSeries.result;
+        // Adiciona as datas na URL apenas se elas foram preenchidas
+        if (startDate) {
+            apiUrl += `&start_date=${startDate}`;
+        }
+        if (endDate) {
+            apiUrl += `&end_date=${endDate}`;
+        }
+
+        console.log(`Buscando dados REAIS de: ${apiUrl}`);
+
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`Erro na API do backend (WTSS): ${response.statusText}`);
+        }
+        const data = await response.json();
+
+        return data.result;
+
+    } catch (error) {
+        console.error("Falha ao buscar dados da série temporal:", error);
+        return null;
+    }
 };

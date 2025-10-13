@@ -38,8 +38,12 @@
             </div>
 
             <div class="filter-group">
-                <label for="date-filter">Filtrar por Data</label>
-                <input type="date" id="date-filter">
+                <label for="date-filter-start">Data de Início</label>
+                <input type="date" id="date-filter-start">
+            </div>
+            <div class="filter-group">
+                <label for="date-filter-end">Data de Fim</label>
+                <input type="date" id="date-filter-end">
             </div>
 
             <div class="filter-group">
@@ -73,14 +77,13 @@
     </div>
 
     </div>
-    <div id="chart-modal" class="modal-overlay" style="display: none;">
+    <div id="comparison-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Comparação de Séries Temporais</h2>
+                <h2>Comparação de Itens</h2>
                 <button id="close-modal-btn" class="close-btn">&times;</button>
             </div>
-            <div id="charts-container" class="charts-container">
-            </div>
+            <div id="comparison-container" class="comparison-container"></div>
         </div>
     </div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
