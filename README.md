@@ -45,8 +45,8 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 
 | Links | Período | Status |
 |:-----:|:----------:|:---------:|
-| [Sprint 1](https://github.com/octacodeteam/ABP3/tree/sprint-1) | 16/09/2025 - 07/10/2025 | Em Andamento 🔜|
-| [Sprint 2](https://github.com/octacodeteam/ABP3/tree/sprint-2) | 13/10/2025 - 03/11/2025 | Não Iniciada ❌|
+| [Sprint 1](https://github.com/octacodeteam/ABP3/tree/sprint-1) | 16/09/2025 - 07/10/2025 | Concluído ✅|
+| [Sprint 2](https://github.com/octacodeteam/ABP3/tree/sprint-2) | 13/10/2025 - 03/11/2025 | Em Andamento ⏳|
 | [Sprint 3](https://github.com/octacodeteam/ABP3/tree/sprint-3) | 06/11/2025 - 24/11/2025 | Não Iniciada ❌|
 
 </span>
