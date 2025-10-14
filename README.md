@@ -119,8 +119,11 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
-| 036 a 041 - GA  |Planejamento Sprint 2  |     3     | Toda a equipe                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
-
+| 036 a 040 - GA  |Planejamento Sprint 2  |     3     | Toda a equipe                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 041 - TP |Ajustar a exibição dos dados na chamada da API |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 042 - TP |Estruturar a função de chamada para a API WTSS |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 043 - GA | Atualização do trello e quebra de tasks da 2° Sprint|     3     | Georgia Mantchev      | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 044 - GA |Preparar o Github para 2° Sprint |     3     | João Pedro                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 
  
 </p>
