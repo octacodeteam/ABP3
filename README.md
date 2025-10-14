@@ -83,7 +83,7 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 3 | A disponibilidade de recursos computacionais e de armazenamento para o servidor pode ser uma restrição, caso seja necessária uma infraestrutura dedicada para processamento ou cache de dados. |
 
 
-### Tasks
+### Tasks - Sprint 1
 
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
@@ -114,6 +114,13 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 033 - DW  |Adicionar busca por endereço| 3 | Igor | ✅ Concluído                                                    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/0107505868f9f84029d1bea5debc6fdf918f4700) |
 | 034 - DW  |Garantir que o projeto esteja estável| 8 | Gustavo | ✅ Concluído                                        | [🔗 Ver](https://github.com/) |
 | 035 - IHC |Realizar testes de usabilidade da interface| 5 | Igor | ✅ Concluído                                     | [🔗 Ver](https://github.com/) |
+
+### Tasks - Sprint 2
+
+| Índice | Título    | Pontuação | Responsável | Condição       | Link |
+|--------|-----------|:---------:|-------------|----------------|------|
+| 036 a 041 - GA  |Planejamento Sprint 2  |     3     | Toda a equipe                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+
 
  
 </p>
