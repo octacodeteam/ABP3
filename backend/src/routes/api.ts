@@ -1,13 +1,25 @@
-import { Router } from 'express';
-// 1. Importe AMBAS as funções do controller
-import { getStacItems, getTimeSeries } from '../controllers/bdcController';
+import { Router } from "express";
+import { getStacItems, getTimeSeries } from "../controllers/bdcController";
+import { geocode } from "../controllers/geocodeController";
 
 const router = Router();
 
-// Rota para buscar dados do STAC (já existe)
-router.get('/stac/search', getStacItems);
+/**
+ * STAC search (BDC)
+ * Expects: latitude, longitude, (opcional) outros filtros
+ */
+router.get("/stac/search", getStacItems);
 
-// 2. NOVA ROTA para buscar a série temporal (WTSS)
-router.get('/wtss/time-series', getTimeSeries);
+/**
+ * WTSS time-series (BDC)
+ * Expects: latitude, longitude, coverage, attributes, start_date, end_date
+ */
+router.get("/wtss/time-series", getTimeSeries);
+
+/**
+ * Geocode (proxy → Nominatim/OSM)
+ * Expects: query (string livre: "Cidade, UF" | "Cidade, País" | endereço)
+ */
+router.get("/geocode", geocode);
 
 export default router;

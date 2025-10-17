@@ -1,14 +1,23 @@
-import express from 'express';
-// 1. Importe o roteador que acabamos de editar
-import apiRouter from './routes/api';
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import apiRoutes from "./routes/api";
 
 const app = express();
-const port = 3000; // Ou a porta que você preferir
 
-// 2. Diga ao Express para usar nossas rotas de API
-// Todas as rotas definidas em api.ts serão prefixadas com /api
-app.use('/api', apiRouter);
+// Middlewares seguros para dev/prod
+app.use(cors());
+app.use(express.json());
+app.use(morgan("tiny"));
 
-app.listen(port, () => {
-    console.log(`Servidor backend rodando em http://localhost:${port}`);
+// Health-check simples
+app.get("/health", (_req, res) => res.json({ ok: true }));
+
+// Rotas da API
+app.use("/api", apiRoutes);
+
+// Porta
+const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
+app.listen(PORT, () => {
+  console.log(`[server] API ouvindo em http://localhost:${PORT}`);
 });

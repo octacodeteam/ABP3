@@ -1,4 +1,4 @@
-// arquivo: frontend/src/map.ts
+// Copie e cole este código completo para substituir o seu arquivo map.ts
 
 import * as L from 'leaflet';
 import { fetchStacData } from './apiService';
@@ -69,19 +69,21 @@ class MapManager {
     }
     
     // =======================================================
-    // INÍCIO DO CÓDIGO ADICIONADO
+    // INÍCIO DA MODIFICAÇÃO
     // =======================================================
     /**
-     * Move o centro do mapa para as coordenadas especificadas.
+     * Move o centro do mapa para as coordenadas especificadas com uma animação de "voo".
      * @param lat A latitude do novo centro.
      * @param lon A longitude do novo centro.
      */
     public panToLocation(lat: number, lon: number): void {
         const zoomLevel = 13; // Nível de zoom ideal para cidades
-        this.map.setView([lat, lon], zoomLevel);
+        
+        // Trocamos setView por flyTo para criar a animação
+        this.map.flyTo([lat, lon], zoomLevel);
     }
     // =======================================================
-    // FIM DO CÓDIGO ADICIONADO
+    // FIM DA MODIFICAÇÃO
     // =======================================================
 }
 

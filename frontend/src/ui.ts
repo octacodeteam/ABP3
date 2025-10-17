@@ -1,5 +1,6 @@
-// VERSÃO COMPLETA E FINAL DO ui.ts (para copiar e colar)
-import { mapManager } from './map'; // Remova esta linha, erro meu.
+// Copie e cole este código completo para substituir o seu arquivo ui.ts
+
+import { mapManager } from './map'; // Import necessário para o mapa se mover
 
 let allFeatures: any[] = [];
 
@@ -21,21 +22,88 @@ function setupFilters(): void {
 
     applyBtn.addEventListener('click', () => {
         const collectionFilter = document.getElementById('collection-filter') as HTMLSelectElement;
-        const dateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
+        // CORREÇÃO: Pegando as duas datas para o filtro de período
+        const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
+        const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
 
         const selectedCollection = collectionFilter.value;
-        const selectedDate = dateFilter.value;
+        const startDate = startDateFilter.value;
+        const endDate = endDateFilter.value;
 
         let filteredFeatures = allFeatures;
+
         if (selectedCollection) {
             filteredFeatures = filteredFeatures.filter(f => f.collection === selectedCollection);
         }
-        if (selectedDate) {
-            filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.startsWith(selectedDate));
+
+        // Lógica de filtro por período
+        if (startDate) {
+            filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] >= startDate);
+        }
+        if (endDate) {
+            filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] <= endDate);
         }
         renderResultsList(filteredFeatures);
     });
 }
+
+// =======================================================
+// INÍCIO DO CÓDIGO CORRIGIDO/ADICIONADO
+// =======================================================
+
+/**
+ * Busca as coordenadas geográficas de um local e move o mapa.
+ */
+async function handleLocationSearch(): Promise<void> {
+    const searchInput = document.getElementById('location-search-input') as HTMLInputElement;
+    const searchBtn = document.getElementById('location-search-btn') as HTMLButtonElement;
+    const locationQuery = searchInput.value;
+
+    if (!locationQuery) {
+        alert('Por favor, digite um local para pesquisar.');
+        return;
+    }
+
+    searchBtn.textContent = 'Buscando...';
+    searchBtn.disabled = true;
+
+    const apiUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(locationQuery)}`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) throw new Error('Falha na resposta da rede.');
+        
+        const data = await response.json();
+
+        if (data && data.length > 0) {
+            const { lat, lon } = data[0];
+            // Chama o método no map.ts para mover o mapa
+            mapManager.panToLocation(parseFloat(lat), parseFloat(lon));
+        } else {
+            alert('Local não encontrado. Tente ser mais específico.');
+        }
+    } catch (error) {
+        console.error('Erro ao buscar localização:', error);
+        alert('Ocorreu um erro ao buscar a localização.');
+    } finally {
+        searchBtn.textContent = 'Buscar Local';
+        searchBtn.disabled = false;
+    }
+}
+
+/**
+ * Configura o evento de clique do botão de busca por local.
+ */
+function setupLocationSearch(): void {
+    const searchBtn = document.getElementById('location-search-btn');
+    if (!searchBtn) return;
+
+    searchBtn.addEventListener('click', handleLocationSearch);
+}
+
+// =======================================================
+// FIM DO CÓDIGO ADICIONADO
+// =======================================================
 
 function setupModal(): void {
     const modal = document.getElementById('comparison-modal');
@@ -164,4 +232,5 @@ export function initializeUI(): void {
     setupSidebarToggle();
     setupFilters();
     setupModal();
+    setupLocationSearch(); // <-- Adiciona a inicialização do filtro de local
 }
