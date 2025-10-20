@@ -157,10 +157,11 @@ html {
 .footer {
   grid-area: footer;
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Alterado para centralizar */
   align-items: center;
-  padding: 0 520px; /* <-- Mantive do primeiro CSS */
-  background-color: #003366e4; /* <-- Mantive do primeiro CSS */
+  gap: 20px; /* Adiciona um espaço entre o texto e o ícone */
+  padding: 0 20px; /* Padding geral para não colar nas bordas */
+  background-color: #003366e4;
   color: white;
   font-size: 0.9rem;
 }
@@ -314,4 +315,9 @@ html {
     font-style: italic;
     color: #888;
     font-size: 0.8rem;
+}
+
+/* Adiciona margem acima do botão de limpar para espaçamento */
+#clear-filters-btn {
+    margin-top: 10px;
 }

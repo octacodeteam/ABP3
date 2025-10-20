@@ -9,17 +9,11 @@ class MapManager {
     private currentMarker: L.Marker | null = null;
 
     constructor(elementId: string) {
-        // Inicializa o mapa no elemento HTML com o ID 'map'
         this.map = L.map(elementId).setView([-23.305, -45.966], 13);
-
-        // Adiciona as camadas e os eventos
         this.addTileLayer();
         this.listenForClicks();
     }
 
-    /**
-     * Adiciona a camada de mapa base (OpenStreetMap)
-     */
     private addTileLayer(): void {
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
@@ -27,65 +21,67 @@ class MapManager {
     }
 
     /**
-     * Fica "ouvindo" por cliques no mapa e dispara todo o fluxo de busca de dados.
+     * Fica "ouvindo" por cliques no mapa.
      */
     private listenForClicks(): void {
         this.map.on('click', async (e: L.LeafletMouseEvent) => {
             const { lat, lng } = e.latlng;
-
-            // Remove o marcador anterior, se houver, e adiciona um novo
-            if (this.currentMarker) {
-                this.map.removeLayer(this.currentMarker);
-            }
-            this.currentMarker = L.marker([lat, lng]).addTo(this.map);
-
-            // A cada clique, reconfiguramos a lógica de comparação com as novas coordenadas
-            setupCompareLogic({ lat, lon: lng });
-
-            console.log(`Buscando dados para - Latitude: ${lat}, Longitude: ${lng}`);
-
-            // 1. Mostra o estado de "carregando" na UI
-            showLoading(true);
-
-            // 2. Chama o serviço de API para buscar os dados (STAC)
-            const features = await fetchStacData(lat, lng);
-
-            // 3. Envia os resultados para a UI para serem exibidos
-            displayResults(features);
-
-            // 4. Esconde o estado de "carregando"
-            showLoading(false);
+            // Ao clicar no mapa, chama a nossa nova função centralizada
+            this.searchAndDisplayData(lat, lng);
         });
     }
 
     /**
-     * Método público para forçar o mapa a se redimensionar.
-     * Útil quando as sidebars abrem/fecham.
+     * MÉTODO CENTRALIZADO: Busca e exibe dados para um ponto geográfico.
+     * Esta é a principal mudança.
+     * @param lat Latitude do ponto.
+     * @param lon Longitude do ponto.
      */
-    public invalidateSize(): void {
-        setTimeout(() => {
-            this.map.invalidateSize();
-        }, 300); // O delay corresponde à animação do CSS
+    public async searchAndDisplayData(lat: number, lon: number): Promise<void> {
+        // Remove o marcador anterior, se houver, e adiciona um novo
+        if (this.currentMarker) {
+            this.map.removeLayer(this.currentMarker);
+        }
+        this.currentMarker = L.marker([lat, lon]).addTo(this.map);
+
+        // Reconfigura a lógica de comparação com as novas coordenadas
+        setupCompareLogic({ lat, lon });
+
+        console.log(`Buscando dados para - Latitude: ${lat}, Longitude: ${lon}`);
+
+        // 1. Mostra o estado de "carregando" na UI
+        showLoading(true);
+
+        // 2. Chama a API para buscar os dados STAC
+        const features = await fetchStacData(lat, lon);
+
+        // 3. Envia os resultados para a UI para serem exibidos
+        displayResults(features);
+
+        // 4. Esconde o estado de "carregando"
+        showLoading(false);
     }
-    
-    // =======================================================
-    // INÍCIO DA MODIFICAÇÃO
-    // =======================================================
+
     /**
-     * Move o centro do mapa para as coordenadas especificadas com uma animação de "voo".
+     * Move o mapa para uma nova localização e, EM SEGUIDA, dispara a busca de dados.
      * @param lat A latitude do novo centro.
      * @param lon A longitude do novo centro.
      */
     public panToLocation(lat: number, lon: number): void {
-        const zoomLevel = 13; // Nível de zoom ideal para cidades
-        
-        // Trocamos setView por flyTo para criar a animação
+        const zoomLevel = 13;
         this.map.flyTo([lat, lon], zoomLevel);
+
+        // Gatilho: Após mover o mapa, chama a busca de dados para o novo ponto.
+        // Isso garante que a busca por "Jacareí" já popule a lista de resultados.
+        this.searchAndDisplayData(lat, lon);
     }
-    // =======================================================
-    // FIM DA MODIFICAÇÃO
-    // =======================================================
+    
+    public invalidateSize(): void {
+        setTimeout(() => {
+            this.map.invalidateSize();
+        }, 300);
+    }
 }
 
-// Cria e exporta uma única instância do MapManager para ser usada em toda a aplicação
+// Cria e exporta uma única instância do MapManager
 export const mapManager = new MapManager('map');

@@ -137,6 +137,26 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     };
 }
 
+// Adicionando função para limpar filtros
+function setupClearFilters(): void {
+    const clearBtn = document.getElementById('clear-filters-btn');
+    if (!clearBtn) return;
+
+    clearBtn.addEventListener('click', () => {
+        // 1. Limpa os valores dos campos de filtro
+        const collectionFilter = document.getElementById('collection-filter') as HTMLSelectElement;
+        const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
+        const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
+
+        collectionFilter.value = '';
+        startDateFilter.value = '';
+        endDateFilter.value = '';
+
+        // 2. Renderiza a lista novamente com todos os resultados originais
+        renderResultsList(allFeatures);
+    });
+}
+
 // --- FUNÇÕES DE RENDERIZAÇÃO E DADOS ---
 
 function displayComparisonTable(selectedIds: string[]): void {
@@ -232,5 +252,6 @@ export function initializeUI(): void {
     setupSidebarToggle();
     setupFilters();
     setupModal();
-    setupLocationSearch(); // <-- Adiciona a inicialização do filtro de local
+    setupLocationSearch();
+    setupClearFilters();
 }
