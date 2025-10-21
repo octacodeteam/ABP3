@@ -1,0 +1,188 @@
+/* Reset Básico e Estilos Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; /* Para o link "#tutorial" funcionar suavemente */
+}
+
+/* --- ALTERAÇÃO: Fundo branco e texto escuro --- */
+body, html {
+    height: 100%;
+    background-color: #ffffff; /* Fundo branco */
+    color: #333333; /* Cor de texto principal (escura) */
+    line-height: 1.6;
+}
+
+/* --- Cabeçalho --- */
+.home-header {
+    background-color: #003366; /* Mesmo azul do cabeçalho do mapa */
+    border-bottom: 2px solid #0055a4;
+    /* --- ALTERAÇÃO: Padding vertical e altura mínima --- */
+    padding: 20px 40px; /* Aumenta o padding vertical para dar mais altura */
+    min-height: 120px; /* Garante uma altura mínima de 120px */
+    display: flex; /* Adicionado para centralizar o conteúdo verticalmente */
+    align-items: center; /* Centraliza verticalmente o .header-content */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%; /* Garante que o conteúdo ocupe a largura */
+}
+
+/* --- ALTERAÇÃO: Logo com altura de 100px --- */
+.home-logo {
+    height: 80px; /* Tamanho ajustado para caber bem nos 120px */
+    object-fit: contain; /* Para evitar distorção da imagem */
+}
+
+.header-link {
+    color: white; /* Texto do link continua branco */
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-left: 20px;
+    transition: opacity 0.2s;
+}
+
+.header-link:hover {
+    opacity: 0.8;
+}
+
+/* --- Conteúdo Principal --- */
+.home-main {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+/* --- Seção de Introdução --- */
+.intro-section {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.intro-section h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+/* --- ALTERAÇÃO: Cor do subtítulo --- */
+.subtitle {
+    font-size: 1.25rem;
+    color: #555555; /* Cor mais escura para o subtítulo */
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    background-color: #007bff;
+    color: white;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.cta-button:hover {
+    background-color: #0056b3;
+}
+
+/* --- ALTERAÇÃO: Seção Sobre e Tutorial (cores claras) --- */
+.about-project,
+.tutorial-section {
+    background-color: #f4f4f4; /* Fundo cinza claro */
+    padding: 30px;
+    margin-top: 40px;
+    border-radius: 8px;
+    border: 1px solid #ddd; /* Adiciona uma borda sutil */
+}
+
+.about-project h2,
+.tutorial-section h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid #0055a4; /* Borda azul para destaque */
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.tutorial-section > p {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.steps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 25px;
+}
+
+.step {
+    text-align: center;
+    padding: 20px;
+    background: #ffffff; /* Fundo branco para os steps */
+    border-radius: 6px;
+    border: 1px solid #eee; /* Borda sutil */
+}
+
+.step-icon {
+    font-size: 2.5rem;
+    color: #007bff;
+    margin-bottom: 15px;
+}
+
+.step h3 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+/* --- ALTERAÇÃO: Cor do texto "Sobre" --- */
+.about-project p {
+    font-size: 1rem;
+    color: #444444; /* Cor de texto escura */
+}
+
+/* --- Rodapé --- */
+.home-footer {
+    text-align: center;
+    padding: 30px;
+    margin-top: 40px;
+    color: #ffffff; /* Texto branco no rodapé */
+    font-size: 0.9rem;
+    background-color: #003366e4;
+    /* --- CORREÇÃO: Removido um '#' extra --- */
+    border-top: 1px solid #003366e4;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .home-header {
+        padding: 10px 20px; /* Menos padding no mobile */
+        min-height: auto; /* Deixa a altura ser definida pelo conteúdo no mobile */
+    }
+
+    .header-content {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .home-logo {
+      height: 60px; /* Reduz um pouco a logo no mobile */
+    }
+
+    .intro-section h1 {
+        font-size: 2.2rem;
+    }
+}

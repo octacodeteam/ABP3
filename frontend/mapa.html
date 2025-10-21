@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoInsight - Mapa Interativo</title>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+
+<body>
+    <div class="container results-hidden">
+        <header class="header">
+            <div class="header-left">
+                <button id="toggle-sidebar" class="menu-icon">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="header-center">
+                <img src="/Imagens/logo_letrabranca.png" alt="Logo GeoInsight" class="logo">
+            </div>
+            <div class="header-right">
+                <a href="/" class="icon-link"><i class="fas fa-home"></i></a>
+            </div>
+        </header>
+
+        <aside id="sidebar" class="sidebar">
+
+            <div class="filter-group">
+                <label for="collection-filter">Filtrar por Coleção</label>
+                <select id="collection-filter">
+                    <option value="">Todas as Coleções</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="date-filter-start">Data de Início</label>
+                <input type="date" id="date-filter-start">
+            </div>
+            <div class="filter-group">
+                <label for="date-filter-end">Data de Fim</label>
+                <input type="date" id="date-filter-end">
+            </div>
+
+            <div class="filter-group">
+                <label for="location-search-input">Pesquisar por Local</label>
+                <input type="text" id="location-search-input" placeholder="Cidade, Estado...">
+                <button id="location-search-btn" class="filter-button">Buscar Local</button>
+            </div>
+            <button id="apply-filters-btn" class="filter-button">Aplicar Filtros</button>
+            <button id="clear-filters-btn" class="filter-button">Limpar Filtros</button>
+
+        </aside>
+
+        <main id="main-content" class="main-content">
+            <div id="map"></div>
+        </main>
+
+        <aside id="results-sidebar" class="results-sidebar">
+            <div class="results-container">
+                <h3 class="results-title">Dados Disponíveis</h3>
+                <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
+                <div id="results-list">
+                </div>
+            </div>
+        </aside>
+
+        <footer class="footer">
+            <p>Copyright © 2025 OCTACODE</p>
+            <a href="https://github.com/octacodeteam/ABP3" target="_blank" class="icon-link">
+                <i class="fab fa-github"></i>
+            </a>
+        </footer>
+    </div>
+
+    </div>
+    <div id="comparison-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Comparação de Itens</h2>
+                <button id="close-modal-btn" class="close-btn">&times;</button>
+            </div>
+            <div id="comparison-container" class="comparison-container"></div>
+        </div>
+    </div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>
