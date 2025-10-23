@@ -12,7 +12,10 @@ export async function renderComparisonCharts(
     coords: { lat: number, lon: number },
     startDate: string,
     endDate: string
+
 ) {
+    console.log("entrou");
+    console.log(selectedItems, coords, startDate, endDate);
     // ... (o início da função continua igual)
     const chartsContainer = document.getElementById('charts-container');
     const modal = document.getElementById('chart-modal');

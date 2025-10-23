@@ -75,7 +75,7 @@ export const getTimeSeries = async (req: Request, res: Response) => {
         }
 
         // URL correta do WTSS (sem /v1)
-        const BDC_WTSS_URL = 'https://brazil-data-cube.dpi.inpe.br/wtss';
+        const BDC_WTSS_URL = 'https://data.inpe.br/bdc/wtss/v4/';
 
         const response = await axios.get(`${BDC_WTSS_URL}/time_series`, {
             params: {

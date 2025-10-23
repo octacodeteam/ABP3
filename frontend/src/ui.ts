@@ -1,5 +1,5 @@
 // Copie e cole este código completo para substituir o seu arquivo ui.ts
-
+import  {renderComparisonCharts}  from '../src/chart'
 import { mapManager } from './map'; // Import necessário para o mapa se mover
 
 let allFeatures: any[] = [];
@@ -118,6 +118,10 @@ function setupModal(): void {
 export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     const resultsList = document.getElementById('results-list');
     const compareBtn = document.getElementById('compare-btn') as HTMLButtonElement;
+    const graf = document.getElementById('graf') as HTMLButtonElement;
+    const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
+    const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
+
     if (!resultsList || !compareBtn) return;
 
     resultsList.onchange = (event) => {
@@ -134,6 +138,15 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
             if (checkbox.dataset.id) selectedIds.push(checkbox.dataset.id);
         });
         displayComparisonTable(selectedIds);
+    };
+
+    graf.onclick = () => {
+        const checkedBoxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
+        const selectedIds: string[] = [];
+        checkedBoxes.forEach(checkbox => {
+            if (checkbox.dataset.id) selectedIds.push(checkbox.dataset.id);
+        });
+        renderComparisonCharts(selectedIds, coords, startDateFilter.value, endDateFilter.value);
     };
 }
 
