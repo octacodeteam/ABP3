@@ -123,6 +123,7 @@ html {
 .filter-button {
   width: 100%;
   padding: 12px;
+  margin-top: 10px;
   background-color: #007bff; /* Azul padrão */
   color: white;
   border: none;
@@ -255,7 +256,8 @@ html {
 
 /* Ajusta altura da lista */
 #results-list {
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 310px);
+  margin-top: 10px;
   overflow-y: auto;
 }
 
@@ -317,7 +319,6 @@ html {
     font-size: 0.8rem;
 }
 
-/* Adiciona margem acima do botão de limpar para espaçamento */
-#clear-filters-btn {
+#compare-btn {
     margin-top: 10px;
 }
