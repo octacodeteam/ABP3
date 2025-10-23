@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { getStacItems, getTimeSeries } from "../controllers/bdcController";
+// Importar as três funções do controller
+import { getStacItems, getTimeSeries, getCoverageAttributes } from "../controllers/bdcController";
 import { geocode } from "../controllers/geocodeController";
 
 const router = Router();
@@ -21,5 +22,11 @@ router.get("/wtss/time-series", getTimeSeries);
  * Expects: query (string livre: "Cidade, UF" | "Cidade, País" | endereço)
  */
 router.get("/geocode", geocode);
+
+/**
+ * NOVO: WTSS coverage attributes (BDC)
+ * Expects: coverage (nome da coleção ou nomes separados por vírgula, ex: S2-16D-2,LANDSAT-16D-1)
+ */
+router.get("/wtss/attributes", getCoverageAttributes); // Nova rota adicionada
 
 export default router;
