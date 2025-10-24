@@ -8,7 +8,6 @@
     <title>GeoInsight - Mapa Interativo</title>
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
@@ -30,7 +29,6 @@
         </header>
 
         <aside id="sidebar" class="sidebar">
-
             <div class="filter-group">
                 <label for="collection-filter">Filtrar por Coleção</label>
                 <select id="collection-filter">
@@ -54,7 +52,6 @@
             </div>
             <button id="apply-filters-btn" class="filter-button">Aplicar Filtros</button>
             <button id="clear-filters-btn" class="filter-button">Limpar Filtros</button>
-
         </aside>
 
         <main id="main-content" class="main-content">
@@ -79,16 +76,45 @@
         </footer>
     </div>
 
-    </div>
+    <!-- Modal de comparação -->
     <div id="comparison-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Comparação de Itens</h2>
                 <button id="close-modal-btn" class="close-btn">&times;</button>
             </div>
-            <div id="comparison-container" class="comparison-container"></div>
+
+            <!-- Seletor de atributos (novo) -->
+            <div id="attribute-selector" style="padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
+                <label for="attribute-select" style="font-weight:600;">Atributos:</label>
+                <select id="attribute-select" multiple size="6" style="min-width:220px; padding:6px;">
+                    <option value="NDVI" selected>NDVI</option>
+                    <option value="EVI" selected>EVI</option>
+                    <option value="NBR">NBR</option>
+                    <option value="B01">B01</option>
+                    <option value="B02">B02</option>
+                    <option value="B03">B03</option>
+                    <option value="B04">B04</option>
+                    <option value="B05">B05</option>
+                    <option value="B06">B06</option>
+                    <option value="B07">B07</option>
+                    <option value="B08">B08</option>
+                    <option value="B8A">B8A</option>
+                    <option value="B09">B09</option>
+                    <option value="B11">B11</option>
+                    <option value="B12">B12</option>
+                    <option value="SCL">SCL</option>
+                    <option value="CLEAROB">CLEAROB</option>
+                    <option value="TOTALOB">TOTALOB</option>
+                    <option value="PROVENANCE">PROVENANCE</option>
+                </select>
+                <button id="apply-attributes" class="filter-button" style="padding:6px 10px;">Aplicar</button>
+            </div>
+
+            <div id="comparison-container" class="comparison-container" style="padding: 12px;"></div>
         </div>
     </div>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script type="module" src="/src/main.ts"></script>
 </body>
