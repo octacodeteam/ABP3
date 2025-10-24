@@ -26,6 +26,9 @@ let activeCharts: Chart[] = []; //
 // Lista de atributos que queremos buscar/mostrar nos gráficos
 const RELEVANT_ATTRIBUTES = ['ndvi', 'evi']; // Comparação case-insensitive será usada
 
+// Define o fator de escala conhecido para NDVI e EVI
+const SCALE_FACTOR = 0.0001;
+
 /**
  * Renderiza gráficos de comparação buscando atributos dinamicamente para coleções WTSS compatíveis.
  * @param selectedCompatibleFeatures Array de objetos STAC Feature selecionados E COMPATÍVEIS com WTSS.
@@ -75,11 +78,9 @@ export async function renderComparisonCharts(
                         console.warn(`Nenhum atributo (${RELEVANT_ATTRIBUTES.join('/')}) encontrado para ${collectionName}. Disponíveis: ${coverageInfo.attributes.join(', ') || 'Nenhum'}`);
                     }
                 }
-                // Se attributesData for null (404 ou erro), já foi logado em fetchCoverageAttributes
             })
             .catch(error => { // Captura erros inesperados no processamento do .then
                 console.error(`Erro inesperado ao processar atributos para ${collectionName}:`, error);
-                // Continua mesmo se uma falhar
             });
         attributePromises.push(promise);
     });
@@ -92,7 +93,7 @@ export async function renderComparisonCharts(
     }
 
 
-    // --- PASSO 2: Buscar as séries temporais ---
+    // --- PASSO 2: Buscar as séries temporais E APLICAR ESCALA ---
     const timeSeriesPromises: Promise<void>[] = [];
     const chartDataConfigs: any[] = []; // Guarda dados formatados { collection, attribute, labels, data }
 
@@ -103,13 +104,32 @@ export async function renderComparisonCharts(
         if (availableAttributes?.length > 0) {
             availableAttributes.forEach(attribute => {
                 const promise = fetchTimeSeriesData(collection, coords.lat, coords.lon, startDate, endDate, attribute) //
-                    .then(timeSeriesResult => {
-                        if (timeSeriesResult?.timeline?.length > 0) { // Verifica se timeline existe e não está vazia
-                            const labels = timeSeriesResult.timeline.map(p => p.date);
-                            const data = timeSeriesResult.timeline.map(p => p.value);
-                            chartDataConfigs.push({ collection, attribute, labels, data });
+                    .then(timeSeriesResult => { // timeSeriesResult é a resposta COMPLETA da API
+
+                        // **** ACESSA OS DADOS DENTRO DE 'result' ****
+                        const resultData = timeSeriesResult?.result;
+
+                        // Verifica se 'result', 'timeline' e 'attributes' existem e não estão vazios
+                        if (resultData?.timeline?.length > 0 && resultData?.attributes?.[0]?.values?.length > 0) {
+
+                            const labels = resultData.timeline; // Pega as datas de result.timeline
+                            const rawValues = resultData.attributes[0].values; // Pega os valores de result.attributes[0].values
+
+                            // **** APLICA A ESCALA AQUI ****
+                            const scaledData = rawValues.map((value: number | null) =>
+                                (value !== null && !isNaN(value)) ? value * SCALE_FACTOR : null // Multiplica pelo fator ou mantém null
+                            );
+                            // *****************************
+
+                            // Verifica se o número de datas e valores é o mesmo
+                            if (labels.length === scaledData.length) { // Usa scaledData agora
+                                chartDataConfigs.push({ collection, attribute, labels, data: scaledData }); // Guarda os dados escalados
+                            } else {
+                                console.warn(`Discrepância no número de datas (${labels.length}) e valores (${scaledData.length}) para ${collection} - ${attribute}. Pulando.`);
+                            }
                         } else {
-                            console.warn(`Série temporal ${attribute} para ${collection} retornou vazia ou inválida.`);
+                            // Este é o log que você está vendo!
+                            console.warn(`Série temporal ${attribute} para ${collection} retornou vazia ou em formato inválido na estrutura 'result'. Resposta recebida:`, timeSeriesResult);
                         }
                     })
                     .catch(error => { // Erro já é logado/alertado em fetchTimeSeriesData
@@ -120,7 +140,7 @@ export async function renderComparisonCharts(
         }
     });
 
-    await Promise.allSettled(timeSeriesPromises); // Espera todas as buscas de séries temporais
+    await Promise.allSettled(timeSeriesPromises); // Espera todas as buscas
 
     // --- PASSO 3: Renderizar os gráficos ---
     const loadingMessage = chartsContainer.querySelector('.loading-message');
@@ -149,7 +169,8 @@ export async function renderComparisonCharts(
         // Monta os datasets (linhas) para este gráfico
         const datasets = configsForAttribute.map((config, index) => ({
             label: config.collection, // Legenda = Nome da coleção
-            data: config.data.map((value, idx) => ({ x: config.labels[idx], y: value })), // Formato {x: date, y: value}
+            // Usa os dados escalados e labels corretos
+            data: config.data.map((value: number | null, idx: number) => ({ x: config.labels[idx], y: value })), // Formato {x: date, y: value}
             borderColor: getRandomColor(index),
             backgroundColor: getRandomColor(index), // Para pontos
             tension: 0.1,
@@ -159,14 +180,13 @@ export async function renderComparisonCharts(
             pointHoverRadius: 5 // Tamanho ao passar o mouse
         }));
 
-        // Pega as labels (datas) da primeira série (assumindo que são as mesmas)
-        const labels = configsForAttribute[0]?.labels || [];
+        // Pega as labels (datas) da primeira série (assumindo que são as mesmas para a escala)
+        const labelsForScale = configsForAttribute[0]?.labels || [];
 
         // Cria o gráfico
-        const chart = new Chart(chartCanvas.getContext('2d')!, {
+        const chart = new Chart(chartCanvas.getContext('2d')!, { // Usa '2d'
             type: 'line',
             data: {
-                // labels: labels, // Usar labels aqui se scale X for 'category'
                 datasets: datasets // Passa os dados no formato {x, y}
             },
             options: {
@@ -180,15 +200,15 @@ export async function renderComparisonCharts(
                 scales: {
                     x: {
                         type: 'category', // Mais simples para strings 'YYYY-MM-DD'
-                        labels: labels, // Fornece as labels aqui para 'category'
-                        // type: 'time', // Requer adaptador de data e labels como Date objects
-                        // time: { unit: 'month' }, // Exemplo se usar TimeScale
+                        labels: labelsForScale, // Fornece as labels aqui para 'category'
                         title: { display: true, text: 'Data' }
                     },
                     y: {
                         beginAtZero: false,
                         title: { display: true, text: 'Valor' },
-                        // min: -1, max: 1 // Descomente e ajuste se necessário (ex: NDVI)
+                        // Define limites min e max apropriados para NDVI/EVI
+                        min: (attributeName === 'NDVI' || attributeName === 'EVI') ? -0.2 : undefined, // Um pouco abaixo de 0
+                        max: (attributeName === 'NDVI' || attributeName === 'EVI') ? 1.0 : undefined   // Máximo é 1
                     }
                 },
                 interaction: { mode: 'index', axis: 'x', intersect: false }

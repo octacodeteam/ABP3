@@ -124,7 +124,7 @@ export const fetchTimeSeriesData = async (
     attribute: string
 ): Promise<TimeSeriesResult | null> => {
     try {
-        let apiUrl = `/api/wtss/time-series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
+        let apiUrl = `/api/wtss/time_series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
         if (startDate) apiUrl += `&start_date=${startDate}`; //
         if (endDate) apiUrl += `&end_date=${endDate}`; //
 

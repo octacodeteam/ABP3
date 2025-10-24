@@ -15,7 +15,7 @@ router.get("/stac/search", getStacItems);
  * WTSS time-series (BDC)
  * Expects: latitude, longitude, coverage, attributes, start_date, end_date
  */
-router.get("/wtss/time-series", getTimeSeries);
+router.get("/wtss/time_series", getTimeSeries);
 
 /**
  * Geocode (proxy → Nominatim/OSM)
