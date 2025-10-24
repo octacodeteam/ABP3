@@ -10,10 +10,7 @@ const BDC_WTSS_URL = 'https://data.inpe.br/bdc/wtss/v4/'; //
 
 // Lista de coleções que SABEMOS serem compatíveis com WTSS no BDC v4
 const WTSS_COMPATIBLE_COLLECTIONS = [
-    'S2-16D-2',
-    'LC8-16D-1',
-    'LC9-16D-1',
-    'MOD13Q1-6',
+    'S2-16D-2', 'myd11a2-6.1', 'myd13q1-6.1', 'mod13q1-6.1', 'CBERS4-WFI-16D-2', 'CBERS-WFI-8D-1', 'LANDSAT-16D-1', 'mod11a2-6.1', 'CBERS4-MUX-2M-1',
     // Adicione outros se souber de mais cubos de dados compatíveis
 ];
 
@@ -131,10 +128,14 @@ export const getCoverageAttributes = async (req: Request, res: Response) => {
     // --- WORKAROUND: Atributos conhecidos ---
     const knownAttributes: { [key: string]: string[] } = {
         'S2-16D-2': ['NDVI', 'EVI', 'NBR', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B11', 'B12', 'SCL', 'CLEAROB', 'TOTALOB', 'PROVENANCE'],
-        'LC8-16D-1': ['NDVI', 'EVI', 'NBR', 'BLUE', 'GREEN', 'RED', 'NIR', 'SWIR1', 'SWIR2', 'PIXELQA'], // Exemplo mais completo
-        'LC9-16D-1': ['NDVI', 'EVI', 'NBR', 'BLUE', 'GREEN', 'RED', 'NIR', 'SWIR1', 'SWIR2', 'PIXELQA'], // Exemplo mais completo
-        'MOD13Q1-6': ['NDVI', 'EVI'] // Exemplo
-        // Adicione outros da lista WTSS_COMPATIBLE_COLLECTIONS
+        'LANDSAT-16D-1': ['NDVI', 'coastal', 'qa_pixel', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'blue', 'green', 'red', 'nir08', 'swir16', 'swir22', 'DATASOURCE', 'EVI'],
+        'mod13q1-6.1': ['NDVI', 'EVI', 'VI_Quality', 'composite_day_of_the_year', 'pixel_reliability', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'MIR_reflectance', 'view_zenith_angle', 'sun_zenith_angle', 'relative_azimuth_angle'], // Atualizado com dados do JSON
+        'CBERS4-MUX-2M-1': ['BAND5', 'BAND6', 'BAND7', 'BAND8', 'NDVI', 'CMASK', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'EVI'],
+        'CBERS4-WFI-16D-2': ['BAND13', 'BAND14', 'CMASK', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'BAND15', 'BAND16', 'EVI', 'NDVI'],
+        'CBERS-WFI-8D-1': ['BAND13', 'CMASK', 'CLEAROB', 'TOTALOB', 'DATASOURCE', 'PROVENANCE', 'EVI', 'NDVI', 'BAND14', 'BAND15', 'BAND16'],
+        'mod11a2-6.1': ['LST_Day_1km', 'QC_Day', 'Day_view_time', 'Day_view_angl', 'Clear_sky_days', 'LST_Night_1km', 'QC_Night', 'Night_view_time', 'Night_view_angl', 'Emis_31', 'Clear_sky_nights', 'Emis_32'],
+        'myd11a2-6.1': ['LST_Day_1km', 'QC_Day', 'Day_view_time', 'Day_view_angl', 'LST_Night_1km', 'QC_Night', 'Night_view_time', 'Night_view_angl', 'Emis_31', 'Emis_32', 'Clear_sky_days', 'Clear_sky_nights'], // Preenchido
+        'myd13q1-6.1': ['NDVI', 'EVI', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'VI_Quality', 'view_zenith_angle', 'composite_day_of_the_year', 'pixel_reliability', 'MIR_reflectance', 'sun_zenith_angle', 'relative_azimuth_angle'] // Preenchido
     };
     // ------------------------------------
 

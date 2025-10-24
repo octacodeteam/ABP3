@@ -8,9 +8,12 @@ let allFeatures: any[] = [];
 // Lista de coleções que SABEMOS serem compatíveis com WTSS (deve ser a mesma do backend e chart.ts)
 const WTSS_COMPATIBLE_COLLECTIONS = [
     'S2-16D-2', 'LC8-16D-1', 'LC9-16D-1', 'MOD13Q1-6',
+    'CBERS4-MUX-2M-1', 'CBERS4-WFI-16D-2', 'CBERS-WFI-8D-1',
+    'LANDSAT-16D-1', 'mod11a2-6.1', 'mod13q1-6.1',
+    'myd11a2-6.1', 'myd13q1-6.1' // Adicionei as coleções atualizadas no backend
 ];
 
-// Variável para manter a última requisição de gráficos (para o botão "Aplicar" do modal)
+// Variável para manter a última requisição de gráficos
 let lastChartRequest: {
     features: any[] | null,
     coords: { lat: number, lon: number } | null,
@@ -117,41 +120,21 @@ function setupModal(): void {
     const modal = document.getElementById('comparison-modal');
     const closeModalBtn = document.getElementById('close-modal-btn');
     const container = document.getElementById('comparison-container');
-    const applyAttributesBtn = document.getElementById('apply-attributes');
 
     if (!modal || !closeModalBtn || !container) return;
 
     const closeModal = () => {
         modal.style.display = 'none';
         container.innerHTML = '';
-        // Limpa gráficos do chart.ts
         clearActiveCharts();
-        // limpa lastChartRequest? mantemos para permitir reabertura se necessário
     };
 
     closeModalBtn.addEventListener('click', closeModal);
     modal.addEventListener('click', (event) => {
         if (event.target === modal) closeModal();
     });
-
-    // Aplica os atributos selecionados (botão dentro do modal)
-    if (applyAttributesBtn) {
-        applyAttributesBtn.addEventListener('click', async () => {
-            // Lê atributos selecionados no seletor
-            const selectEl = document.getElementById('attribute-select') as HTMLSelectElement | null;
-            const selectedAttrs = selectEl ? Array.from(selectEl.selectedOptions).map(o => o.value) : ['NDVI', 'EVI'];
-
-            // Se tivermos uma requisição anterior, reexecuta com os novos atributos
-            if (lastChartRequest.features && lastChartRequest.coords && lastChartRequest.startDate && lastChartRequest.endDate) {
-                // Re-renderiza com os atributos escolhidos
-                await renderComparisonCharts(lastChartRequest.features, lastChartRequest.coords, lastChartRequest.startDate, lastChartRequest.endDate, selectedAttrs);
-            } else {
-                // Caso não haja requisição anterior (raro), apenas fecha ou mostra alerta
-                alert('Nenhuma seleção ativa para aplicar. Gere gráficos primeiro pelo botão "Grafico".');
-            }
-        });
-    }
 }
+
 
 /**
  * Atualiza o estado (habilitado/desabilitado) dos botões Comparar e Gráfico.
@@ -179,9 +162,10 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     const grafBtn = document.getElementById('graf') as HTMLButtonElement;
     const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
     const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
+    const attributeSelect = document.getElementById('chart-attribute-select') as HTMLSelectElement; // Pega o novo select
 
-    if (!resultsList || !compareBtn || !grafBtn || !startDateFilter || !endDateFilter) {
-        console.error("Elementos #results-list, #compare-btn, #graf, #date-filter-start ou #date-filter-end não encontrados.");
+    if (!resultsList || !compareBtn || !grafBtn || !startDateFilter || !endDateFilter || !attributeSelect) { // Verifica o novo select
+        console.error("Elementos #results-list, #compare-btn, #graf, #date-filter-start, #date-filter-end ou #chart-attribute-select não encontrados.");
         return;
     }
 
@@ -225,11 +209,16 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
         const selectedCompatibleFeatures = allFeatures.filter(feature => selectedIds.includes(feature.id));
 
         if (selectedCompatibleFeatures.length > 0) {
-            // Lê atributos selecionados no seletor do modal (caso o modal já exista no DOM)
-            const selectEl = document.getElementById('attribute-select') as HTMLSelectElement | null;
-            const selectedAttrs = selectEl ? Array.from(selectEl.selectedOptions).map(o => o.value) : ['NDVI', 'EVI'];
+            // Lê os atributos selecionados do NOVO seletor na sidebar
+            const selectedAttrs = Array.from(attributeSelect.selectedOptions).map(option => option.value);
 
-            // Salva a última requisição para o botão "Aplicar" do modal
+            // Se nenhum atributo for selecionado, informa o usuário ou usa um padrão
+            if (selectedAttrs.length === 0) {
+                alert("Por favor, selecione pelo menos um atributo (NDVI, EVI, etc.) para gerar o gráfico.");
+                return; // Impede a chamada para renderComparisonCharts
+            }
+
+            // Salva a última requisição (pode ser útil se quiser re-gerar)
             lastChartRequest = {
                 features: selectedCompatibleFeatures,
                 coords,
@@ -237,7 +226,8 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
                 endDate
             };
 
-            console.log("Chamando renderComparisonCharts com features COMPATÍVEIS:", selectedCompatibleFeatures);
+            console.log(`Chamando renderComparisonCharts com features COMPATÍVEIS: ${selectedCompatibleFeatures.map(f=>f.id).join(', ')} e atributos: ${selectedAttrs.join(', ')}`);
+            // Passa os atributos selecionados para a função de renderização
             await renderComparisonCharts(selectedCompatibleFeatures, coords, startDate, endDate, selectedAttrs);
         } else {
             alert("Nenhum item compatível com gráfico foi selecionado.");
@@ -248,6 +238,7 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     compareBtn.disabled = true;
     grafBtn.disabled = true;
 }
+
 
 /**
  * Exibe uma tabela comparativa no modal.
@@ -274,6 +265,7 @@ function displayComparisonTable(selectedIds: string[]): void {
     propertiesToCompare.forEach(prop => {
         tableHTML += `<tr><td style="padding: 8px; font-weight: bold; text-align: left;">${prop.name}</td>`;
         itemsToCompare.forEach(item => {
+            // Safely access nested properties
             const value = prop.path.split('.').reduce((o, i) => (o && typeof o === 'object' && o !== null) ? (o as any)[i] : undefined, item);
             const formattedValue = prop.format ? prop.format(value) : (value ?? 'N/A');
             tableHTML += `<td style="padding: 8px;">${formattedValue}</td>`;
@@ -285,6 +277,7 @@ function displayComparisonTable(selectedIds: string[]): void {
     container.innerHTML = tableHTML;
     modal.style.display = 'flex';
 }
+
 
 /**
  * Renderiza a lista, desabilita checkbox e mostra aviso para itens não compatíveis com WTSS.
@@ -302,7 +295,8 @@ function renderResultsList(features: any[]): void {
 
     features.forEach(feature => {
         const item = document.createElement('div');
-        const isWtssCompatible = feature.properties?.isWtssCompatible === true || WTSS_COMPATIBLE_COLLECTIONS.includes(feature.collection);
+        // Verifica a flag 'isWtssCompatible' adicionada pelo backend
+        const isWtssCompatible = feature.properties?.isWtssCompatible === true;
 
         item.className = `result-item ${!isWtssCompatible ? 'disabled' : ''}`;
         item.title = isWtssCompatible ? `Coleção ${feature.collection}` : `Coleção ${feature.collection} (não compatível com gráficos WTSS)`;
@@ -330,12 +324,17 @@ function populateCollectionFilter(features: any[]): void {
     if (!collectionFilter) return;
     const currentSelection = collectionFilter.value;
     const collections = [...new Set(features.map(f => f.collection).filter(Boolean))].sort();
-    while (collectionFilter.options.length > 1) collectionFilter.remove(1);
+    // Limpa opções antigas, exceto a primeira ("Todas as Coleções")
+    while (collectionFilter.options.length > 1) {
+        collectionFilter.remove(1);
+    }
     collections.forEach(name => {
         const option = document.createElement('option');
-        option.value = name; option.textContent = name;
+        option.value = name;
+        option.textContent = name;
         collectionFilter.appendChild(option);
     });
+    // Restaura a seleção se ela ainda existir na nova lista
     collectionFilter.value = collections.includes(currentSelection) ? currentSelection : "";
 }
 
@@ -344,15 +343,17 @@ export function showLoading(isLoading: boolean): void {
     const container = document.querySelector('.container');
     if (!resultsList || !container) return;
     if (isLoading) {
+        // Mostra a sidebar de resultados quando começa a carregar
         container.classList.remove('results-hidden');
         resultsList.innerHTML = '<p class="loading-message">Buscando dados...</p>';
     }
+    // Não escondemos explicitamente ao terminar, deixamos o displayResults preencher
 }
 
 export function displayResults(features: any[]): void {
-    allFeatures = features;
-    populateCollectionFilter(features);
-    renderResultsList(features);
+    allFeatures = features; // Atualiza a lista global
+    populateCollectionFilter(features); // Atualiza o filtro de coleção
+    renderResultsList(features); // Renderiza a lista de resultados
 }
 
 export function initializeUI(): void {
@@ -361,4 +362,5 @@ export function initializeUI(): void {
     setupClearFilters();
     setupModal();
     setupLocationSearch();
+    // A lógica de comparação (setupCompareLogic) é chamada pelo map.ts após um clique/busca
 }

@@ -61,6 +61,18 @@
         <aside id="results-sidebar" class="results-sidebar">
             <div class="results-container">
                 <h3 class="results-title">Dados Disponíveis</h3>
+                <div class="filter-group" style="margin-bottom: 10px;">
+                    <label for="chart-attribute-select">Atributos p/ Gráfico:</label>
+                    <select id="chart-attribute-select" multiple size="4" style="width: 100%; padding: 5px;">
+                        <option value="NDVI" selected>NDVI</option>
+                        <option value="EVI" selected>EVI</option>
+                        <option value="NBR">NBR</option>
+                        <option value="BLUE">Azul (Blue)</option>
+                        <option value="GREEN">Verde (Green)</option>
+                        <option value="RED">Vermelho (Red)</option>
+                        <option value="NIR">Infravermelho Próximo (NIR)</option>
+                        <option value="SWIR16">Onda Curta Infravermelho 1 (SWIR1)</option> <option value="SWIR22">Onda Curta Infravermelho 2 (SWIR2)</option> </select>
+                </div>
                 <button id="graf" class="filter-button">Grafico</button>
                 <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
                 <div id="results-list">
@@ -76,39 +88,11 @@
         </footer>
     </div>
 
-    <!-- Modal de comparação -->
     <div id="comparison-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Comparação de Itens</h2>
                 <button id="close-modal-btn" class="close-btn">&times;</button>
-            </div>
-
-            <!-- Seletor de atributos (novo) -->
-            <div id="attribute-selector" style="padding: 10px 16px; display: flex; align-items: center; gap: 12px;">
-                <label for="attribute-select" style="font-weight:600;">Atributos:</label>
-                <select id="attribute-select" multiple size="6" style="min-width:220px; padding:6px;">
-                    <option value="NDVI" selected>NDVI</option>
-                    <option value="EVI" selected>EVI</option>
-                    <option value="NBR">NBR</option>
-                    <option value="B01">B01</option>
-                    <option value="B02">B02</option>
-                    <option value="B03">B03</option>
-                    <option value="B04">B04</option>
-                    <option value="B05">B05</option>
-                    <option value="B06">B06</option>
-                    <option value="B07">B07</option>
-                    <option value="B08">B08</option>
-                    <option value="B8A">B8A</option>
-                    <option value="B09">B09</option>
-                    <option value="B11">B11</option>
-                    <option value="B12">B12</option>
-                    <option value="SCL">SCL</option>
-                    <option value="CLEAROB">CLEAROB</option>
-                    <option value="TOTALOB">TOTALOB</option>
-                    <option value="PROVENANCE">PROVENANCE</option>
-                </select>
-                <button id="apply-attributes" class="filter-button" style="padding:6px 10px;">Aplicar</button>
             </div>
 
             <div id="comparison-container" class="comparison-container" style="padding: 12px;"></div>
