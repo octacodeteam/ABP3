@@ -1,245 +1,211 @@
 // frontend/src/chart.ts
 
-// Importa apenas os componentes necessários do Chart.js para otimização
 import {
     Chart,
     LineController,
     LineElement,
     PointElement,
     LinearScale,
-    CategoryScale, // Para o eixo X (datas)
-    TimeScale,     // Alternativa para o eixo X se as datas forem objetos Date
+    CategoryScale,
+    TimeScale, // Incluído caso precise usar
     Title,
     Tooltip,
     Legend
 } from 'chart.js';
-// Importa as funções da API
 import { fetchCoverageAttributes, fetchTimeSeriesData } from './apiService'; //
 
-// Registra os componentes que serão usados nos gráficos de linha
+// Registra os componentes necessários
 Chart.register(
-    LineController,
-    LineElement,
-    PointElement,
-    LinearScale,
-    CategoryScale, // Use CategoryScale se suas labels (datas) forem strings "YYYY-MM-DD"
-    // TimeScale,     // Use TimeScale se suas labels forem objetos Date (requer adaptador de data)
-    Title,
-    Tooltip,
-    Legend
+    LineController, LineElement, PointElement, LinearScale, CategoryScale,
+    TimeScale, Title, Tooltip, Legend
 ); //
 
-// Guarda referências aos gráficos ativos para poder destruí-los depois
+// Guarda referências aos gráficos ativos
 let activeCharts: Chart[] = []; //
 
+// Lista de atributos que queremos buscar/mostrar nos gráficos
+const RELEVANT_ATTRIBUTES = ['ndvi', 'evi']; // Comparação case-insensitive será usada
+
 /**
- * MODIFICADO: Renderiza gráficos de comparação buscando atributos dinamicamente.
- * @param selectedFeatures Array de objetos STAC Feature selecionados pelo usuário.
+ * Renderiza gráficos de comparação buscando atributos dinamicamente para coleções WTSS compatíveis.
+ * @param selectedCompatibleFeatures Array de objetos STAC Feature selecionados E COMPATÍVEIS com WTSS.
  * @param coords Objeto com latitude e longitude { lat, lon }.
  * @param startDate String da data de início no formato 'YYYY-MM-DD'.
  * @param endDate String da data de fim no formato 'YYYY-MM-DD'.
  */
 export async function renderComparisonCharts(
-    selectedFeatures: any[],
+    selectedCompatibleFeatures: any[], // Nome atualizado para clareza
     coords: { lat: number; lon: number },
     startDate: string,
     endDate: string
 ): Promise<void> {
 
-    // Encontra o container onde os gráficos serão colocados e o modal
-    const chartsContainer = document.getElementById('comparison-container'); // ATENÇÃO: Usando o mesmo container da tabela? Verifique seu HTML.
-    const modal = document.getElementById('comparison-modal'); // Certifique-se que o ID do modal está correto
+    const chartsContainer = document.getElementById('comparison-container'); // Container no modal //
+    const modal = document.getElementById('comparison-modal'); // O modal em si //
 
     if (!chartsContainer || !modal) {
-        console.error("Elemento '#comparison-container' ou '#comparison-modal' não encontrado no DOM.");
-        alert("Erro interno: Não foi possível encontrar a área para exibir os gráficos.");
+        console.error("Elemento '#comparison-container' ou '#comparison-modal' não encontrado.");
+        alert("Erro interno: Área para gráficos não encontrada.");
         return;
     }
 
-    // Limpa conteúdo anterior, destrói gráficos antigos e mostra mensagem de carregamento
+    // Limpa e prepara o modal/container
     chartsContainer.innerHTML = '<p class="loading-message" style="text-align: center; padding: 20px;">Carregando dados para os gráficos...</p>'; //
     activeCharts.forEach(chart => chart.destroy()); //
     activeCharts = []; //
-    modal.style.display = 'flex'; // Garante que o modal seja exibido
+    modal.style.display = 'flex'; //
 
-    // --- PASSO 1: Buscar os atributos disponíveis para as coleções selecionadas ---
-    const collectionNames = [...new Set(selectedFeatures.map(f => f.collection))]; // Pega nomes únicos de coleção
-    const attributesData = await fetchCoverageAttributes(collectionNames); //
+    // --- PASSO 1: Buscar atributos PARA CADA coleção selecionada ---
+    const attributePromises: Promise<void>[] = [];
+    const attributesMap = new Map<string, string[]>(); // Mapa: Coleção -> Atributos Relevantes
 
-    if (!attributesData || !attributesData.coverages || attributesData.coverages.length === 0) {
-        chartsContainer.innerHTML = '<p class="info-message" style="text-align: center; padding: 20px; color: red;">Não foi possível obter os atributos disponíveis (ex: NDVI, EVI) para as coleções selecionadas. Verifique o console para mais detalhes.</p>';
+    const uniqueCompatibleCollections = [...new Set(selectedCompatibleFeatures.map(f => f.collection))];
+
+    uniqueCompatibleCollections.forEach(collectionName => {
+        const promise = fetchCoverageAttributes(collectionName) // Chama a API para CADA coleção //
+            .then(attributesData => {
+                if (attributesData?.coverages?.[0]?.attributes) { // Verifica se a resposta é válida
+                    const coverageInfo = attributesData.coverages[0];
+                    const relevantAttributes = coverageInfo.attributes.filter(attr =>
+                        RELEVANT_ATTRIBUTES.includes(attr.toLowerCase()) // Filtra por NDVI/EVI (case-insensitive)
+                    );
+                    if (relevantAttributes.length > 0) {
+                        attributesMap.set(collectionName, relevantAttributes); // Guarda no mapa
+                    } else {
+                        console.warn(`Nenhum atributo (${RELEVANT_ATTRIBUTES.join('/')}) encontrado para ${collectionName}. Disponíveis: ${coverageInfo.attributes.join(', ') || 'Nenhum'}`);
+                    }
+                }
+                // Se attributesData for null (404 ou erro), já foi logado em fetchCoverageAttributes
+            })
+            .catch(error => { // Captura erros inesperados no processamento do .then
+                console.error(`Erro inesperado ao processar atributos para ${collectionName}:`, error);
+                // Continua mesmo se uma falhar
+            });
+        attributePromises.push(promise);
+    });
+
+    await Promise.allSettled(attributePromises); // Espera todas as buscas de atributos
+
+    if (attributesMap.size === 0) {
+         chartsContainer.innerHTML = `<p class="info-message" style="text-align: center; padding: 20px; color: red;">Não foi possível obter atributos (${RELEVANT_ATTRIBUTES.join('/')}) para nenhuma das coleções selecionadas compatíveis com WTSS. Verifique o console.</p>`;
         return;
     }
 
-    // Cria um mapa para fácil acesso: Nome da Coleção -> Array de Atributos
-    const attributesMap = new Map<string, string[]>();
-    attributesData.coverages.forEach((cov: { coverage: string; attributes: string[] }) => {
-        // Filtra atributos comuns se necessário (ex: mostrar apenas NDVI e EVI)
-        const relevantAttributes = cov.attributes.filter(attr => ['ndvi', 'evi'].includes(attr.toLowerCase()));
-        if (relevantAttributes.length > 0) {
-            attributesMap.set(cov.coverage, relevantAttributes);
-        } else {
-             console.warn(`Nenhum atributo relevante (NDVI, EVI) encontrado para a coleção: ${cov.coverage}. Atributos disponíveis: ${cov.attributes.join(', ')}`);
-        }
-    });
 
-    // --- PASSO 2: Buscar as séries temporais para cada coleção e cada atributo relevante ---
-    const timeSeriesPromises: Promise<any>[] = []; // Armazena todas as promessas de busca
-    const chartDataConfigs: any[] = []; // Armazena os dados formatados para os gráficos
+    // --- PASSO 2: Buscar as séries temporais ---
+    const timeSeriesPromises: Promise<void>[] = [];
+    const chartDataConfigs: any[] = []; // Guarda dados formatados { collection, attribute, labels, data }
 
-    selectedFeatures.forEach(feature => {
+    selectedCompatibleFeatures.forEach(feature => {
         const collection = feature.collection;
-        const availableAttributes = attributesMap.get(collection);
+        const availableAttributes = attributesMap.get(collection); // Pega atributos relevantes do mapa
 
-        if (availableAttributes && availableAttributes.length > 0) {
-            // Para cada atributo relevante encontrado (ex: 'NDVI', 'EVI')
+        if (availableAttributes?.length > 0) {
             availableAttributes.forEach(attribute => {
                 const promise = fetchTimeSeriesData(collection, coords.lat, coords.lon, startDate, endDate, attribute) //
                     .then(timeSeriesResult => {
-                        // Verifica se a API retornou dados válidos
-                        if (timeSeriesResult && Array.isArray(timeSeriesResult.timeline) && timeSeriesResult.timeline.length > 0) {
-                            // Formata os dados para o Chart.js
-                            const labels = timeSeriesResult.timeline.map((point: { date: string }) => point.date); // Datas como strings 'YYYY-MM-DD'
-                            const data = timeSeriesResult.timeline.map((point: { value: number | null }) => point.value); // Valores (podem ser null)
-
-                            // Armazena a configuração desta linha/série
-                            chartDataConfigs.push({
-                                collection: collection,
-                                attribute: attribute, // Guarda qual atributo estes dados representam
-                                labels: labels,     // Array de datas
-                                data: data          // Array de valores
-                            });
+                        if (timeSeriesResult?.timeline?.length > 0) { // Verifica se timeline existe e não está vazia
+                            const labels = timeSeriesResult.timeline.map(p => p.date);
+                            const data = timeSeriesResult.timeline.map(p => p.value);
+                            chartDataConfigs.push({ collection, attribute, labels, data });
                         } else {
-                            console.warn(`Série temporal ${attribute} para ${collection} retornou vazia ou em formato inválido.`);
+                            console.warn(`Série temporal ${attribute} para ${collection} retornou vazia ou inválida.`);
                         }
                     })
-                    .catch(error => {
-                        // Não interrompe as outras buscas, apenas loga o erro
-                        console.error(`Erro ao buscar time series para ${collection} - ${attribute}:`, error);
+                    .catch(error => { // Erro já é logado/alertado em fetchTimeSeriesData
+                        // Apenas evita que a falha de uma busca impeça as outras
                     });
-                timeSeriesPromises.push(promise); // Adiciona a promessa à lista
+                timeSeriesPromises.push(promise);
             });
-        } else {
-            console.warn(`Nenhum atributo relevante (NDVI, EVI) mapeado para a coleção: ${collection}. Pulando busca de série temporal.`);
         }
     });
 
-    // Espera que TODAS as buscas de séries temporais (bem-sucedidas ou falhas) terminem
-    await Promise.allSettled(timeSeriesPromises);
+    await Promise.allSettled(timeSeriesPromises); // Espera todas as buscas de séries temporais
 
-    // --- PASSO 3: Renderizar os gráficos com os dados obtidos ---
+    // --- PASSO 3: Renderizar os gráficos ---
     const loadingMessage = chartsContainer.querySelector('.loading-message');
-    if (loadingMessage) loadingMessage.remove(); // Remove a mensagem de "Carregando..."
+    if (loadingMessage) loadingMessage.remove(); // Remove o "Carregando..." //
 
     if (chartDataConfigs.length === 0) {
-        chartsContainer.innerHTML = '<p class="info-message" style="text-align: center; padding: 20px; color: orange;">Nenhum dado de série temporal encontrado para os itens e atributos selecionados (NDVI, EVI). Verifique o console para possíveis erros.</p>';
+        chartsContainer.innerHTML = `<p class="info-message" style="text-align: center; padding: 20px; color: orange;">Nenhum dado de série temporal (${RELEVANT_ATTRIBUTES.join('/')}) encontrado para os itens selecionados no período especificado. Verifique o console.</p>`;
         return;
     }
 
-    // Agrupa os dados por ATRIBUTO para criar um gráfico separado para cada um (ex: Gráfico NDVI, Gráfico EVI)
+    // Agrupa dados por ATRIBUTO (NDVI, EVI)
     const chartsByAttribute = new Map<string, any[]>();
     chartDataConfigs.forEach(config => {
-        const key = config.attribute.toUpperCase(); // Agrupa por atributo (case-insensitive)
-        if (!chartsByAttribute.has(key)) {
-            chartsByAttribute.set(key, []);
-        }
+        const key = config.attribute.toUpperCase();
+        if (!chartsByAttribute.has(key)) chartsByAttribute.set(key, []);
         chartsByAttribute.get(key)?.push(config);
     });
 
-    // Cria um elemento <canvas> e um gráfico Chart.js para cada atributo encontrado
+    // Cria um gráfico para cada atributo
     chartsByAttribute.forEach((configsForAttribute, attributeName) => {
         const chartCanvas = document.createElement('canvas'); //
-        chartCanvas.style.maxHeight = '300px'; // Limita a altura do canvas
-        chartCanvas.style.marginBottom = '20px'; // Espaço entre gráficos
-        chartsContainer.appendChild(chartCanvas); // Adiciona o canvas ao modal
+        chartCanvas.style.maxHeight = '350px'; // Altura máxima
+        chartCanvas.style.marginBottom = '25px'; // Espaço entre gráficos
+        chartsContainer.appendChild(chartCanvas); // Adiciona ao modal //
 
-        // Monta os 'datasets' (as linhas do gráfico) para este atributo específico
+        // Monta os datasets (linhas) para este gráfico
         const datasets = configsForAttribute.map((config, index) => ({
-            label: `${config.collection}`, // A legenda da linha será o nome da coleção
-            data: config.data,
-            borderColor: getRandomColor(index), // Pega uma cor diferente para cada coleção
-            tension: 0.1, // Suaviza a linha
-            fill: false, // Não preenche a área abaixo da linha
-            parsing: { // Necessário se houver valores 'null' nos dados
-                 xAxisKey: 'x', // Ou o nome da sua propriedade de data se usar objetos
-                 yAxisKey: 'y' // Ou o nome da sua propriedade de valor se usar objetos
-            },
-            spanGaps: true // Conecta a linha mesmo se houver pontos nulos
+            label: config.collection, // Legenda = Nome da coleção
+            data: config.data.map((value, idx) => ({ x: config.labels[idx], y: value })), // Formato {x: date, y: value}
+            borderColor: getRandomColor(index),
+            backgroundColor: getRandomColor(index), // Para pontos
+            tension: 0.1,
+            fill: false,
+            spanGaps: true, // Conecta através de pontos nulos
+            pointRadius: 3, // Tamanho dos pontos
+            pointHoverRadius: 5 // Tamanho ao passar o mouse
         }));
 
-        // Assume que as datas (labels) são as mesmas para todas as séries do mesmo atributo
-        // Pega as labels da primeira configuração encontrada para este atributo
+        // Pega as labels (datas) da primeira série (assumindo que são as mesmas)
         const labels = configsForAttribute[0]?.labels || [];
 
         // Cria o gráfico
-        const chart = new Chart(chartCanvas.getContext('2d')!, { // O '!' assume que o contexto 2d sempre existirá
+        const chart = new Chart(chartCanvas.getContext('2d')!, {
             type: 'line',
             data: {
-                labels: labels, // Eixo X (Datas)
-                datasets: datasets // As linhas (Coleções)
+                // labels: labels, // Usar labels aqui se scale X for 'category'
+                datasets: datasets // Passa os dados no formato {x, y}
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false, // Permite que a altura seja controlada pelo CSS/style
+                maintainAspectRatio: false,
                 plugins: {
-                    legend: {
-                        position: 'top', // Posição da legenda (nomes das coleções)
-                    },
-                    title: {
-                        display: true,
-                        text: `Série Temporal - ${attributeName}`, // Título do Gráfico (ex: Série Temporal - NDVI)
-                        font: { size: 16 }
-                    },
-                    tooltip: {
-                        mode: 'index', // Mostra tooltips para todos os pontos na mesma data
-                        intersect: false,
-                    }
+                    legend: { position: 'top' },
+                    title: { display: true, text: `Série Temporal - ${attributeName}`, font: { size: 16 } },
+                    tooltip: { mode: 'index', intersect: false }
                 },
                 scales: {
-                    x: { // Configuração do Eixo X (Datas)
-                         type: 'category', // Usar 'category' para labels de string 'YYYY-MM-DD'
-                        // type: 'time', // Usar 'time' se 'labels' forem objetos Date (requer adaptador)
-                        title: {
-                            display: true,
-                            text: 'Data'
-                        }
+                    x: {
+                        type: 'category', // Mais simples para strings 'YYYY-MM-DD'
+                        labels: labels, // Fornece as labels aqui para 'category'
+                        // type: 'time', // Requer adaptador de data e labels como Date objects
+                        // time: { unit: 'month' }, // Exemplo se usar TimeScale
+                        title: { display: true, text: 'Data' }
                     },
-                    y: { // Configuração do Eixo Y (Valores)
-                        beginAtZero: false, // NDVI/EVI podem ser negativos ou próximos de zero
-                        title: {
-                            display: true,
-                            text: 'Valor'
-                        },
-                         // Define limites se necessário, ex: para NDVI (-1 a 1)
-                         // min: -1,
-                         // max: 1
+                    y: {
+                        beginAtZero: false,
+                        title: { display: true, text: 'Valor' },
+                        // min: -1, max: 1 // Descomente e ajuste se necessário (ex: NDVI)
                     }
                 },
-                interaction: { // Melhora a interação com o mouse
-                    mode: 'nearest',
-                    axis: 'x',
-                    intersect: false
-                }
+                interaction: { mode: 'index', axis: 'x', intersect: false }
             }
         }); //
-        activeCharts.push(chart); // Guarda a referência para limpar depois
+        activeCharts.push(chart); //
     });
 }
 
 /**
  * Função auxiliar para obter cores distintas para as linhas do gráfico.
- * @param index Índice da linha/dataset.
- * @returns Uma string de cor RGB.
  */
 function getRandomColor(index: number): string {
     const colors = [
-        'rgb(54, 162, 235)',  // Azul
-        'rgb(255, 99, 132)',   // Vermelho
-        'rgb(75, 192, 192)',   // Verde Água
-        'rgb(255, 205, 86)',  // Amarelo
-        'rgb(153, 102, 255)', // Roxo
-        'rgb(255, 159, 64)',  // Laranja
-        'rgb(100, 100, 100)' // Cinza (para mais linhas)
+        'rgb(54, 162, 235)', 'rgb(255, 99, 132)', 'rgb(75, 192, 192)',
+        'rgb(255, 205, 86)', 'rgb(153, 102, 255)', 'rgb(255, 159, 64)',
+        'rgb(201, 203, 207)' // Cinza
     ];
-    return colors[index % colors.length]; // Usa o módulo para ciclar pelas cores
+    return colors[index % colors.length];
 }

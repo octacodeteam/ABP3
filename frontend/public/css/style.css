@@ -10,7 +10,7 @@ body,
 html {
   height: 100%;
   overflow: hidden; /* Evita a rolagem da página inteira */
-  background-color: #fff; /* <-- Mantive do primeiro CSS */
+  background-color: #fff; /* Fundo branco geral */
 }
 
 /* Container principal */
@@ -20,35 +20,35 @@ html {
     "header header header"
     "sidebar main results"
     "footer footer footer";
-  grid-template-rows: 60px 1fr 40px;
-  grid-template-columns: 280px 1fr 350px; /* Esquerda | Centro | Direita */
+  grid-template-rows: 60px 1fr 40px; /* Altura do header, conteúdo flexível, altura do footer */
+  grid-template-columns: 280px 1fr 350px; /* Largura sidebar esq | Mapa | Largura sidebar dir */
   height: 100vh;
   transition: grid-template-columns 0.3s ease;
 }
 
-/* Controla sidebars */
+/* Controla visibilidade das sidebars */
 .container.sidebar-hidden {
-  grid-template-columns: 0 1fr 350px;
+  grid-template-columns: 0 1fr 350px; /* Esconde sidebar esquerda */
 }
 
 .container.results-hidden {
-  grid-template-columns: 280px 1fr 0;
+  grid-template-columns: 280px 1fr 0; /* Esconde sidebar direita */
 }
 
 .container.sidebar-hidden.results-hidden {
-  grid-template-columns: 0 1fr 0;
+  grid-template-columns: 0 1fr 0; /* Esconde ambas */
 }
 
-/* --- Cabeçalho --- */
+/* --- Cabeçalho (Página do Mapa) --- */
 .header {
   grid-area: header;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 20px;
-  background-color: #003366;
+  background-color: #003366; /* Azul escuro */
   color: white;
-  border-bottom: 2px solid #0055a4;
+  border-bottom: 2px solid #0055a4; /* Azul mais claro */
 }
 
 .header-left,
@@ -67,86 +67,98 @@ html {
   margin-right: 15px;
 }
 
-.title {
-  font-size: 1.2rem;
-  font-weight: normal;
-}
-
 .logo {
-  height: 200px;
+  height: 50px; /* Altura da logo no cabeçalho do mapa */
+  object-fit: contain; /* Evita distorção */
 }
 
 .icon-link {
   color: white;
   font-size: 1.5rem;
   text-decoration: none;
+  margin-left: 15px; /* Espaço para o ícone home/github */
 }
 
 /* --- Sidebar da esquerda (Filtros) --- */
 .sidebar {
   grid-area: sidebar;
-  background-color: #f4f4f4;
+  background-color: #f4f4f4; /* Cinza claro */
   padding: 20px;
-  overflow-y: auto;
+  overflow-y: auto; /* Permite rolagem se filtros forem muitos */
   border-right: 1px solid #ddd;
-  transition: width 0.3s ease;
+  transition: width 0.3s ease, padding 0.3s ease; /* Anima largura e padding */
   width: 280px; /* Largura fixa */
-  overflow-x: hidden;
+  overflow-x: hidden; /* Esconde conteúdo que transborda horizontalmente */
 }
 
-.sidebar-hidden .sidebar {
+/* Estilo da sidebar escondida */
+.container.sidebar-hidden .sidebar {
   width: 0;
-  padding: 20px 0;
-  visibility: hidden; /* Evita conteúdo visível durante animação */
+  padding: 20px 0; /* Remove padding lateral ao esconder */
+  border-right: none; /* Remove a borda */
+  visibility: hidden; /* Esconde completamente */
 }
 
 .filter-group {
-  margin-bottom: 20px;
+  margin-bottom: 15px; /* Espaçamento entre grupos de filtros */
 }
 
 .filter-group label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 5px; /* Espaço entre label e input/select */
   font-weight: bold;
-  color: #333;
+  color: #333; /* Cor escura para label */
+  font-size: 0.9rem;
 }
 
-.filter-group input,
+.filter-group input[type="date"],
+.filter-group input[type="text"],
 .filter-group select {
   width: 100%;
-  padding: 10px;
+  padding: 8px 10px; /* Padding interno */
   border: 1px solid #ccc;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
+/* Estilo para placeholder */
+.filter-group input[type="text"]::placeholder {
+  color: #999;
+}
+
+/* Botões na sidebar de filtros */
 .filter-button {
   width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  background-color: #007bff; /* Azul padrão */
+  padding: 10px; /* Padding dos botões */
+  background-color: #007bff; /* Azul primário */
   color: white;
   border: none;
   border-radius: 4px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  margin-bottom: 5px; /* Pequeno espaço abaixo de cada botão */
 }
 
 .filter-button:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Azul mais escuro no hover */
 }
 
 .filter-button:disabled {
-  background-color: #a0a0a0;
+  background-color: #a0a0a0; /* Cinza para botões desabilitados */
   cursor: not-allowed;
+}
+
+/* Adiciona margem acima do botão de limpar para espaçamento */
+#clear-filters-btn {
+    margin-top: 10px;
 }
 
 /* --- Conteúdo Principal (Mapa) --- */
 .main-content {
   grid-area: main;
-  background-color: #1a1a1a; /* Fundo escuro p/ mapa */
-  position: relative;
+  background-color: #e9ecef; /* Um fundo cinza muito claro para o mapa */
+  position: relative; /* Necessário para elementos posicionados dentro */
 }
 
 #map {
@@ -154,75 +166,75 @@ html {
   height: 100%;
 }
 
-/* --- Rodapé --- */
-.footer {
-  grid-area: footer;
-  display: flex;
-  justify-content: center; /* Alterado para centralizar */
-  align-items: center;
-  gap: 20px; /* Adiciona um espaço entre o texto e o ícone */
-  padding: 0 20px; /* Padding geral para não colar nas bordas */
-  background-color: #003366e4;
-  color: white;
-  font-size: 0.9rem;
+/* --- Sidebar da direita (Resultados) --- */
+.results-sidebar {
+  grid-area: results;
+  background-color: #f4f4f4; /* Mesmo cinza da outra sidebar */
+  padding: 20px;
+  overflow: hidden; /* Esconde overflow por padrão */
+  border-left: 1px solid #ddd;
+  width: 350px; /* Largura fixa */
+  transition: width 0.3s ease, padding 0.3s ease; /* Anima largura e padding */
+  display: flex; /* Usar flexbox para organizar o conteúdo interno */
+  flex-direction: column; /* Organiza título, botões e lista verticalmente */
 }
 
-/* --- Responsividade --- */
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 0 1fr; /* Esconde a sidebar por padrão */
-    position: relative;
-  }
-
-  .sidebar {
-    position: absolute;
-    left: -280px;
-    top: 60px; 
-    bottom: 40px; 
-    z-index: 1000;
-    transition: left 0.3s ease;
-  }
-
-  .container.sidebar-visible .sidebar {
-    left: 0; /* Sidebar entra na tela */
-  }
-
-  .title {
-    display: none; /* Esconde o título para caber no mobile */
-  }
+/* Estilo da sidebar de resultados escondida */
+.container.results-hidden .results-sidebar {
+  width: 0;
+  padding: 20px 0;
+  border-left: none;
+  visibility: hidden;
 }
 
-/* --- Área de Resultados --- */
 .results-container {
-  margin-top: 25px;
-  border-top: 1px solid #ddd;
-  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ocupa toda a altura da sidebar */
 }
 
 .results-title {
-  font-size: 1.1rem;
+  font-size: 1.2rem; /* Tamanho do título "Dados Disponíveis" */
   color: #333;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd; /* Linha abaixo do título */
+  flex-shrink: 0; /* Impede que o título encolha */
+}
+
+/* Botões na sidebar de resultados */
+#graf, /* ID do botão de gráfico */
+#compare-btn {
+  padding: 8px 10px; /* Padding menor para botões de ação */
+  font-size: 0.9rem; /* Fonte menor */
+  margin-bottom: 10px; /* Espaço abaixo dos botões */
+  flex-shrink: 0; /* Impede que botões encolham */
+}
+
+/* Adiciona espaço (margem) acima do botão "Comparar Selecionados" */
+#compare-btn {
+    margin-top: 5px; /* Reduzido para menos espaço */
+}
+
+/* Área da lista de resultados */
+#results-list {
+  flex-grow: 1; /* Permite que a lista ocupe o espaço restante */
+  overflow-y: auto; /* Adiciona scroll vertical SE necessário */
+  margin-top: 5px; /* Pequeno espaço acima da lista */
 }
 
 .result-item {
-  background-color: #e9ecef;
-  padding: 10px;
+  background-color: #ffffff; /* Fundo branco para cada item */
+  padding: 10px 12px;
   border-radius: 4px;
-  margin-bottom: 10px;
-  border-left: 4px solid #007bff;
+  margin-bottom: 8px; /* Espaço entre itens */
+  border-left: 4px solid #007bff; /* Borda azul à esquerda */
+  transition: background-color 0.2s, border-color 0.2s; /* Suaviza transições */
+  cursor: default; /* Cursor padrão */
 }
 
-.result-item h4 {
-  margin: 0 0 5px 0;
-  font-size: 1rem;
-  word-break: break-all;
-}
-
-.result-item p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: #555;
+.result-item:hover {
+  background-color: #eef8ff; /* Fundo levemente azulado no hover */
 }
 
 .result-item-header {
@@ -234,45 +246,59 @@ html {
 
 .result-item-header h4 {
   margin: 0;
+  font-size: 0.95rem; /* Tamanho da fonte do nome da coleção */
+  font-weight: bold;
+  color: #333;
+  word-break: break-word; /* Quebra palavras longas */
+}
+
+.result-item p {
+  margin: 2px 0 0 0; /* Espaçamento do parágrafo da data */
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.compare-checkbox {
+  cursor: pointer;
+  margin-left: 10px; /* Espaço à esquerda do checkbox */
+  transform: scale(1.1); /* Deixa o checkbox um pouco maior */
 }
 
 .loading-message,
 .info-message {
-  color: #6c757d;
+  color: #6c757d; /* Cinza para mensagens informativas */
   text-align: center;
-  padding: 20px;
+  padding: 20px 10px;
+  font-style: italic;
 }
 
-/* --- Sidebar da direita (Resultados) --- */
-.results-sidebar {
-  grid-area: results;
-  background-color: #f4f4f4;
-  padding: 20px;
-  overflow: hidden; /* Se quiser, troque para 'auto' */
-  border-left: 1px solid #ddd;
-  width: 350px;
-  transition: width 0.3s ease;
+/* --- Rodapé --- */
+.footer {
+  grid-area: footer;
+  display: flex;
+  justify-content: center; /* Centraliza conteúdo */
+  align-items: center;
+  gap: 20px; /* Espaço entre texto e ícone GitHub */
+  padding: 0 20px;
+  background-color: #003366; /* Mesmo azul do header */
+  color: white;
+  font-size: 0.9rem;
+  border-top: 1px solid #0055a4; /* Linha superior */
 }
 
-/* Ajusta altura da lista */
-#results-list {
-  max-height: calc(100vh - 310px);
-  margin-top: 10px;
-  overflow-y: auto;
-}
-
-/* --- Estilos para o Modal de Gráficos --- */
+/* --- Estilos para o Modal --- */
 .modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
+    background-color: rgba(0, 0, 0, 0.6); /* Fundo escuro semitransparente */
+    display: none; /* Começa escondido */
     justify-content: center;
     align-items: center;
-    z-index: 2000;
+    z-index: 2000; /* Garante que fique acima de tudo */
+    padding: 20px; /* Espaço nas bordas */
 }
 
 .modal-content {
@@ -280,10 +306,11 @@ html {
     padding: 20px;
     border-radius: 8px;
     width: 90%;
-    max-width: 1200px;
-    height: 80%;
+    max-width: 1000px; /* Largura máxima do modal */
+    max-height: 90vh; /* Altura máxima */
     display: flex;
     flex-direction: column;
+    overflow: hidden; /* Impede conteúdo de vazar antes do scroll */
 }
 
 .modal-header {
@@ -293,6 +320,12 @@ html {
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;
     margin-bottom: 15px;
+    flex-shrink: 0; /* Impede header de encolher */
+}
+
+.modal-header h2 {
+  color: #333; /* Cor escura para título do modal */
+  font-size: 1.4rem;
 }
 
 .close-btn {
@@ -301,24 +334,107 @@ html {
     font-size: 2rem;
     cursor: pointer;
     color: #555;
+    padding: 0 5px;
+    line-height: 1;
 }
 
-.charts-container {
-    flex-grow: 1;
-    overflow-y: auto;
+.comparison-container { /* Área onde a tabela ou gráficos aparecerão */
+    flex-grow: 1; /* Ocupa o espaço restante */
+    overflow-y: auto; /* Adiciona scroll se necessário */
+    color: #333; /* Cor de texto escura para conteúdo do modal */
 }
 
+/* Estilo para a tabela de comparação (opcional, melhora aparência) */
+.comparison-table th,
+.comparison-table td {
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+}
+.comparison-table thead th {
+  background-color: #e9ecef;
+}
+
+/* --- Responsividade (Ajustes básicos) --- */
+@media (max-width: 1024px) {
+  .container {
+    /* No tablet, esconde a sidebar de resultados por padrão? */
+    /* grid-template-columns: 250px 1fr 0; */
+    /* Ou apenas diminui as larguras */
+     grid-template-columns: 250px 1fr 300px;
+  }
+  .sidebar, .results-sidebar {
+    /* Ajusta largura se necessário */
+    /* width: 250px; ou width: 300px; */
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    grid-template-areas: /* Muda o layout no celular */
+      "header header"
+      "main main"
+      "footer footer";
+    grid-template-rows: 50px 1fr 40px; /* Header menor */
+    grid-template-columns: 1fr; /* Apenas uma coluna principal */
+  }
+
+  /* Sidebars passam a ser flutuantes ou modais no mobile */
+  .sidebar, .results-sidebar {
+    position: fixed; /* Ou absolute */
+    top: 50px; /* Abaixo do header */
+    bottom: 40px; /* Acima do footer */
+    width: 280px; /* Largura desejada */
+    z-index: 1500; /* Acima do mapa, abaixo do modal */
+    transform: translateX(-100%); /* Escondida à esquerda por padrão */
+    transition: transform 0.3s ease;
+    border: none;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  }
+  .results-sidebar {
+    left: auto; /* Remove o 'left' padrão */
+    right: 0; /* Alinha à direita */
+    transform: translateX(100%); /* Escondida à direita */
+  }
+
+  /* Classes para mostrar as sidebars no mobile */
+  .container.sidebar-visible .sidebar {
+    transform: translateX(0);
+  }
+  .container.results-visible .results-sidebar { /* Nova classe necessária */
+     transform: translateX(0);
+  }
+
+  /* Ajustes header mobile */
+  .header { padding: 0 15px; }
+  .logo { height: 35px; } /* Logo menor */
+
+  /* Ajustes footer mobile */
+  .footer { padding: 0 15px; gap: 10px; font-size: 0.8rem; }
+}
+
+/* --- NOVAS REGRAS CSS ADICIONADAS --- */
+
+/* Estilos para resultados não compatíveis com gráficos WTSS */
 .result-item.disabled {
-    border-left-color: #aaa;
-    opacity: 0.6;
+    opacity: 0.65; /* Deixa o item um pouco transparente */
+    border-left-color: #aaa; /* Cor da borda esquerda mais apagada (cinza) */
+    background-color: #f8f9fa; /* Fundo levemente acinzentado */
+    cursor: default; /* Indica que não há interação especial */
+}
+.result-item.disabled:hover {
+    background-color: #f8f9fa; /* Remove o efeito hover de mudança de cor */
 }
 
+/* Estilo para o texto de aviso "(Não gera gráfico)" */
 .incompatible-warning {
-    font-style: italic;
-    color: #888;
-    font-size: 0.8rem;
+    font-size: 0.8em; /* Fonte pequena */
+    color: #dc3545; /* Cor vermelha para alerta */
+    font-style: italic; /* Itálico */
+    margin-top: 3px; /* Pequeno espaço acima */
 }
 
-#compare-btn {
-    margin-top: 10px;
+/* Garante que checkboxes desabilitados pareçam não clicáveis */
+.result-item.disabled .compare-checkbox {
+    cursor: not-allowed; /* Cursor de "proibido" */
+    opacity: 0.5; /* Deixa o checkbox mais apagado */
 }

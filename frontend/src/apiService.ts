@@ -9,9 +9,10 @@ interface StacFeature {
     collection: string; // O nome da coleção (coverage) é crucial
     properties: {
         datetime: string;
+        isWtssCompatible?: boolean; // Flag adicionada pelo backend
         [key: string]: any;
     };
-    assets?: { // Adiciona a seção de assets se precisar acessar links de visualização, etc.
+    assets?: {
         thumbnail?: { href: string };
         [key: string]: any;
     }
@@ -31,51 +32,58 @@ export const fetchStacData = async (lat: number, lon: number): Promise<StacFeatu
         }
         const data = await response.json();
         console.log("Frontend: Dados STAC recebidos:", data);
-        return data.features || []; // Retorna a lista de features
+        // Garante que o retorno seja sempre um array, mesmo se data.features não existir
+        return Array.isArray(data?.features) ? data.features : []; //
     } catch (error) {
         console.error("Falha ao buscar dados do STAC no frontend:", error);
         alert(`Erro ao buscar dados de satélite: ${error}`); // Informa o usuário
-        return []; // Retorna array vazio em caso de erro
+        return []; // Retorna array vazio em caso de erro //
     }
 };
 
 /**
- * Interface para a resposta esperada da busca de atributos.
+ * Interface para a resposta da busca de atributos PARA UMA COLEÇÃO.
  */
-interface CoverageAttributesResponse {
-    coverages: {
+interface SingleCoverageAttributesResponse {
+    coverages: { // Mesmo que a API retorne um array com um item, mantemos a estrutura
         coverage: string;
         attributes: string[];
     }[];
 }
 
 /**
- * NOVO: Busca os atributos disponíveis para uma lista de coleções (coverages).
- * @param collections Array com os nomes das coleções. Ex: ['S2-16D-2', 'LANDSAT-16D-1']
+ * MODIFICADO: Busca os atributos disponíveis para UMA ÚNICA coleção (coverage).
+ * @param collectionName O nome da coleção. Ex: 'S2-16D-2'
  * @returns Uma promessa que resolve para a estrutura de dados com os atributos ou null em caso de erro.
  */
-export const fetchCoverageAttributes = async (collections: string[]): Promise<CoverageAttributesResponse | null> => {
-    if (!collections || collections.length === 0) {
-        console.warn("fetchCoverageAttributes chamado sem coleções.");
+export const fetchCoverageAttributes = async (collectionName: string): Promise<SingleCoverageAttributesResponse | null> => {
+    if (!collectionName) {
+        console.warn("fetchCoverageAttributes chamado sem nome de coleção.");
         return null;
     }
     try {
-        const collectionsParam = collections.join(',');
-        const apiUrl = `/api/wtss/attributes?coverage=${encodeURIComponent(collectionsParam)}`;
+        const apiUrl = `/api/wtss/attributes?coverage=${encodeURIComponent(collectionName)}`;
         console.log(`Frontend: Buscando atributos WTSS de ${apiUrl}`);
 
         const response = await fetch(apiUrl);
         if (!response.ok) {
+            // Se o backend retornou 404 (cobertura não encontrada), trata como aviso, não erro fatal
+            if (response.status === 404) {
+                console.warn(`Atributos não encontrados para ${collectionName} (API retornou 404).`);
+                return null; // Retorna null para indicar que não há atributos
+            }
+            // Outros erros
             const errorData = await response.json();
             throw new Error(`Erro na API do backend (atributos WTSS): ${response.statusText} - ${errorData.detail || errorData.message}`);
         }
-        const data: CoverageAttributesResponse = await response.json();
-        console.log("Frontend: Atributos WTSS recebidos:", data);
-        return data; // Deve retornar algo como { "coverages": [{ "coverage": "...", "attributes": ["NDVI", "EVI"] }, ...] }
+        const data: SingleCoverageAttributesResponse = await response.json();
+        console.log(`Frontend: Atributos WTSS recebidos para ${collectionName}:`, data);
+        // Retorna a resposta (que deve conter um array 'coverages' com um único item)
+        return data;
 
     } catch (error) {
-        console.error("Falha ao buscar atributos das coberturas WTSS:", error);
-        alert(`Erro ao buscar atributos disponíveis para os gráficos: ${error}`); // Informa o usuário
+        console.error(`Falha ao buscar atributos da cobertura WTSS ${collectionName}:`, error);
+        // Não mostra alert aqui para não interromper o loop no chart.ts
         return null; // Retorna null em caso de erro
     }
 };
@@ -93,13 +101,12 @@ interface TimeSeriesTimelinePoint {
  */
 interface TimeSeriesResult {
     timeline: TimeSeriesTimelinePoint[];
-    // Pode haver outros campos como 'processing_unit', 'attribute', etc.
+    // Pode haver outros campos
     [key: string]: any;
 }
 
 /**
  * Busca dados de série temporal do NOSSO backend.
- * MODIFICADO: Recebe o atributo específico a ser buscado.
  * @param collection Nome da coleção (coverage).
  * @param lat Latitude.
  * @param lon Longitude.
@@ -114,13 +121,10 @@ export const fetchTimeSeriesData = async (
     lon: number,
     startDate: string,
     endDate: string,
-    attribute: string // <-- PARÂMETRO ADICIONADO E AGORA USADO
+    attribute: string
 ): Promise<TimeSeriesResult | null> => {
     try {
-        // Monta a URL para o nosso backend, incluindo o atributo específico
-        let apiUrl = `/api/wtss/time-series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`; // <-- ATRIBUTO USADO AQUI
-
-        // Adiciona as datas na URL apenas se elas foram fornecidas
+        let apiUrl = `/api/wtss/time-series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
         if (startDate) apiUrl += `&start_date=${startDate}`; //
         if (endDate) apiUrl += `&end_date=${endDate}`; //
 
@@ -134,13 +138,12 @@ export const fetchTimeSeriesData = async (
         const data = await response.json();
         console.log(`Frontend: Dados WTSS (${attribute}) recebidos para ${collection}:`, data);
 
-        // A estrutura de retorno da API WTSS time_series geralmente tem um objeto 'result'
-        // Verifique a estrutura real retornada pela sua API /getTimeSeries
-        return data.result || data; // Retorna o 'result' se existir, senão o objeto todo
+        // Retorna o 'result' se existir (padrão WTSS), senão o objeto todo
+        return data.result || data; //
 
     } catch (error) {
         console.error(`Falha ao buscar dados da série temporal WTSS para o atributo ${attribute}:`, error);
-        alert(`Erro ao buscar dados do gráfico (${attribute}) para ${collection}: ${error}`); // Informa o usuário
-        return null; // Retorna null em caso de erro
+        alert(`Erro ao buscar dados do gráfico (${attribute}) para ${collection}: ${error}`);
+        return null;
     }
 };
