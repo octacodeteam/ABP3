@@ -18,7 +18,8 @@
     "express": "^5.1.0",
     "leaflet": "^1.9.4",
     "mongoose": "^8.18.2",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",

@@ -71,7 +71,9 @@
                         <option value="GREEN">Verde (Green)</option>
                         <option value="RED">Vermelho (Red)</option>
                         <option value="NIR">Infravermelho Próximo (NIR)</option>
-                        <option value="SWIR16">Onda Curta Infravermelho 1 (SWIR1)</option> <option value="SWIR22">Onda Curta Infravermelho 2 (SWIR2)</option> </select>
+                        <option value="SWIR16">Onda Curta Infravermelho 1 (SWIR1)</option>
+                        <option value="SWIR22">Onda Curta Infravermelho 2 (SWIR2)</option>
+                    </select>
                 </div>
                 <button id="graf" class="filter-button">Grafico</button>
                 <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
@@ -96,6 +98,25 @@
             </div>
 
             <div id="comparison-container" class="comparison-container" style="padding: 12px;"></div>
+
+            <!-- RODAPÉ DO MODAL: botão pequeno no canto inferior esquerdo -->
+            <div class="modal-footer" style="display: flex; justify-content: flex-start; gap: 8px; padding: 10px 12px 14px 12px;">
+                <button
+                    id="export-chart-btn"
+                    style="
+                        display: none;
+                        background: #007bff;
+                        color: #fff;
+                        border: none;
+                        padding: 6px 14px;
+                        border-radius: 4px;
+                        font-size: 0.75rem;
+                        cursor: pointer;
+                    "
+                >
+                    Exportar Excel
+                </button>
+            </div>
         </div>
     </div>
 

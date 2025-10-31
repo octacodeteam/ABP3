@@ -68,7 +68,7 @@ html {
 }
 
 .logo {
-  height: 50px; /* Altura da logo no cabeçalho do mapa */
+  height: 190px; /* Altura da logo no cabeçalho do mapa */
   object-fit: contain; /* Evita distorção */
 }
 

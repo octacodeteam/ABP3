@@ -13,6 +13,7 @@ import {
     Legend
 } from 'chart.js';
 import { fetchCoverageAttributes, fetchTimeSeriesData } from './apiService';
+import * as XLSX from 'xlsx';
 
 // Registra os componentes necessários
 Chart.register(
@@ -22,6 +23,17 @@ Chart.register(
 
 // Guarda referências aos gráficos ativos (interno ao módulo)
 let activeCharts: Chart[] = [];
+
+// Tipo de dado que vamos guardar para exportar depois
+type ExportSheet = {
+    attrName: string;
+    point: { lat: number; lon: number };
+    labels: string[];
+    series: Array<{ collection: string; values: (number | null)[] }>;
+};
+
+// Agora guardamos uma lista de abas a serem exportadas
+let latestExportData: ExportSheet[] = [];
 
 // Fator de escala conhecido para NDVI e EVI (valor inteiro -> multiplica por 0.0001)
 const SCALE_FACTOR = 0.0001;
@@ -33,6 +45,7 @@ const SCALE_FACTOR = 0.0001;
 export function clearActiveCharts() {
     activeCharts.forEach(c => c.destroy());
     activeCharts = [];
+    latestExportData = [];
 }
 
 /**
@@ -43,6 +56,64 @@ export function destroyCharts(charts: Chart[]) {
     charts.forEach(chart => {
         try { chart.destroy(); } catch { /* ignore */ }
     });
+}
+
+/**
+ * Exporta o último conjunto de gráficos gerados para um arquivo .xlsx
+ * Agora com linhas explicativas
+ */
+export function exportLatestChartsToExcel(): void {
+    if (!latestExportData || latestExportData.length === 0) {
+        alert('Nenhum gráfico disponível para exportar.');
+        return;
+    }
+
+    const wb = XLSX.utils.book_new();
+
+    latestExportData.forEach((sheetData) => {
+        const aoa: any[][] = [];
+
+        // Linha de título
+        aoa.push([`Série temporal - ${sheetData.attrName}`]);
+
+        // Linha com o ponto clicado
+        aoa.push([`Ponto consultado: latitude ${sheetData.point.lat.toFixed(5)}, longitude ${sheetData.point.lon.toFixed(5)}`]);
+
+        // Se for NDVI/EVI, avisar que já está escalado
+        if (['NDVI', 'EVI'].includes(sheetData.attrName.toUpperCase())) {
+            aoa.push([`Observação: valores já escalados para o intervalo 0 a 1.`]);
+        } else {
+            aoa.push([`Observação: valores no formato retornado pela API WTSS para o atributo ${sheetData.attrName}.`]);
+        }
+
+        // Linha vazia
+        aoa.push([]);
+
+        // Cabeçalho real da tabela
+        const header: string[] = ['Data (YYYY-MM-DD)'];
+        sheetData.series.forEach(s => {
+            header.push(`${s.collection} (${sheetData.attrName})`);
+        });
+        aoa.push(header);
+
+        // Linhas de dados
+        for (let i = 0; i < sheetData.labels.length; i++) {
+            const row: any[] = [sheetData.labels[i]];
+            sheetData.series.forEach(s => {
+                const v = s.values[i];
+                row.push((v !== null && v !== undefined && v !== '') ? v : '');
+            });
+            aoa.push(row);
+        }
+
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+        const safeName = sheetData.attrName.substring(0, 31) || 'Dados';
+        XLSX.utils.book_append_sheet(wb, ws, safeName);
+    });
+
+    const today = new Date().toISOString().slice(0, 10);
+    const fileName = `geoinsight_graficos_${today}.xlsx`;
+    XLSX.writeFile(wb, fileName);
 }
 
 /**
@@ -81,15 +152,11 @@ export async function renderComparisonCharts(
     await Promise.allSettled(uniqueCollections.map(async (collection) => {
         try {
             const data = await fetchCoverageAttributes(collection);
-            // Algumas respostas vêm com .coverages[0].attributes, outras podem vir direto; tentamos ambos
             const attrs = data?.coverages?.[0]?.attributes ?? data?.attributes ?? [];
             if (Array.isArray(attrs) && attrs.length > 0) {
-                // Transform attrs para uppercase para comparação
                 const attrsUC = attrs.map((a: string) => a.toString().toUpperCase());
-                // Filtra apenas os selecionados pelo usuário (case-insensitive)
                 const relevant = attrsUC.filter((a: string) => selectedAttrsUC.includes(a));
                 if (relevant.length > 0) {
-                    // Guardamos em uppercase para manter consistência
                     attributesMap.set(collection, relevant);
                 } else {
                     console.warn(`Coleção ${collection} não possui nenhum dos atributos selecionados (${selectedAttrsUC.join(', ')}). Atributos disponíveis: ${attrsUC.join(', ')}`);
@@ -116,20 +183,14 @@ export async function renderComparisonCharts(
             const availableAttrs = attributesMap.get(collection) || [];
             return availableAttrs.map(async (attributeUC: string) => {
                 try {
-                    // A API provavelmente aceita tanto 'NDVI' quanto 'ndvi' — mantenha attribute original se necessário.
-                    // Aqui passamos attributeUC, se sua API for sensível a case ajuste conforme necessário.
                     const timeSeries = await fetchTimeSeriesData(collection, coords.lat, coords.lon, startDate, endDate, attributeUC);
-
-                    // Aceita respostas com ou sem "result"
                     const resultData = timeSeries?.result ?? timeSeries;
 
-                    // Verifica se timeline e attributes existem
                     if (!resultData?.timeline || !resultData?.attributes) {
                         console.warn(`Resposta inválida de ${collection} (${attributeUC}):`, timeSeries);
                         return;
                     }
 
-                    // Encontrar o atributo na resposta (case-insensitive)
                     const attrObj = resultData.attributes.find((a: any) =>
                         (a.attribute ?? '').toString().toUpperCase() === attributeUC.toUpperCase()
                     );
@@ -142,7 +203,6 @@ export async function renderComparisonCharts(
                     const labels = resultData.timeline;
                     const rawValues = attrObj.values;
 
-                    // Se for NDVI/EVI aplicamos SCALE_FACTOR, caso contrário mantemos o valor "bruto"
                     const shouldScale = ['NDVI', 'EVI'].includes(attributeUC.toUpperCase());
                     const scaledData = rawValues.map((v: number | null) =>
                         (v !== null && !isNaN(v)) ? (shouldScale ? v * SCALE_FACTOR : v) : null
@@ -176,6 +236,9 @@ export async function renderComparisonCharts(
         if (!chartsByAttr.has(key)) chartsByAttr.set(key, []);
         chartsByAttr.get(key)?.push(cfg);
     });
+
+    // 👉 vamos começar a montar o que será exportado
+    latestExportData = [];
 
     chartsByAttr.forEach((configs, attrName) => {
         const canvas = document.createElement('canvas');
@@ -215,7 +278,6 @@ export async function renderComparisonCharts(
                     y: {
                         beginAtZero: false,
                         title: { display: true, text: 'Valor' },
-                        // só aplicar limites para NDVI/EVI (valores entre -0.2 e 1.0)
                         min: ['NDVI', 'EVI'].includes(attrName) ? -0.2 : undefined,
                         max: ['NDVI', 'EVI'].includes(attrName) ? 1.0 : undefined
                     }
@@ -225,7 +287,30 @@ export async function renderComparisonCharts(
         });
 
         activeCharts.push(chart);
+
+        // 👉 montar dados para exportar depois
+        const baseLabels: string[] = configs[0]?.labels || [];
+        const series = configs.map((cfg: any) => ({
+            collection: cfg.collection,
+            values: cfg.data as (number | null)[]
+        }));
+
+        latestExportData.push({
+            attrName,
+            point: { lat: coords.lat, lon: coords.lon },
+            labels: baseLabels,
+            series
+        });
     });
+
+    // 👉 mostrar botão do rodapé
+    const exportBtn = document.getElementById('export-chart-btn') as HTMLButtonElement | null;
+    if (exportBtn) {
+        exportBtn.style.display = 'inline-block';
+        exportBtn.onclick = () => {
+            exportLatestChartsToExcel();
+        };
+    }
 }
 
 /**
