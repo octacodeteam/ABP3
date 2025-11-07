@@ -2,84 +2,73 @@ import { Request, Response } from 'express';
 import axios, { AxiosError } from 'axios';
 
 // --- URLs CORRETAS ---
-// URL base para o serviço STAC
-const BDC_STAC_URL = 'https://data.inpe.br/bdc/stac/v1'; //
-// URL base para o serviço WTSS
-const BDC_WTSS_URL = 'https://data.inpe.br/bdc/wtss/v4/'; //
-// --- FIM DAS URLs CORRETAS ---
+const BDC_STAC_URL = 'https://data.inpe.br/bdc/stac/v1';
+// CORREÇÃO 1: Removida a barra '/' do final
+const BDC_WTSS_URL = 'https://data.inpe.br/bdc/wtss/v4'; 
+// --- FIM DA CORREÇÃO 1 ---
 
-// Lista de coleções que SABEMOS serem compatíveis com WTSS no BDC v4
 const WTSS_COMPATIBLE_COLLECTIONS = [
     'S2-16D-2', 'myd11a2-6.1', 'myd13q1-6.1', 'mod13q1-6.1', 'CBERS4-WFI-16D-2', 'CBERS-WFI-8D-1', 'LANDSAT-16D-1', 'mod11a2-6.1', 'CBERS4-MUX-2M-1',
-    // Adicione outros se souber de mais cubos de dados compatíveis
 ];
 
 /**
  * Busca itens STAC.
- * MODIFICADO: Filtro inicial por 'collections' compatíveis com WTSS REATIVADO.
  */
 export const getStacItems = async (req: Request, res: Response) => {
     try {
-        const { latitude, longitude } = req.query; //
+        const { latitude, longitude } = req.query; 
 
         if (!latitude || !longitude) {
-            return res.status(400).json({ message: 'Parâmetros latitude e longitude são obrigatórios.' }); //
+            return res.status(400).json({ message: 'Parâmetros latitude e longitude são obrigatórios.' }); 
         }
 
-        const lon = parseFloat(longitude as string); //
-        const lat = parseFloat(latitude as string); //
-        const offset = 0.001; // Mantém uma pequena área de busca
-        const bboxString = `${lon - offset},${lat - offset},${lon + offset},${lat + offset}`; //
+        const lon = parseFloat(longitude as string); 
+        const lat = parseFloat(latitude as string); 
+        const offset = 0.001; 
+        const bboxString = `${lon - offset},${lat - offset},${lon + offset},${lat + offset}`; 
 
-        const stacSearchUrl = `${BDC_STAC_URL}/search`; //
+        const stacSearchUrl = `${BDC_STAC_URL}/search`; 
 
-        // Junta a lista de coleções compatíveis em uma string separada por vírgula
         const compatibleCollectionsParam = WTSS_COMPATIBLE_COLLECTIONS.join(',');
 
         console.log(`Buscando STAC (COLEÇÕES COMPATÍVEIS) em ${stacSearchUrl} com bbox: ${bboxString} e collections: ${compatibleCollectionsParam}`);
 
-        // *** ALTERAÇÃO AQUI: Reativado o parâmetro 'collections' ***
         const response = await axios.get(stacSearchUrl, {
             params: {
                 bbox: bboxString,
-                collections: compatibleCollectionsParam, // Filtra pelas coleções compatíveis
-                limit: 150 // Mantém um limite razoável
+                collections: compatibleCollectionsParam, 
+                limit: 150
             }
-        }); //
+        }); 
 
-        // Adiciona flag de compatibilidade WTSS (todos aqui serão true)
         const featuresWithFlag = response.data.features.map((feature: any) => ({
             ...feature,
             properties: {
                 ...feature.properties,
-                isWtssCompatible: true // Como filtramos, todos são compatíveis
+                isWtssCompatible: true 
             }
         }));
 
-        // Ordena por data (mais recentes primeiro)
         featuresWithFlag.sort((a: any, b: any) => {
-            // Trata casos onde datetime pode não existir ou ser inválido
             const dateA = a.properties?.datetime ? new Date(a.properties.datetime).getTime() : 0;
             const dateB = b.properties?.datetime ? new Date(b.properties.datetime).getTime() : 0;
-            // Se as datas forem inválidas ou iguais, não muda a ordem
             if (isNaN(dateA) || isNaN(dateB)) return 0;
-            return dateB - dateA; // Ordena do mais recente para o mais antigo
+            return dateB - dateA; 
         });
 
-
         res.status(200).json({
-             ...response.data, // Mantém outros dados da resposta STAC
-             features: featuresWithFlag // Envia a lista com a flag
+             ...response.data, 
+             features: featuresWithFlag 
             });
 
     } catch (error: any) {
-        console.error("Erro detalhado ao buscar itens no STAC:", error.response?.data || error.message); //
+        console.error("Erro detalhado ao buscar itens no STAC:", error.response?.data || error.message); 
         const axiosError = error as AxiosError;
-        const status = axiosError.response?.status || 500; //
+        const status = axiosError.response?.status || 500; 
         res.status(status).json({
             message: 'Erro no servidor ao contatar a API STAC do BDC',
             detail: axiosError.response?.data || axiosError.message
-        }); //
+        }); 
     }
 };
 
@@ -88,103 +77,106 @@ export const getStacItems = async (req: Request, res: Response) => {
  */
 export const getTimeSeries = async (req: Request, res: Response) => {
     try {
-        const { latitude, longitude, coverage, attributes, start_date, end_date } = req.query; //
+        // Renomeia na desestruturação para _str (string)
+        const { latitude: latStr, longitude: lonStr, coverage, attributes, start_date, end_date } = req.query;
 
-        if (!latitude || !longitude || !coverage || !attributes) {
-            return res.status(400).json({ message: 'Parâmetros latitude, longitude, coverage e attributes são obrigatórios.' }); //
+        if (!latStr || !lonStr || !coverage || !attributes) {
+            return res.status(400).json({ message: 'Parâmetros latitude, longitude, coverage e attributes são obrigatórios.' });
         }
 
-        const wtssTimeSeriesUrl = `${BDC_WTSS_URL}/time_series`; //
+        // --- CORREÇÃO 2: Converte para float antes de enviar ---
+        const latitude = parseFloat(latStr as string);
+        const longitude = parseFloat(lonStr as string);
+        // --- FIM DA CORREÇÃO 2 ---
+
+        // URL agora é montada corretamente (sem //)
+        const wtssTimeSeriesUrl = `${BDC_WTSS_URL}/time_series`;
         console.log(`Buscando WTSS Time Series em ${wtssTimeSeriesUrl} para coverage ${coverage}, attribute ${attributes}`);
 
         const response = await axios.get(wtssTimeSeriesUrl, {
-            params: { latitude, longitude, coverage, attributes, start_date, end_date } //
+            // Passa os valores convertidos para NÚMERO
+            params: { latitude, longitude, coverage, attributes, start_date, end_date } 
         });
 
-        res.status(200).json(response.data); //
+        res.status(200).json(response.data); 
 
     } catch (error: any) {
-        console.error("Erro detalhado ao buscar série temporal WTSS:", error.response?.data || error.message); //
+        console.error("Erro detalhado ao buscar série temporal WTSS:", error.response?.data || error.message); 
         const axiosError = error as AxiosError;
-        const status = axiosError.response?.status || 500; //
+        const status = axiosError.response?.status || 500; 
         res.status(status).json({
             message: 'Erro no servidor ao contatar a API WTSS do BDC para buscar série temporal',
             detail: axiosError.response?.data || axiosError.message
-        }); //
+        }); 
     }
 };
 
 /**
  * Busca os atributos disponíveis para UMA cobertura específica (WTSS).
- * Inclui workaround para erro 404 em coleções conhecidas.
  */
 export const getCoverageAttributes = async (req: Request, res: Response) => {
-    const coverage = req.query.coverage as string; //
+    const coverage = req.query.coverage as string; 
 
     if (!coverage) {
-        return res.status(400).json({ message: 'Parâmetro coverage (apenas um nome) é obrigatório.' }); //
+        return res.status(400).json({ message: 'Parâmetro coverage (apenas um nome) é obrigatório.' }); 
     }
-
-    // --- WORKAROUND: Atributos conhecidos ---
+    
+    // WORKAROUND PARA O NDVI DO S2-16D-2 QUE ESTÁ QUEBRADO NA API DO INPE
     const knownAttributes: { [key: string]: string[] } = {
-        'S2-16D-2': ['NDVI', 'EVI', 'NBR', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B11', 'B12', 'SCL', 'CLEAROB', 'TOTALOB', 'PROVENANCE'],
-        'LANDSAT-16D-1': ['NDVI', 'coastal', 'qa_pixel', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'blue', 'green', 'red', 'nir08', 'swir16', 'swir22', 'DATASOURCE', 'EVI'],
-        'mod13q1-6.1': ['NDVI', 'EVI', 'VI_Quality', 'composite_day_of_the_year', 'pixel_reliability', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'MIR_reflectance', 'view_zenith_angle', 'sun_zenith_angle', 'relative_azimuth_angle'], // Atualizado com dados do JSON
+        // 'NDVI' FOI REMOVIDO DAQUI PARA EVITAR A CHAMADA QUEBRADA
+        'S2-16D-2': ['EVI', 'NBR', 'B01', 'B02', 'B03', 'B04', 'B05', 'B06', 'B07', 'B08', 'B8A', 'B09', 'B11', 'B12', 'SCL', 'CLEAROB', 'TOTALOB', 'PROVENANCE'],
+        'LANDSAT-16D-1': ['NDVI', 'coastal', 'qa_pixel', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'blue', 'green', 'red', 'nir08', 'swir16', 'swir22', 'DATASOURCE', 'EVI'], 
+        'mod13q1-6.1': ['NDVI', 'EVI', 'VI_Quality', 'composite_day_of_the_year', 'pixel_reliability', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'MIR_reflectance', 'view_zenith_angle', 'sun_zenith_angle', 'relative_azimuth_angle'], 
         'CBERS4-MUX-2M-1': ['BAND5', 'BAND6', 'BAND7', 'BAND8', 'NDVI', 'CMASK', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'EVI'],
         'CBERS4-WFI-16D-2': ['BAND13', 'BAND14', 'CMASK', 'CLEAROB', 'TOTALOB', 'PROVENANCE', 'BAND15', 'BAND16', 'EVI', 'NDVI'],
         'CBERS-WFI-8D-1': ['BAND13', 'CMASK', 'CLEAROB', 'TOTALOB', 'DATASOURCE', 'PROVENANCE', 'EVI', 'NDVI', 'BAND14', 'BAND15', 'BAND16'],
         'mod11a2-6.1': ['LST_Day_1km', 'QC_Day', 'Day_view_time', 'Day_view_angl', 'Clear_sky_days', 'LST_Night_1km', 'QC_Night', 'Night_view_time', 'Night_view_angl', 'Emis_31', 'Clear_sky_nights', 'Emis_32'],
-        'myd11a2-6.1': ['LST_Day_1km', 'QC_Day', 'Day_view_time', 'Day_view_angl', 'LST_Night_1km', 'QC_Night', 'Night_view_time', 'Night_view_angl', 'Emis_31', 'Emis_32', 'Clear_sky_days', 'Clear_sky_nights'], // Preenchido
-        'myd13q1-6.1': ['NDVI', 'EVI', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'VI_Quality', 'view_zenith_angle', 'composite_day_of_the_year', 'pixel_reliability', 'MIR_reflectance', 'sun_zenith_angle', 'relative_azimuth_angle'] // Preenchido
+        'myd11a2-6.1': ['LST_Day_1km', 'QC_Day', 'Day_view_time', 'Day_view_angl', 'LST_Night_1km', 'QC_Night', 'Night_view_time', 'Night_view_angl', 'Emis_31', 'Emis_32', 'Clear_sky_days', 'Clear_sky_nights'], 
+        'myd13q1-6.1': ['NDVI', 'EVI', 'blue_reflectance', 'red_reflectance', 'NIR_reflectance', 'VI_Quality', 'view_zenith_angle', 'composite_day_of_the_year', 'pixel_reliability', 'MIR_reflectance', 'sun_zenith_angle', 'relative_azimuth_angle'] 
     };
-    // ------------------------------------
-
-    const wtssDescribeUrl = `${BDC_WTSS_URL}/describe_coverage`; //
+    
+    // URL agora é montada corretamente (sem //)
+    const wtssDescribeUrl = `${BDC_WTSS_URL}/describe_coverage`;
     console.log(`Buscando atributos WTSS em ${wtssDescribeUrl} para: ${coverage}`);
 
     try {
         const response = await axios.get(wtssDescribeUrl, {
-            params: { coverage: coverage } //
+            params: { coverage: coverage } 
         });
 
         const responseData = response.data;
-        // Pega atributos da resposta da API
-        const attributes = Object.keys(responseData.attributes || {}); //
+        const attributes = Object.keys(responseData.attributes || {}); 
 
         console.log(`Atributos encontrados via API para ${coverage}: ${attributes.join(', ')}`);
         res.status(200).json({
             coverages: [{ coverage: coverage, attributes: attributes }]
-        }); //
+        }); 
 
     } catch (error: any) {
-        const axiosError = error as AxiosError<{ code?: number; description?: string }>; //
+        const axiosError = error as AxiosError<{ code?: number; description?: string }>; 
 
-        // *** LÓGICA DO WORKAROUND ***
         if (axiosError.response?.status === 404 && knownAttributes[coverage]) {
             console.warn(`WTSS /describe_coverage retornou 404 para ${coverage}. Usando atributos pré-definidos como fallback.`);
-            res.status(200).json({ // Retorna 200 OK com os dados do fallback
+            res.status(200).json({ 
                 coverages: [{
                     coverage: coverage,
-                    attributes: knownAttributes[coverage] // Usa a lista pré-definida
+                    attributes: knownAttributes[coverage] 
                 }]
             });
         }
-        // *** FIM DO WORKAROUND ***
         else if (axiosError.response?.status === 404) {
-             // 404 para uma coleção não definida no fallback
              console.warn(`WTSS /describe_coverage retornou 404 para ${coverage} (não pré-definido).`);
              return res.status(404).json({
                  message: `A cobertura '${coverage}' não foi encontrada na API WTSS do BDC ou não possui atributos conhecidos.`,
                  detail: axiosError.response?.data?.description || 'API do INPE retornou Not Found'
-             }); //
+             }); 
         } else {
-            // Outros erros
-            console.error("Erro detalhado ao buscar atributos de cobertura WTSS:", axiosError.response?.data || axiosError.message); //
-            const status = axiosError.response?.status || 500; //
+            console.error("Erro detalhado ao buscar atributos de cobertura WTSS:", axiosError.response?.data || error.message); 
+            const status = axiosError.response?.status || 500; 
             res.status(status).json({
                 message: 'Erro no servidor ao contatar a API WTSS do BDC para buscar atributos',
                 detail: axiosError.response?.data || axiosError.message
-            }); //
+            }); 
         }
     }
 };

@@ -32,12 +32,11 @@ export const fetchStacData = async (lat: number, lon: number): Promise<StacFeatu
         }
         const data = await response.json();
         console.log("Frontend: Dados STAC recebidos:", data);
-        // Garante que o retorno seja sempre um array, mesmo se data.features não existir
-        return Array.isArray(data?.features) ? data.features : []; //
+        return Array.isArray(data?.features) ? data.features : []; 
     } catch (error) {
         console.error("Falha ao buscar dados do STAC no frontend:", error);
-        alert(`Erro ao buscar dados de satélite: ${error}`); // Informa o usuário
-        return []; // Retorna array vazio em caso de erro //
+        alert(`Erro ao buscar dados de satélite: ${error}`); 
+        return []; 
     }
 };
 
@@ -45,16 +44,14 @@ export const fetchStacData = async (lat: number, lon: number): Promise<StacFeatu
  * Interface para a resposta da busca de atributos PARA UMA COLEÇÃO.
  */
 interface SingleCoverageAttributesResponse {
-    coverages: { // Mesmo que a API retorne um array com um item, mantemos a estrutura
+    coverages: { 
         coverage: string;
         attributes: string[];
     }[];
 }
 
 /**
- * MODIFICADO: Busca os atributos disponíveis para UMA ÚNICA coleção (coverage).
- * @param collectionName O nome da coleção. Ex: 'S2-16D-2'
- * @returns Uma promessa que resolve para a estrutura de dados com os atributos ou null em caso de erro.
+ * Busca os atributos disponíveis para UMA ÚNICA coleção (coverage).
  */
 export const fetchCoverageAttributes = async (collectionName: string): Promise<SingleCoverageAttributesResponse | null> => {
     if (!collectionName) {
@@ -67,24 +64,20 @@ export const fetchCoverageAttributes = async (collectionName: string): Promise<S
 
         const response = await fetch(apiUrl);
         if (!response.ok) {
-            // Se o backend retornou 404 (cobertura não encontrada), trata como aviso, não erro fatal
             if (response.status === 404) {
                 console.warn(`Atributos não encontrados para ${collectionName} (API retornou 404).`);
-                return null; // Retorna null para indicar que não há atributos
+                return null; 
             }
-            // Outros erros
             const errorData = await response.json();
             throw new Error(`Erro na API do backend (atributos WTSS): ${response.statusText} - ${errorData.detail || errorData.message}`);
         }
         const data: SingleCoverageAttributesResponse = await response.json();
         console.log(`Frontend: Atributos WTSS recebidos para ${collectionName}:`, data);
-        // Retorna a resposta (que deve conter um array 'coverages' com um único item)
         return data;
 
     } catch (error) {
         console.error(`Falha ao buscar atributos da cobertura WTSS ${collectionName}:`, error);
-        // Não mostra alert aqui para não interromper o loop no chart.ts
-        return null; // Retorna null em caso de erro
+        return null; 
     }
 };
 
@@ -101,19 +94,11 @@ interface TimeSeriesTimelinePoint {
  */
 interface TimeSeriesResult {
     timeline: TimeSeriesTimelinePoint[];
-    // Pode haver outros campos
     [key: string]: any;
 }
 
 /**
  * Busca dados de série temporal do NOSSO backend.
- * @param collection Nome da coleção (coverage).
- * @param lat Latitude.
- * @param lon Longitude.
- * @param startDate Data de início (YYYY-MM-DD).
- * @param endDate Data de fim (YYYY-MM-DD).
- * @param attribute O atributo desejado (ex: "NDVI", "EVI").
- * @returns Uma promessa que resolve para os dados da série temporal ou null em caso de erro.
  */
 export const fetchTimeSeriesData = async (
     collection: string,
@@ -123,27 +108,28 @@ export const fetchTimeSeriesData = async (
     endDate: string,
     attribute: string
 ): Promise<TimeSeriesResult | null> => {
-    try {
-        let apiUrl = `/api/wtss/time_series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
-        if (startDate) apiUrl += `&start_date=${startDate}`; //
-        if (endDate) apiUrl += `&end_date=${endDate}`; //
+    
+    // *** MUDANÇA IMPORTANTE: O try/catch foi movido para o chart.ts ***
+    // Nós *queremos* que esta função falhe (lance um erro) se a API falhar,
+    // para que o Promise.allSettled possa capturá-la.
+    
+    let apiUrl = `/api/wtss/time_series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
+    if (startDate) apiUrl += `&start_date=${startDate}`; 
+    if (endDate) apiUrl += `&end_date=${endDate}`; 
 
-        console.log(`Frontend: Buscando dados WTSS Time Series (${attribute}) de: ${apiUrl}`);
+    console.log(`Frontend: Buscando dados WTSS Time Series (${attribute}) de: ${apiUrl}`);
 
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`Erro na API do backend (WTSS Time Series): ${response.statusText} - ${errorData.detail || errorData.message}`);
-        }
-        const data = await response.json();
-        console.log(`Frontend: Dados WTSS (${attribute}) recebidos para ${collection}:`, data);
-
-        // Retorna o 'result' se existir (padrão WTSS), senão o objeto todo
-        return data.result || data; //
-
-    } catch (error) {
-        console.error(`Falha ao buscar dados da série temporal WTSS para o atributo ${attribute}:`, error);
-        alert(`Erro ao buscar dados do gráfico (${attribute}) para ${collection}: ${error}`);
-        return null;
+    const response = await fetch(apiUrl);
+    
+    if (!response.ok) {
+        const errorData = await response.json();
+        // Lança um erro detalhado que será pego pelo 'Promise.allSettled' no chart.ts
+        throw new Error(`[${collection} - ${attribute}]: ${errorData.detail?.description || errorData.message || 'Erro desconhecido'}`);
     }
+    
+    const data = await response.json();
+    console.log(`Frontend: Dados WTSS (${attribute}) recebidos para ${collection}:`, data);
+
+    return data.result || data; 
+
 };

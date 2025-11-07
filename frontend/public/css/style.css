@@ -129,6 +129,8 @@ html {
 /* Botões na sidebar de filtros */
 .filter-button {
   width: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
   padding: 10px; /* Padding dos botões */
   background-color: #007bff; /* Azul primário */
   color: white;
@@ -147,11 +149,6 @@ html {
 .filter-button:disabled {
   background-color: #a0a0a0; /* Cinza para botões desabilitados */
   cursor: not-allowed;
-}
-
-/* Adiciona margem acima do botão de limpar para espaçamento */
-#clear-filters-btn {
-    margin-top: 10px;
 }
 
 /* --- Conteúdo Principal (Mapa) --- */
@@ -439,3 +436,63 @@ html {
     opacity: 0.5; /* Deixa o checkbox mais apagado */
 }
 
+/* O container que agrupa os botões */
+.attribute-toggle-group {
+  display: flex;
+  flex-direction: column; /* Itens um abaixo do outro */
+  gap: 3px; /* Espaço entre os itens */
+  border: 1px solid #ccc; /* Borda ao redor do grupo */
+  background-color: #ffffff; /* Fundo branco */
+  padding: 5px;
+  border-radius: 4px;
+}
+
+/* Esconde o checkbox original */
+.attribute-toggle-group .toggle-option input[type="checkbox"] {
+  display: none;
+}
+
+/* Estiliza a <label> para parecer um item selecionável */
+.attribute-toggle-group .toggle-option label {
+  display: flex;
+  align-items: center;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  color: #333; /* Cor do texto padrão (escuro) */
+  background-color: #ffffff; /* Fundo padrão (branco) */
+  border: 1px solid transparent; /* Borda transparente por padrão */
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Adiciona o ponto (ícone de rádio) à esquerda */
+.attribute-toggle-group .toggle-option label::before {
+  content: '●';
+  font-size: 1.2em;
+  margin-right: 10px;
+  color: #ccc; /* Cor do ponto (cinza claro, não selecionado) */
+  transition: color 0.2s ease;
+}
+
+/* Estilo do botão quando o mouse passa por cima (hover) */
+.attribute-toggle-group .toggle-option label:hover {
+  background-color: #f4f4f4; /* Fundo cinza bem claro no hover */
+}
+
+/* ESTILO QUANDO SELECIONADO (clicado) */
+/* Altera o fundo, cor da borda e cor do texto */
+.attribute-toggle-group .toggle-option input[type="checkbox"]:checked + label {
+  background-color: #e6f2ff; /* Fundo azul bem claro */
+  color: #0056b3; /* Texto em azul escuro */
+  border-color: #007bff; /* Borda azul primário */
+  font-weight: bold;
+}
+
+/* Altera a cor do ponto quando o item está selecionado */
+.attribute-toggle-group .toggle-option input[type="checkbox"]:checked + label::before {
+  color: #007bff; /* Cor do ponto (azul primário) */
+}

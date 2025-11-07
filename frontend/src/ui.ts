@@ -257,18 +257,34 @@ function setupModal(): void {
 
 /**
  * Atualiza o estado (habilitado/desabilitado) dos botões Comparar e Gráfico.
+ * AGORA VERIFICA TANTO SATÉLITES QUANTO ATRIBUTOS.
  */
 function updateButtonStates(): void {
   const resultsList = document.getElementById('results-list');
   const compareBtn = document.getElementById('compare-btn') as HTMLButtonElement;
   const grafBtn = document.getElementById('graf') as HTMLButtonElement;
+  const attributeContainer = document.getElementById('chart-attribute-container');
 
-  if (!resultsList || !compareBtn || !grafBtn) return;
+  // Se algum elemento essencial não for encontrado, não faz nada
+  if (!resultsList || !compareBtn || !grafBtn || !attributeContainer) {
+    console.warn("updateButtonStates: Elementos essenciais não encontrados.");
+    return;
+  }
 
-  const checkedEnabledCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked:not([disabled])');
-  const allCheckedCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
-  compareBtn.disabled = allCheckedCheckboxes.length < 2;
-  grafBtn.disabled = checkedEnabledCheckboxes.length === 0;
+  // 1. Verifica os checkboxes dos SATÉLITES (lista de resultados)
+  const checkedSatellites = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked:not([disabled])');
+  const allCheckedSatellites = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
+
+  // 2. Verifica os checkboxes dos ATRIBUTOS (NDVI, EVI, etc.)
+  const checkedAttributes = attributeContainer.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked');
+
+  // 3. Atualiza a lógica dos botões
+  // O botão "Comparar" (tabela) só precisa de 2+ satélites
+  compareBtn.disabled = allCheckedSatellites.length < 2;
+  
+  // O botão "Gráfico" precisa de:
+  // (Pelo menos 1 satélite compatível) E (Pelo menos 1 atributo)
+  grafBtn.disabled = (checkedSatellites.length === 0) || (checkedAttributes.length === 0);
 }
 
 /**
@@ -281,19 +297,23 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
   const grafBtn = document.getElementById('graf') as HTMLButtonElement;
   const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
   const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
-  const attributeSelect = document.getElementById('chart-attribute-select') as HTMLSelectElement;
+  // Container dos checkboxes de atributo
+  const attributeContainer = document.getElementById('chart-attribute-container');
 
-  if (!resultsList || !compareBtn || !grafBtn || !startDateFilter || !endDateFilter || !attributeSelect) {
-    console.error("Elementos #results-list, #compare-btn, #graf, #date-filter-start, #date-filter-end ou #chart-attribute-select não encontrados.");
+  if (!resultsList || !compareBtn || !grafBtn || !startDateFilter || !endDateFilter || !attributeContainer) {
+    console.error("Elementos #results-list, #compare-btn, #graf, #date-filter-start, #date-filter-end ou #chart-attribute-container não encontrados.");
     return;
   }
 
+  // ** CORREÇÃO: ADICIONA O LISTENER PARA OS SATÉLITES AQUI **
+  // Este listener atualiza os botões sempre que um checkbox de satélite é alterado.
   resultsList.addEventListener('input', (event) => {
     if ((event.target as HTMLElement).classList.contains('compare-checkbox')) {
       updateButtonStates();
     }
   });
 
+  // Ação do botão "Comparar Selecionados" (Tabela)
   compareBtn.onclick = () => {
     const allCheckedCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
     const selectedIds = Array.from(allCheckedCheckboxes)
@@ -305,6 +325,7 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     }
   };
 
+  // Ação do botão "Grafico"
   grafBtn.onclick = async () => {
     // Validação de datas
     const startDate = startDateFilter.value;
@@ -319,6 +340,7 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
       return;
     }
 
+    // Pega os satélites selecionados
     const checkedEnabledCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked:not([disabled])');
     const selectedIds = Array.from(checkedEnabledCheckboxes)
                              .map(cb => cb.dataset.id).filter(Boolean) as string[];
@@ -326,14 +348,16 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     const selectedCompatibleFeatures = allFeatures.filter(feature => selectedIds.includes(feature.id));
 
     if (selectedCompatibleFeatures.length > 0) {
-      const selectedAttrs = Array.from(attributeSelect.selectedOptions).map(option => option.value);
+      // Pega os atributos selecionados (dos checkboxes)
+      const attributeCheckboxes = attributeContainer.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked');
+      const selectedAttrs = Array.from(attributeCheckboxes).map(checkbox => checkbox.value);
 
       if (selectedAttrs.length === 0) {
+        // Esta verificação agora é dupla, pois o botão deve estar desabilitado, mas é uma boa garantia
         alert("Por favor, selecione pelo menos um atributo (NDVI, EVI, etc.) para gerar o gráfico.");
-        return; // Impede a chamada para renderComparisonCharts
+        return; 
       }
 
-      // Salva a última requisição (pode ser útil se quiser re-gerar)
       lastChartRequest = {
         features: selectedCompatibleFeatures,
         coords,
@@ -343,14 +367,15 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
 
       console.log(`Chamando renderComparisonCharts com features COMPATÍVEIS: ${selectedCompatibleFeatures.map(f=>f.id).join(', ')} e atributos: ${selectedAttrs.join(', ')}`);
       await renderComparisonCharts(selectedCompatibleFeatures, coords, startDate, endDate, selectedAttrs);
+    
     } else {
+      // Esta verificação também é dupla
       alert("Nenhum item compatível com gráfico foi selecionado.");
     }
   };
 
-  // Garante estado inicial desabilitado ao configurar
-  compareBtn.disabled = true;
-  grafBtn.disabled = true;
+  // Garante estado inicial desabilitado ao (re)configurar a lógica
+  updateButtonStates();
 }
 
 
@@ -504,5 +529,17 @@ export function initializeUI(): void {
   setupClearFilters();
   setupModal();
   setupLocationSearch();
+
+  // ** CORREÇÃO: ADICIONA O LISTENER PARA OS ATRIBUTOS AQUI **
+  // Este listener atualiza os botões sempre que um checkbox de ATRIBUTO é alterado.
+  const attributeContainer = document.getElementById('chart-attribute-container');
+  if (attributeContainer) {
+    attributeContainer.addEventListener('input', (event) => {
+      if ((event.target as HTMLElement).getAttribute('name') === 'chart-attribute') {
+        updateButtonStates();
+      }
+    });
+  }
+
   // A lógica de comparação (setupCompareLogic) é chamada pelo map.ts após um clique/busca
 }

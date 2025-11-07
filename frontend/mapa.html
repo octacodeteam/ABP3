@@ -48,8 +48,8 @@
             <div class="filter-group">
                 <label for="location-search-input">Pesquisar por Local</label>
                 <input type="text" id="location-search-input" placeholder="Cidade, Estado...">
-                <button id="location-search-btn" class="filter-button">Buscar Local</button>
             </div>
+            <button id="location-search-btn" class="filter-button">Buscar Local</button>
             <button id="apply-filters-btn" class="filter-button">Aplicar Filtros</button>
             <button id="clear-filters-btn" class="filter-button">Limpar Filtros</button>
         </aside>
@@ -62,19 +62,48 @@
             <div class="results-container">
                 <h3 class="results-title">Dados Disponíveis</h3>
                 <div class="filter-group" style="margin-bottom: 10px;">
-                    <label for="chart-attribute-select">Atributos p/ Gráfico:</label>
-                    <select id="chart-attribute-select" multiple size="4" style="width: 100%; padding: 5px;">
-                        <option value="NDVI" selected>NDVI</option>
-                        <option value="EVI" selected>EVI</option>
-                        <option value="NBR">NBR</option>
-                        <option value="BLUE">Azul (Blue)</option>
-                        <option value="GREEN">Verde (Green)</option>
-                        <option value="RED">Vermelho (Red)</option>
-                        <option value="NIR">Infravermelho Próximo (NIR)</option>
-                        <option value="SWIR16">Onda Curta Infravermelho 1 (SWIR1)</option>
-                        <option value="SWIR22">Onda Curta Infravermelho 2 (SWIR2)</option>
-                    </select>
+                <label>Atributos p/ Gráfico:</label>
+                <div id="chart-attribute-container" class="attribute-toggle-group">
+                    
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-ndvi" name="chart-attribute" value="NDVI" checked>
+                        <label for="attr-ndvi">NDVI</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-evi" name="chart-attribute" value="EVI" checked>
+                        <label for="attr-evi">EVI</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-nbr" name="chart-attribute" value="NBR">
+                        <label for="attr-nbr">NBR</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-blue" name="chart-attribute" value="BLUE">
+                        <label for="attr-blue">Azul</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-green" name="chart-attribute" value="GREEN">
+                        <label for="attr-green">Verde</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-red" name="chart-attribute" value="RED">
+                        <label for="attr-red">Vermelho</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-nir" name="chart-attribute" value="NIR">
+                        <label for="attr-nir">NIR</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-swir16" name="chart-attribute" value="SWIR16">
+                        <label for="attr-swir16">SWIR1</label>
+                    </div>
+                    <div class="toggle-option">
+                        <input type="checkbox" id="attr-swir22" name="chart-attribute" value="SWIR22">
+                        <label for="attr-swir22">SWIR2</label>
+                    </div>
+                    
                 </div>
+            </div>
                 <button id="graf" class="filter-button">Grafico</button>
                 <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
                 <div id="results-list">

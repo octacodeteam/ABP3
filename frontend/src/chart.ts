@@ -21,10 +21,17 @@ Chart.register(
     TimeScale, Title, Tooltip, Legend
 );
 
+// --- 1. FUNÇÃO DE DELAY (SLEEP) ---
+/**
+ * Cria uma pausa (delay) em milissegundos.
+ * @param ms Tempo para esperar (ex: 2000 para 2 segundos)
+ */
+const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+// --- FIM DA FUNÇÃO ---
+
 // Guarda referências aos gráficos ativos (interno ao módulo)
 let activeCharts: Chart[] = [];
 
-// Tipo de dado que vamos guardar para exportar depois
 type ExportSheet = {
     attrName: string;
     point: { lat: number; lon: number };
@@ -32,36 +39,21 @@ type ExportSheet = {
     series: Array<{ collection: string; values: (number | null)[] }>;
 };
 
-// Agora guardamos uma lista de abas a serem exportadas
 let latestExportData: ExportSheet[] = [];
-
-// Fator de escala conhecido para NDVI e EVI (valor inteiro -> multiplica por 0.0001)
 const SCALE_FACTOR = 0.0001;
 
-/**
- * Destrói os charts mantidos internamente e limpa o array.
- * Chamado pelo UI ao fechar modal.
- */
 export function clearActiveCharts() {
     activeCharts.forEach(c => c.destroy());
     activeCharts = [];
     latestExportData = [];
 }
 
-/**
- * Função pública usada por outros módulos se quiser destruir um array de charts
- * (mantive por compatibilidade caso prefira usar).
- */
 export function destroyCharts(charts: Chart[]) {
     charts.forEach(chart => {
         try { chart.destroy(); } catch { /* ignore */ }
     });
 }
 
-/**
- * Exporta o último conjunto de gráficos gerados para um arquivo .xlsx
- * Agora com linhas explicativas
- */
 export function exportLatestChartsToExcel(): void {
     if (!latestExportData || latestExportData.length === 0) {
         alert('Nenhum gráfico disponível para exportar.');
@@ -72,31 +64,22 @@ export function exportLatestChartsToExcel(): void {
 
     latestExportData.forEach((sheetData) => {
         const aoa: any[][] = [];
-
-        // Linha de título
         aoa.push([`Série temporal - ${sheetData.attrName}`]);
-
-        // Linha com o ponto clicado
         aoa.push([`Ponto consultado: latitude ${sheetData.point.lat.toFixed(5)}, longitude ${sheetData.point.lon.toFixed(5)}`]);
 
-        // Se for NDVI/EVI, avisar que já está escalado
         if (['NDVI', 'EVI'].includes(sheetData.attrName.toUpperCase())) {
             aoa.push([`Observação: valores já escalados para o intervalo 0 a 1.`]);
         } else {
             aoa.push([`Observação: valores no formato retornado pela API WTSS para o atributo ${sheetData.attrName}.`]);
         }
-
-        // Linha vazia
         aoa.push([]);
 
-        // Cabeçalho real da tabela
         const header: string[] = ['Data (YYYY-MM-DD)'];
         sheetData.series.forEach(s => {
             header.push(`${s.collection} (${sheetData.attrName})`);
         });
         aoa.push(header);
 
-        // Linhas de dados
         for (let i = 0; i < sheetData.labels.length; i++) {
             const row: any[] = [sheetData.labels[i]];
             sheetData.series.forEach(s => {
@@ -116,16 +99,17 @@ export function exportLatestChartsToExcel(): void {
     XLSX.writeFile(wb, fileName);
 }
 
+
 /**
- * Renderiza gráficos de comparação buscando atributos dinamicamente para coleções WTSS compatíveis.
- * Agora aceita parâmetro `selectedAttributes` (array de strings, ex: ['NDVI','NBR'])
+ * Renderiza gráficos de comparação.
+ * IMPLEMENTA O "EFEITO CASCATA" COM DELAY.
  */
 export async function renderComparisonCharts(
     selectedCompatibleFeatures: any[],
     coords: { lat: number; lon: number },
     startDate: string,
     endDate: string,
-    selectedAttributes: string[] = ['NDVI', 'EVI'] // padrão caso não seja informado
+    selectedAttributes: string[] = ['NDVI', 'EVI']
 ): Promise<void> {
 
     const chartsContainer = document.getElementById('comparison-container');
@@ -137,32 +121,26 @@ export async function renderComparisonCharts(
         return;
     }
 
-    // Normalize attributes (upper case) para comparações
     const selectedAttrsUC = selectedAttributes.map(a => (a ?? '').toString().toUpperCase());
 
-    // Limpa e prepara o modal/container
-    chartsContainer.innerHTML = '<p class="loading-message" style="text-align: center; padding: 20px;">Carregando dados para os gráficos...</p>';
+    chartsContainer.innerHTML = '<p class="loading-message" style="text-align: center; padding: 20px;">1/3: Buscando atributos disponíveis...</p>';
     clearActiveCharts();
     modal.style.display = 'flex';
 
-    // --- PASSO 1: Buscar atributos de cada coleção ---
+    // --- PASSO 1: Buscar atributos de cada coleção (continua em paralelo, é rápido) ---
     const attributesMap = new Map<string, string[]>();
     const uniqueCollections = [...new Set(selectedCompatibleFeatures.map(f => f.collection))];
 
-    await Promise.allSettled(uniqueCollections.map(async (collection) => {
+    await Promise.all(uniqueCollections.map(async (collection) => {
         try {
             const data = await fetchCoverageAttributes(collection);
-            const attrs = data?.coverages?.[0]?.attributes ?? data?.attributes ?? [];
+            const attrs = data?.coverages?.[0]?.attributes ?? (data as any)?.attributes ?? [];
             if (Array.isArray(attrs) && attrs.length > 0) {
                 const attrsUC = attrs.map((a: string) => a.toString().toUpperCase());
                 const relevant = attrsUC.filter((a: string) => selectedAttrsUC.includes(a));
                 if (relevant.length > 0) {
                     attributesMap.set(collection, relevant);
-                } else {
-                    console.warn(`Coleção ${collection} não possui nenhum dos atributos selecionados (${selectedAttrsUC.join(', ')}). Atributos disponíveis: ${attrsUC.join(', ')}`);
                 }
-            } else {
-                console.warn(`Resposta de atributos inesperada para ${collection}:`, data);
             }
         } catch (err) {
             console.error(`Erro ao buscar atributos de ${collection}:`, err);
@@ -174,62 +152,122 @@ export async function renderComparisonCharts(
         return;
     }
 
-    // --- PASSO 2: Buscar séries temporais ---
+    chartsContainer.innerHTML = '<p class="loading-message" style="text-align: center; padding: 20px;">2/3: Buscando dados das séries temporais...</p>';
+
+    // --- PASSO 2: Criar lista de TAREFAS (não promessas) ---
+    const tasksToRun: { collection: string, attributeUC: string }[] = [];
+    selectedCompatibleFeatures.forEach(feature => {
+        const collection = feature.collection;
+        const availableAttrs = attributesMap.get(collection) || [];
+        
+        availableAttrs.forEach(attributeUC => {
+            tasksToRun.push({ collection, attributeUC });
+        });
+    });
+
+    // --- PASSO 3: Executar tarefas UMA DE CADA VEZ (Sequencial) ---
     const chartDataConfigs: any[] = [];
+    const errorMessages: string[] = [];
+    
+    let currentTask = 1;
+    const totalTasks = tasksToRun.length;
+    const loadingMessageEl = chartsContainer.querySelector('.loading-message');
 
-    await Promise.allSettled(
-        selectedCompatibleFeatures.flatMap(feature => {
-            const collection = feature.collection;
-            const availableAttrs = attributesMap.get(collection) || [];
-            return availableAttrs.map(async (attributeUC: string) => {
-                try {
-                    const timeSeries = await fetchTimeSeriesData(collection, coords.lat, coords.lon, startDate, endDate, attributeUC);
-                    const resultData = timeSeries?.result ?? timeSeries;
+    // ESTE É O "EFEITO CASCATA"
+    for (const task of tasksToRun) {
+        const { collection, attributeUC } = task;
+        
+        // Atualiza a mensagem de loading
+        if (loadingMessageEl) {
+            loadingMessageEl.textContent = 
+                `Buscando dados (${currentTask}/${totalTasks}): ${collection} (${attributeUC})...`;
+        }
+        
+        try {
+            // --- 2. ADIÇÃO DO DELAY DE 2 SEGUNDOS ---
+            // Adiciona a pausa de 2 segundos ANTES de fazer a chamada
+            // (Não adiciona na *primeira* chamada para ser mais rápido)
+            if (currentTask > 1) {
+                await sleep(2000); 
+            }
+            // --- FIM DA ADIÇÃO ---
 
-                    if (!resultData?.timeline || !resultData?.attributes) {
-                        console.warn(`Resposta inválida de ${collection} (${attributeUC}):`, timeSeries);
-                        return;
-                    }
+            // Await FORÇA a espera da chamada terminar antes de ir para a próxima
+            const timeSeries = await fetchTimeSeriesData(collection, coords.lat, coords.lon, startDate, endDate, attributeUC);
 
-                    const attrObj = resultData.attributes.find((a: any) =>
-                        (a.attribute ?? '').toString().toUpperCase() === attributeUC.toUpperCase()
-                    );
+            // Se a chamada funcionou, processa e ordena os dados
+            const resultData = timeSeries?.result ?? timeSeries;
+            if (!resultData?.timeline || !resultData?.attributes) {
+                throw new Error(`[${collection} - ${attributeUC}]: Resposta inválida da API`);
+            }
 
-                    if (!attrObj || !Array.isArray(attrObj.values)) {
-                        console.warn(`Atributo ${attributeUC} não encontrado ou sem valores em ${collection}.`);
-                        return;
-                    }
+            const attrObj = resultData.attributes.find((a: any) =>
+                (a.attribute ?? '').toString().toUpperCase() === attributeUC.toUpperCase()
+            );
+            if (!attrObj || !Array.isArray(attrObj.values)) {
+                throw new Error(`[${collection} - ${attributeUC}]: Atributo não encontrado na resposta`);
+            }
 
-                    const labels = resultData.timeline;
-                    const rawValues = attrObj.values;
+            // CORREÇÃO DO GRÁFICO "RISCADO" (Ordenação)
+            const originalLabels = resultData.timeline as string[];
+            const rawValues = attrObj.values as (number | null)[];
+            const shouldScale = ['NDVI', 'EVI'].includes(attributeUC.toUpperCase());
 
-                    const shouldScale = ['NDVI', 'EVI'].includes(attributeUC.toUpperCase());
-                    const scaledData = rawValues.map((v: number | null) =>
-                        (v !== null && !isNaN(v)) ? (shouldScale ? v * SCALE_FACTOR : v) : null
-                    );
-
-                    if (labels.length !== scaledData.length) {
-                        console.warn(`Número de datas (${labels.length}) difere de valores (${scaledData.length}) em ${collection} - ${attributeUC}.`);
-                        return;
-                    }
-
-                    chartDataConfigs.push({ collection, attribute: attributeUC.toUpperCase(), labels, data: scaledData });
-                } catch (error) {
-                    console.error(`Erro ao buscar série temporal para ${collection} (${attributeUC}):`, error);
-                }
+            let combinedData = originalLabels.map((date, index) => {
+                const rawValue = rawValues[index];
+                const scaledValue = (rawValue !== null && !isNaN(rawValue))
+                    ? (shouldScale ? rawValue * SCALE_FACTOR : rawValue)
+                    : null;
+                return { date: date, value: scaledValue };
             });
-        })
-    );
 
-    // --- PASSO 3: Renderizar os gráficos ---
-    chartsContainer.innerHTML = '';
+            combinedData.sort((a, b) => a.date.localeCompare(b.date)); // Ordena por data
+            const sortedLabels = combinedData.map(d => d.date);
+            const sortedData = combinedData.map(d => d.value);
 
-    if (chartDataConfigs.length === 0) {
+            // Adiciona aos dados que funcionaram
+            chartDataConfigs.push({
+                collection,
+                attribute: attributeUC.toUpperCase(),
+                labels: sortedLabels,
+                data: sortedData
+            });
+
+        } catch (error: any) {
+            // Se a chamada falhou, captura o erro e adiciona à lista de erros
+            console.error(`Falha na busca de ${collection} (${attributeUC}):`, error);
+            // Tenta extrair a mensagem de erro específica, se não, usa a mensagem genérica
+            const detail = (error as Error).message || `Falha ao buscar ${collection} (${attributeUC})`;
+            errorMessages.push(detail.includes('[') ? detail : `[${collection} - ${attributeUC}]: ${detail}`);
+        }
+        
+        currentTask++; // Próxima tarefa
+    }
+    
+    // --- PASSO 4: Renderizar os gráficos e os erros ---
+    chartsContainer.innerHTML = ''; // Limpa a mensagem "Buscando..."
+
+    // Mostra os erros no topo do modal
+    if (errorMessages.length > 0) {
+        const errorHtml = `
+            <div style="background-color: #fffbe6; border: 1px solid #ffe58f; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                <h4 style="color: #d46b08; margin: 0 0 5px 0;">Alguns gráficos falharam:</h4>
+                <ul style="margin: 0; padding-left: 20px;">
+                    ${errorMessages.map(msg => `<li style="font-size: 0.9em; color: #333;">${msg}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        chartsContainer.innerHTML += errorHtml;
+    }
+
+    if (chartDataConfigs.length === 0 && errorMessages.length > 0) {
+        // Se *tudo* falhou, não precisa dizer "nenhum dado"
+    } else if (chartDataConfigs.length === 0) {
         chartsContainer.innerHTML = `<p style="text-align:center;color:orange;">Nenhum dado encontrado para os atributos selecionados (${selectedAttrsUC.join(', ')}) no período.</p>`;
         return;
     }
 
-    // Agrupa por atributo
+    // Agrupa os dados que funcionaram por atributo
     const chartsByAttr = new Map<string, any[]>();
     chartDataConfigs.forEach(cfg => {
         const key = (cfg.attribute ?? '').toString().toUpperCase();
@@ -237,7 +275,6 @@ export async function renderComparisonCharts(
         chartsByAttr.get(key)?.push(cfg);
     });
 
-    // 👉 vamos começar a montar o que será exportado
     latestExportData = [];
 
     chartsByAttr.forEach((configs, attrName) => {
@@ -272,7 +309,7 @@ export async function renderComparisonCharts(
                 scales: {
                     x: {
                         type: 'category',
-                        labels: configs[0]?.labels || [],
+                        labels: configs[0]?.labels || [], // Usa os labels ordenados
                         title: { display: true, text: 'Data' }
                     },
                     y: {
@@ -288,7 +325,6 @@ export async function renderComparisonCharts(
 
         activeCharts.push(chart);
 
-        // 👉 montar dados para exportar depois
         const baseLabels: string[] = configs[0]?.labels || [];
         const series = configs.map((cfg: any) => ({
             collection: cfg.collection,
@@ -303,19 +339,18 @@ export async function renderComparisonCharts(
         });
     });
 
-    // 👉 mostrar botão do rodapé
+    // Mostra o botão de exportar se algum gráfico foi renderizado
     const exportBtn = document.getElementById('export-chart-btn') as HTMLButtonElement | null;
-    if (exportBtn) {
+    if (exportBtn && latestExportData.length > 0) {
         exportBtn.style.display = 'inline-block';
         exportBtn.onclick = () => {
             exportLatestChartsToExcel();
         };
+    } else if (exportBtn) {
+        exportBtn.style.display = 'none';
     }
 }
 
-/**
- * Retorna uma cor fixa baseada no índice (não verdadeiramente aleatória para previsibilidade)
- */
 function getRandomColor(index: number): string {
     const colors = [
         'rgb(54, 162, 235)', 'rgb(255, 99, 132)', 'rgb(75, 192, 192)',
