@@ -120,12 +120,30 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
 | 036 a 040 - GA  |Planejamento Sprint 2  |     3     | Toda a equipe                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
-| 041 - TP |Ajustar a exibição dos dados na chamada da API |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
-| 042 - TP |Estruturar a função de chamada para a API WTSS |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 041 - TP |Ajustar a exibição dos dados na chamada da API |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/0cf7e7a31d820c179175d3254e910812b63a9a67) |
+| 042 - TP |Estruturar a função de chamada para a API WTSS |     3     | Alisson                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/0cf7e7a31d820c179175d3254e910812b63a9a67) |
 | 043 - GA | Atualização do trello e quebra de tasks da 2° Sprint|     3     | Georgia Mantchev      | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 | 044 - GA |Preparar o Github para 2° Sprint |     3     | João Pedro                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 045 - GA |Preenchimento da planilha |     3     | Georgia Mantchev                                 | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 046 - DW |Solucionar erro de uso  da API WTSS |     8     | Alisson, João, Igor, Georgia           | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 046.1 - DW |Solucionar erro de uso  da API WTSS |     8     | Alisson, João, Georgia           | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 047 - DW | Adicionar um botão "Limpar Filtros" que restaura a visualização original da lista. |     3     | Gustavo Hammes | ✅ Concluído | [🔗 Ver]([https://github.com/](https://github.com/octacodeteam/ABP3/commit/f50b17b77499b139c700b564f5cbc7a914a862ac)) |
+| 047.1 - DW | Tratamento do WTSS para retornar dados |     5     | João Pedro | ✅ Concluído | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/8751bfa9271de258a0d321fb89f7d9d9e837359b) |
+| 047.2 - DW | Ajuste WTSS e fazer gráfico |     3     | Gustavo Hammes, Igor | ✅ Concluído | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/9690ed4deb9150ff45a4567a5e367bacf1603cc8) |
+| 048 - DW |Criação de página inicial|     3     | Gustavo Hammes                                    | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/b81b6b7c6e6e48533f1f7b672dcbc71c929c29ee) |
+| 049 - GA | Casos de Uso|     3     | Georgia Mantchev                                              | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/f6bedb8d9eefcb123ffbfe702b485cb61b2eb954) |
+| 050 - GA | Diagrama de Classe |     3     | Georgia Mantchev                           | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/0388f549c8e6245aec2026c7971f5ba0adbcfa17) |
+| 051 - GA |Diagrama de sequência|     3     | Georgia Mantchev                          | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/144510f695e9465a121a9511f6d2c3f8dcac152d) |
+| 052 - TP | Função de exportar dados para planilha|     3     | Alisson, Igor                                 | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/86dfe36f0c53bb087f644999713141d8ee2f1b48) |
+| 053 - GA | Testes e analise do site|     3     | João Pedro, Gustavo                                 | ✅ Concluído  | [🔗 Ver](https://github.com/) |
+| 054 - GA | Gravar o video sprint2                                                                    |     3     | João Pedro                                            | ✅ Concluído  | [🔗 Ver](https://youtu.be/iqorYPgTSvY) |
 
- 
+### Tasks - Sprint 3
+
+| Índice | Título    | Pontuação | Responsável | Condição       | Link |
+|--------|-----------|:---------:|-------------|----------------|------|
+| 055 a 060 - GA  |Planejamento Sprint 3  |     3     | Toda a equipe                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+
 </p>
 </span>
 <br>
