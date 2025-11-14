@@ -140,6 +140,8 @@ html {
   cursor: pointer;
   transition: background-color 0.2s;
   margin-bottom: 5px; /* Pequeno espaço abaixo de cada botão */
+  margin-right: 8px;  /* Espaço entre o ícone e o texto */
+  font-size: 0.9em;   /* Deixa o ícone um pouco menor */
 }
 
 .filter-button:hover {
@@ -445,6 +447,8 @@ html {
   background-color: #ffffff; /* Fundo branco */
   padding: 5px;
   border-radius: 4px;
+  max-height: 180px;  /* Limita a altura (ajuste o valor se preferir) */
+  overflow-y: auto;   /* Adiciona a barra de rolagem se o conteúdo passar */
 }
 
 /* Esconde o checkbox original */
@@ -495,4 +499,26 @@ html {
 /* Altera a cor do ponto quando o item está selecionado */
 .attribute-toggle-group .toggle-option input[type="checkbox"]:checked + label::before {
   color: #007bff; /* Cor do ponto (azul primário) */
+}
+
+/*Novo estilo para o botão secundário (Limpar Filtros) */
+.btn-secondary {
+    background-color: transparent;     /* Fundo transparente */
+    color: #007bff;                 /* Texto na cor azul primária */
+    border: 2px solid #007bff;      /* Borda azul */
+}
+
+/* Efeito hover para o botão secundário */
+.btn-secondary:hover {
+    background-color: #007bff;     /* Preenche de azul no hover */
+    color: white;                  /* Texto fica branco */
+}
+
+/* Deixar o botão de busca com um leve destaque verde */
+#location-search-btn {
+    background-color: #28a745; /* Um tom de verde "ir" */
+    border-color: #28a745;
+}
+#location-search-btn:hover {
+    background-color: #218838; /* Verde mais escuro */
 }
