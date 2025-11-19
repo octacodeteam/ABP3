@@ -100,7 +100,7 @@ html {
 }
 
 .filter-group {
-  margin-bottom: 15px; /* Espaçamento entre grupos de filtros */
+  margin-bottom: 8px; /* Espaçamento entre grupos de filtros */
 }
 
 .filter-group label {
@@ -447,7 +447,7 @@ html {
   background-color: #ffffff; /* Fundo branco */
   padding: 5px;
   border-radius: 4px;
-  max-height: 180px;  /* Limita a altura (ajuste o valor se preferir) */
+  max-height: 145px;  /* Limita a altura (ajuste o valor se preferir) */
   overflow-y: auto;   /* Adiciona a barra de rolagem se o conteúdo passar */
 }
 
@@ -521,4 +521,37 @@ html {
 }
 #location-search-btn:hover {
     background-color: #218838; /* Verde mais escuro */
+}
+
+/* Estilo para o subtítulo separador na sidebar */
+.collections-subtitle {
+    margin: 5px 0; /* Reduzido drasticamente as margens verticais */
+    color: #333;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 2px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    display: block;
+}
+
+/* Botões menores e com menos margem */
+#graf, 
+#compare-btn {
+    padding: 6px 10px; /* Botões um pouco mais finos */
+    font-size: 0.85rem;
+    margin-bottom: 5px; /* Menos espaço entre eles */
+}
+
+/* Ajuste na lista para garantir que ela pegue o espaço que sobrou */
+#results-list {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-top: 0; /* Remove margem extra do topo */
+}
+
+/* Pequeno ajuste para o filtro de coleção ficar mais compacto */
+.collection-filter-container {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
 }

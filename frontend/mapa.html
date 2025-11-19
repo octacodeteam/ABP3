@@ -30,13 +30,6 @@
 
         <aside id="sidebar" class="sidebar">
             <div class="filter-group">
-                <label for="collection-filter">Filtrar por Coleção</label>
-                <select id="collection-filter">
-                    <option value="">Todas as Coleções</option>
-                </select>
-            </div>
-
-            <div class="filter-group">
                 <label for="date-filter-start">Data de Início</label>
                 <input type="date" id="date-filter-start">
             </div>
@@ -67,11 +60,9 @@
 
         <aside id="results-sidebar" class="results-sidebar">
             <div class="results-container">
-                <h3 class="results-title">Dados Disponíveis</h3>
                 <div class="filter-group" style="margin-bottom: 10px;">
                     <label>Atributos p/ Gráfico:</label>
                     <div id="chart-attribute-container" class="attribute-toggle-group">
-
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-ndvi" name="chart-attribute" value="NDVI" checked>
                             <label for="attr-ndvi">NDVI</label>
@@ -108,11 +99,27 @@
                             <input type="checkbox" id="attr-swir22" name="chart-attribute" value="SWIR22">
                             <label for="attr-swir22">SWIR2</label>
                         </div>
-
                     </div>
                 </div>
-                <button id="graf" class="filter-button">Grafico</button>
-                <button id="compare-btn" class="filter-button" disabled>Comparar Selecionados</button>
+
+                <div class="filter-group collection-filter-container">
+                    <label for="collection-filter">Filtrar Lista:</label>
+                    <select id="collection-filter">
+                        <option value="">Todas as Coleções</option>
+                    </select>
+                </div>
+
+                <h4 class="collections-subtitle">
+                    Coleções Encontradas
+                </h4>
+
+                <button id="graf" class="filter-button">
+                    <i class="fas fa-chart-line"></i> Gerar Gráfico
+                </button>
+                <button id="compare-btn" class="filter-button" disabled>
+                    <i class="fas fa-table"></i> Comparar Selecionados
+                </button>
+
                 <div id="results-list">
                 </div>
             </div>

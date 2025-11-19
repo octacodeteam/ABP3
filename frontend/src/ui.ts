@@ -147,29 +147,55 @@ function setupSidebarToggle(): void {
   });
 }
 
-function setupFilters(): void {
-  const applyBtn = document.getElementById('apply-filters-btn');
-  if (!applyBtn) return;
-  applyBtn.addEventListener('click', () => {
-    const collectionFilter = document.getElementById('collection-filter') as HTMLSelectElement;
-    const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
-    const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
-    const selectedCollection = collectionFilter.value;
-    const startDate = startDateFilter.value;
-    const endDate = endDateFilter.value;
+function applyCurrentFilters() {
+  const collectionFilter = document.getElementById('collection-filter') as HTMLSelectElement;
+  const startDateFilter = document.getElementById('date-filter-start') as HTMLInputElement;
+  const endDateFilter = document.getElementById('date-filter-end') as HTMLInputElement;
 
-    let filteredFeatures = allFeatures;
-    if (selectedCollection) {
-      filteredFeatures = filteredFeatures.filter(f => f.collection === selectedCollection);
-    }
-    if (startDate) {
-      filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] >= startDate);
-    }
-    if (endDate) {
-      filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] <= endDate);
-    }
-    renderResultsList(filteredFeatures);
-  });
+  const selectedCollection = collectionFilter ? collectionFilter.value : '';
+  const startDate = startDateFilter ? startDateFilter.value : '';
+  const endDate = endDateFilter ? endDateFilter.value : '';
+
+  let filteredFeatures = allFeatures;
+
+  // Filtra por Coleção
+  if (selectedCollection) {
+    filteredFeatures = filteredFeatures.filter(f => f.collection === selectedCollection);
+  }
+
+  // Filtra por Data (Início)
+  if (startDate) {
+    filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] >= startDate);
+  }
+
+  // Filtra por Data (Fim)
+  if (endDate) {
+    filteredFeatures = filteredFeatures.filter(f => f.properties.datetime.split('T')[0] <= endDate);
+  }
+
+  renderResultsList(filteredFeatures);
+}
+
+/**
+ * Configura os eventos dos filtros.
+ */
+function setupFilters(): void {
+  // 1. Filtro de Coleção (Direita): Aplica instantaneamente ao mudar (change)
+  const collectionFilter = document.getElementById('collection-filter');
+  if (collectionFilter) {
+    collectionFilter.addEventListener('change', () => {
+      applyCurrentFilters();
+    });
+  }
+
+  // 2. Filtro de Datas (Esquerda): Continua aplicando pelo botão "Aplicar Filtros"
+  // (Ou podemos fazer instantâneo também, mas manteremos o botão por enquanto)
+  const applyBtn = document.getElementById('apply-filters-btn');
+  if (applyBtn) {
+    applyBtn.addEventListener('click', () => {
+      applyCurrentFilters();
+    });
+  }
 }
 
 function setupClearFilters(): void {
@@ -281,7 +307,7 @@ function updateButtonStates(): void {
   // 3. Atualiza a lógica dos botões
   // O botão "Comparar" (tabela) só precisa de 2+ satélites
   compareBtn.disabled = allCheckedSatellites.length < 2;
-  
+
   // O botão "Gráfico" precisa de:
   // (Pelo menos 1 satélite compatível) E (Pelo menos 1 atributo)
   grafBtn.disabled = (checkedSatellites.length === 0) || (checkedAttributes.length === 0);
@@ -317,11 +343,11 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
   compareBtn.onclick = () => {
     const allCheckedCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked');
     const selectedIds = Array.from(allCheckedCheckboxes)
-                             .map(cb => cb.dataset.id).filter(Boolean) as string[];
+      .map(cb => cb.dataset.id).filter(Boolean) as string[];
     if (selectedIds.length >= 2) {
       displayComparisonTable(selectedIds);
     } else {
-       alert("Selecione pelo menos dois itens para comparar na tabela.");
+      alert("Selecione pelo menos dois itens para comparar na tabela.");
     }
   };
 
@@ -343,7 +369,7 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
     // Pega os satélites selecionados
     const checkedEnabledCheckboxes = resultsList.querySelectorAll<HTMLInputElement>('.compare-checkbox:checked:not([disabled])');
     const selectedIds = Array.from(checkedEnabledCheckboxes)
-                             .map(cb => cb.dataset.id).filter(Boolean) as string[];
+      .map(cb => cb.dataset.id).filter(Boolean) as string[];
 
     const selectedCompatibleFeatures = allFeatures.filter(feature => selectedIds.includes(feature.id));
 
@@ -355,7 +381,7 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
       if (selectedAttrs.length === 0) {
         // Esta verificação agora é dupla, pois o botão deve estar desabilitado, mas é uma boa garantia
         alert("Por favor, selecione pelo menos um atributo (NDVI, EVI, etc.) para gerar o gráfico.");
-        return; 
+        return;
       }
 
       lastChartRequest = {
@@ -365,9 +391,9 @@ export function setupCompareLogic(coords: { lat: number, lon: number }): void {
         endDate
       };
 
-      console.log(`Chamando renderComparisonCharts com features COMPATÍVEIS: ${selectedCompatibleFeatures.map(f=>f.id).join(', ')} e atributos: ${selectedAttrs.join(', ')}`);
+      console.log(`Chamando renderComparisonCharts com features COMPATÍVEIS: ${selectedCompatibleFeatures.map(f => f.id).join(', ')} e atributos: ${selectedAttrs.join(', ')}`);
       await renderComparisonCharts(selectedCompatibleFeatures, coords, startDate, endDate, selectedAttrs);
-    
+
     } else {
       // Esta verificação também é dupla
       alert("Nenhum item compatível com gráfico foi selecionado.");
@@ -465,7 +491,7 @@ function renderResultsList(features: any[]): void {
       <div class="result-item-header" style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
           <div>
             <h4 style="margin:0;">${collectionName || 'Coleção Indefinida'}</h4>
-            <p style="margin:2px 0 0 0;font-size:0.68rem;color:#0066cc;font-weight:500;">${groupText}</p>
+            <p style="margin:2px 0 0 0;font-size:0.9rem;color:#0066cc;font-weight:500;">${groupText}</p>
           </div>
           <input
               type="checkbox"
