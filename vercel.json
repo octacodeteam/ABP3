@@ -4,14 +4,17 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { 
-        "distDir": "dist", 
-        "buildCommand": "npm run build" 
+      "config": {
+        "buildCommand": "cd frontend && npm install && npm run build", 
+        "distDir": "dist" 
       }
     },
     {
       "src": "backend/src/server.ts",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "buildCommand": "cd backend && npm install" 
+      }
     }
   ],
   "rewrites": [
@@ -31,6 +34,5 @@
       "source": "/(.*)",
       "destination": "/$1"
     }
-  ],
-  "installCommand": "npm install && npm --prefix ./frontend install ./frontend && npm --prefix ./backend install ./backend"
+  ]
 }
