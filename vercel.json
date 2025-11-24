@@ -15,7 +15,6 @@
       "src": "backend/src/server.ts",
       "use": "@vercel/node",
       "config": {
-        
         "buildCommand": "cd backend && npm install" 
       }
     }
