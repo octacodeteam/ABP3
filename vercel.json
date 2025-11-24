@@ -32,5 +32,5 @@
       "destination": "/$1"
     }
   ],
-  "installCommand": "npm install --prefix ./frontend && npm install --prefix ./backend"
+  "installCommand": "npm install && npm --prefix ./frontend install ./frontend && npm --prefix ./backend install ./backend"
 }
