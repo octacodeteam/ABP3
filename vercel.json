@@ -6,7 +6,7 @@
       "use": "@vercel/static-build",
       "config": {
         "buildCommand": "cd frontend && npm install && npm run build", 
-        "distDir": "dist" 
+        "distDir": "frontend/dist" 
       }
     },
     {
@@ -23,16 +23,16 @@
       "destination": "/backend/src/server.ts"
     },
     {
-      "source": "/mapa",
-      "destination": "/mapa.html"
+      "source": "/",
+      "destination": "/frontend/dist/index.html"
     },
     {
-      "source": "/",
-      "destination": "/index.html"
+      "source": "/mapa",
+      "destination": "/frontend/dist/mapa.html"
     },
     {
       "source": "/(.*)",
-      "destination": "/$1"
+      "destination": "/frontend/dist/$1"
     }
   ]
 }
