@@ -4,12 +4,11 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "config": { "distDir": "dist", "buildCommand": "npm run build" }
     },
     {
       "src": "backend/src/server.ts",
-      "use": "@vercel/node",
-      "config": { "includeFiles": ["backend/dist/**"] }
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -21,14 +20,16 @@
       "src": "/mapa.html",
       "dest": "/mapa.html"
     },
+    {
+      "src": "/",
+      "dest": "/index.html"
+    },
+    {
       "src": "/[^/.]+",
       "dest": "/index.html"
     }
   ],
   "rewrites": [
-    { "source": "/", "destination": "frontend/dist/index.html" }
-  ],
-  "github": {
-    "silent": true
-  }
+    { "source": "/", "destination": "/index.html" }
+  ]
 }
