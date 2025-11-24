@@ -356,14 +356,7 @@ html {
 /* --- Responsividade (Ajustes básicos) --- */
 @media (max-width: 1024px) {
   .container {
-    /* No tablet, esconde a sidebar de resultados por padrão? */
-    /* grid-template-columns: 250px 1fr 0; */
-    /* Ou apenas diminui as larguras */
      grid-template-columns: 250px 1fr 300px;
-  }
-  .sidebar, .results-sidebar {
-    /* Ajusta largura se necessário */
-    /* width: 250px; ou width: 300px; */
   }
 }
 
@@ -411,44 +404,51 @@ html {
   .footer { padding: 0 15px; gap: 10px; font-size: 0.8rem; }
 }
 
-/* --- NOVAS REGRAS CSS ADICIONADAS --- */
+/* --- REGRAS CSS ADICIONADAS --- */
 
-/* Estilos para resultados não compatíveis com gráficos WTSS */
 .result-item.disabled {
-    opacity: 0.65; /* Deixa o item um pouco transparente */
-    border-left-color: #aaa; /* Cor da borda esquerda mais apagada (cinza) */
-    background-color: #f8f9fa; /* Fundo levemente acinzentado */
-    cursor: default; /* Indica que não há interação especial */
+    opacity: 0.65;
+    border-left-color: #aaa;
+    background-color: #f8f9fa;
+    cursor: default;
 }
 .result-item.disabled:hover {
-    background-color: #f8f9fa; /* Remove o efeito hover de mudança de cor */
+    background-color: #f8f9fa;
 }
 
-/* Estilo para o texto de aviso "(Não gera gráfico)" */
 .incompatible-warning {
-    font-size: 0.8em; /* Fonte pequena */
-    color: #dc3545; /* Cor vermelha para alerta */
-    font-style: italic; /* Itálico */
-    margin-top: 3px; /* Pequeno espaço acima */
+    font-size: 0.8em;
+    color: #dc3545;
+    font-style: italic;
+    margin-top: 3px;
 }
 
-/* Garante que checkboxes desabilitados pareçam não clicáveis */
 .result-item.disabled .compare-checkbox {
-    cursor: not-allowed; /* Cursor de "proibido" */
-    opacity: 0.5; /* Deixa o checkbox mais apagado */
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
-/* O container que agrupa os botões */
 .attribute-toggle-group {
   display: flex;
-  flex-direction: column; /* Itens um abaixo do outro */
-  gap: 3px; /* Espaço entre os itens */
-  border: 1px solid #ccc; /* Borda ao redor do grupo */
-  background-color: #ffffff; /* Fundo branco */
+  flex-direction: column;
+  gap: 3px;
+  border: 1px solid #ccc;
+  background-color: #ffffff;
   padding: 5px;
   border-radius: 4px;
-  max-height: 145px;  /* Limita a altura (ajuste o valor se preferir) */
-  overflow-y: auto;   /* Adiciona a barra de rolagem se o conteúdo passar */
+  max-height: 145px;
+  overflow-y: auto;
+}
+
+/* Ajuste para alinhar Label e Ícone e correção de z-index */
+.attribute-toggle-group .toggle-option {
+    display: flex; 
+    align-items: center; 
+    position: relative; 
+    z-index: 1; 
+}
+.attribute-toggle-group .toggle-option:hover {
+    z-index: 10;
 }
 
 /* Esconde o checkbox original */
@@ -462,70 +462,63 @@ html {
   align-items: center;
   padding: 8px 10px;
   font-size: 0.95rem;
-  color: #333; /* Cor do texto padrão (escuro) */
-  background-color: #ffffff; /* Fundo padrão (branco) */
-  border: 1px solid transparent; /* Borda transparente por padrão */
+  color: #333;
+  background-color: #ffffff;
+  border: 1px solid transparent;
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
-  width: 100%;
+  width: auto; 
+  flex-grow: 1; 
   box-sizing: border-box;
 }
 
-/* Adiciona o ponto (ícone de rádio) à esquerda */
 .attribute-toggle-group .toggle-option label::before {
   content: '●';
   font-size: 1.2em;
   margin-right: 10px;
-  color: #ccc; /* Cor do ponto (cinza claro, não selecionado) */
+  color: #ccc;
   transition: color 0.2s ease;
 }
 
-/* Estilo do botão quando o mouse passa por cima (hover) */
 .attribute-toggle-group .toggle-option label:hover {
-  background-color: #f4f4f4; /* Fundo cinza bem claro no hover */
+  background-color: #f4f4f4;
 }
 
-/* ESTILO QUANDO SELECIONADO (clicado) */
-/* Altera o fundo, cor da borda e cor do texto */
+/* ESTILO QUANDO SELECIONADO */
 .attribute-toggle-group .toggle-option input[type="checkbox"]:checked + label {
-  background-color: #e6f2ff; /* Fundo azul bem claro */
-  color: #0056b3; /* Texto em azul escuro */
-  border-color: #007bff; /* Borda azul primário */
+  background-color: #e6f2ff;
+  color: #0056b3;
+  border-color: #007bff;
   font-weight: bold;
 }
 
-/* Altera a cor do ponto quando o item está selecionado */
 .attribute-toggle-group .toggle-option input[type="checkbox"]:checked + label::before {
-  color: #007bff; /* Cor do ponto (azul primário) */
+  color: #007bff;
 }
 
-/*Novo estilo para o botão secundário (Limpar Filtros) */
 .btn-secondary {
-    background-color: transparent;     /* Fundo transparente */
-    color: #007bff;                 /* Texto na cor azul primária */
-    border: 2px solid #007bff;      /* Borda azul */
+    background-color: transparent;
+    color: #007bff;
+    border: 2px solid #007bff;
 }
 
-/* Efeito hover para o botão secundário */
 .btn-secondary:hover {
-    background-color: #007bff;     /* Preenche de azul no hover */
-    color: white;                  /* Texto fica branco */
+    background-color: #007bff;
+    color: white;
 }
 
-/* Deixar o botão de busca com um leve destaque verde */
 #location-search-btn {
-    background-color: #28a745; /* Um tom de verde "ir" */
+    background-color: #28a745;
     border-color: #28a745;
 }
 #location-search-btn:hover {
-    background-color: #218838; /* Verde mais escuro */
+    background-color: #218838;
 }
 
-/* Estilo para o subtítulo separador na sidebar */
 .collections-subtitle {
-    margin: 5px 0; /* Reduzido drasticamente as margens verticais */
+    margin: 5px 0;
     color: #333;
     border-bottom: 1px solid #ddd;
     padding-bottom: 2px;
@@ -534,24 +527,102 @@ html {
     display: block;
 }
 
-/* Botões menores e com menos margem */
 #graf, 
 #compare-btn {
-    padding: 6px 10px; /* Botões um pouco mais finos */
+    padding: 6px 10px;
     font-size: 0.85rem;
-    margin-bottom: 5px; /* Menos espaço entre eles */
+    margin-bottom: 5px;
 }
 
-/* Ajuste na lista para garantir que ela pegue o espaço que sobrou */
 #results-list {
     flex-grow: 1;
     overflow-y: auto;
-    margin-top: 0; /* Remove margem extra do topo */
+    margin-top: 0;
 }
 
-/* Pequeno ajuste para o filtro de coleção ficar mais compacto */
 .collection-filter-container {
     margin-bottom: 15px;
     padding-bottom: 10px;
     border-bottom: 1px solid #eee;
+}
+
+/* --- ESTILOS DO TOOLTIP (BALÃO DE INFORMAÇÃO) - POSICIONADO À ESQUERDA --- */
+
+.info-icon {
+    margin-left: 8px;
+    margin-right: 4px;
+    color: #999;
+    cursor: help;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.info-icon:hover {
+    color: #007bff;
+}
+
+/* O balão (Tooltip) - POSICIONADO À ESQUERDA */
+.info-icon::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    
+    /* Posição à esquerda e centralizada */
+    top: 50%;
+    right: 45px; /* Distância para a esquerda */
+    left: auto; /* Revertido para auto */
+    bottom: auto; 
+    transform: translateY(-50%); 
+    
+    background-color: #333;
+    color: #fff;
+    padding: 10px 14px; 
+    border-radius: 6px;
+    font-size: 0.8rem;
+    line-height: 1.4; 
+    white-space: normal;
+    width: max-content;
+    max-width: 200px;
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 1000; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    text-align: left;
+    pointer-events: none;
+    font-weight: normal;
+}
+
+/* Seta do balão - APONTANDO PARA A DIREITA */
+.info-icon::before {
+    content: "";
+    position: absolute;
+    
+    /* Posicionamento da seta */
+    top: 50%;
+    right: 35px; /* Ajuste da distância */
+    left: auto; /* Revertido para auto */
+    bottom: auto;
+    transform: translateY(-50%);
+    
+    border-width: 5px;
+    border-style: solid;
+    /* Apontando para a direita (ícone) */
+    border-color: transparent transparent transparent #333; 
+    
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    z-index: 1000; 
+}
+
+/* Mostra o tooltip ao passar o mouse */
+.info-icon:hover::after,
+.info-icon:hover::before {
+    opacity: 1;
+    visibility: visible;
 }

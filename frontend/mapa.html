@@ -63,42 +63,79 @@
                 <div class="filter-group" style="margin-bottom: 10px;">
                     <label>Atributos p/ Gráfico:</label>
                     <div id="chart-attribute-container" class="attribute-toggle-group">
+                        
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-ndvi" name="chart-attribute" value="NDVI" checked>
                             <label for="attr-ndvi">NDVI</label>
+                            <span class="info-icon" data-tooltip="Índice de Vegetação da Diferença Normalizada. Indica saúde e densidade da vegetação.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-evi" name="chart-attribute" value="EVI" checked>
                             <label for="attr-evi">EVI</label>
+                            <span class="info-icon" data-tooltip="Índice de Vegetação Melhorado. Corrige efeitos da atmosfera e solo. Ideal para florestas densas como a Amazônia.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-nbr" name="chart-attribute" value="NBR">
                             <label for="attr-nbr">NBR</label>
+                            <span class="info-icon" data-tooltip="Índice de Queimada Normalizada. Usado para identificar áreas queimadas e severidade do fogo.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-blue" name="chart-attribute" value="BLUE">
                             <label for="attr-blue">Azul</label>
+                            <span class="info-icon" data-tooltip="Espectro visível (Azul). Útil para diferenciar corpos d'água e nuvens.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-green" name="chart-attribute" value="GREEN">
                             <label for="attr-green">Verde</label>
+                            <span class="info-icon" data-tooltip="Espectro visível (Verde). Reflete a clorofila das plantas.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-red" name="chart-attribute" value="RED">
                             <label for="attr-red">Vermelho</label>
+                            <span class="info-icon" data-tooltip="Espectro visível (Vermelho). Fortemente absorvido pela clorofila. Base para o cálculo do NDVI.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-nir" name="chart-attribute" value="NIR">
                             <label for="attr-nir">NIR</label>
+                            <span class="info-icon" data-tooltip="Infravermelho Próximo. Refletido pela estrutura celular das plantas. Diferencia vegetação de outros alvos.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-swir16" name="chart-attribute" value="SWIR16">
                             <label for="attr-swir16">SWIR1</label>
+                            <span class="info-icon" data-tooltip="Infravermelho de Ondas Curtas 1. Sensível à umidade nas plantas e no solo.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                         <div class="toggle-option">
                             <input type="checkbox" id="attr-swir22" name="chart-attribute" value="SWIR22">
                             <label for="attr-swir22">SWIR2</label>
+                            <span class="info-icon" data-tooltip="Infravermelho de Ondas Curtas 2. Detecta estresse hídrico severo e minerais.">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
                         </div>
+
                     </div>
                 </div>
 
@@ -142,7 +179,6 @@
 
             <div id="comparison-container" class="comparison-container" style="padding: 12px;"></div>
 
-            <!-- RODAPÉ DO MODAL: botão pequeno no canto inferior esquerdo -->
             <div class="modal-footer"
                 style="display: flex; justify-content: flex-start; gap: 8px; padding: 10px 12px 14px 12px;">
                 <button id="export-chart-btn" style="
