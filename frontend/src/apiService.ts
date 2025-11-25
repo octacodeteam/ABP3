@@ -1,6 +1,6 @@
-/**
- * Este arquivo centraliza todas as chamadas para o nosso backend.
- */
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+// ====================================================================
+
 
 // Define o tipo de dado que esperamos receber para cada item da lista STAC
 interface StacFeature {
@@ -23,7 +23,7 @@ interface StacFeature {
  */
 export const fetchStacData = async (lat: number, lon: number): Promise<StacFeature[]> => {
     try {
-        const apiUrl = `/api/stac/search?latitude=${lat}&longitude=${lon}`;
+        const apiUrl = `${API_BASE_URL}/stac/search?latitude=${lat}&longitude=${lon}`;
         console.log(`Frontend: Buscando dados STAC de ${apiUrl}`);
         const response = await fetch(apiUrl);
         if (!response.ok) {
@@ -59,7 +59,7 @@ export const fetchCoverageAttributes = async (collectionName: string): Promise<S
         return null;
     }
     try {
-        const apiUrl = `/api/wtss/attributes?coverage=${encodeURIComponent(collectionName)}`;
+        const apiUrl = `${API_BASE_URL}/wtss/attributes?coverage=${encodeURIComponent(collectionName)}`;
         console.log(`Frontend: Buscando atributos WTSS de ${apiUrl}`);
 
         const response = await fetch(apiUrl);
@@ -113,7 +113,7 @@ export const fetchTimeSeriesData = async (
     // Nós *queremos* que esta função falhe (lance um erro) se a API falhar,
     // para que o Promise.allSettled possa capturá-la.
     
-    let apiUrl = `/api/wtss/time_series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
+    let apiUrl = `${API_BASE_URL}/wtss/time_series?coverage=${encodeURIComponent(collection)}&attributes=${encodeURIComponent(attribute)}&latitude=${lat}&longitude=${lon}`;
     if (startDate) apiUrl += `&start_date=${startDate}`; 
     if (endDate) apiUrl += `&end_date=${endDate}`; 
 
