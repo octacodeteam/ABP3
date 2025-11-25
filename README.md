@@ -46,8 +46,8 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | Links | Período | Status |
 |:-----:|:----------:|:---------:|
 | [Sprint 1](https://github.com/octacodeteam/ABP3/tree/sprint-1) | 16/09/2025 - 07/10/2025 | Concluído ✅|
-| [Sprint 2](https://github.com/octacodeteam/ABP3/tree/sprint-2) | 13/10/2025 - 03/11/2025 | Em Andamento ⏳|
-| [Sprint 3](https://github.com/octacodeteam/ABP3/tree/sprint-3) | 06/11/2025 - 24/11/2025 | Não Iniciada ❌|
+| [Sprint 2](https://github.com/octacodeteam/ABP3/tree/sprint-2) | 13/10/2025 - 03/11/2025 | Concluído ✅|
+| [Sprint 3](https://github.com/octacodeteam/ABP3/tree/sprint-3) | 06/11/2025 - 24/11/2025 | Concluído ✅|
 
 </span>
 
@@ -142,7 +142,20 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 
 | Índice | Título    | Pontuação | Responsável | Condição       | Link |
 |--------|-----------|:---------:|-------------|----------------|------|
-| 055 a 060 - GA  |Planejamento Sprint 3  |     3     | Toda a equipe                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 055 a 059 - GA  |Planejamento Sprint 3  |     3     | Toda a equipe                         | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 60 - IHC  |Melhoria visual exportação dados  |     3     | Gustavo, Igor                    | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/2cf696cb1ed69c4a510457bee9b75e01adf91405) |
+| 61 - IHC  |Atualização na interface |     3     | Alisson                                   | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/c7e0d56ba831c02bf2bd879b0314c8839652ad27) |
+| 62 - GA  |Organizar trello  |     3     | Georgia                                           | ✅ Concluído                       | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) |
+| 63 - GA  |Finalizar o GITHUB da 3° sprint  |     3     | João Pedro                         | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 64 - DW  |Otimizaqção e melhoria visual  |     3     | Alisson                              | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/c318231d8905ea8a0fe010a6d0f7af412669a29a) |
+| 65 - GA  |Analisar quais tasks foram concluidas e marcar  |     3     | Georgia             | ✅ Concluído                       | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) |
+| 66 - DW  |Revisão do codigo para subir  |     3     | Gustavo                               | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 67 - GA  |Roteiro apresentação sprint 3°  |     3     | João Pedro                          | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 68 - IHC |Adição de legendas para os atributos  |     3     |João Pedro                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/e01c95dac2f9acb8f92ccd86910d206e313bb339) |
+| 69 - IHC  |Teste de usabilidade |     3     | Igor, Georgia, Alisson                        | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 70 - GA  |Subir o site |     3     | Gustavo                                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 71 - GA  |Gravar o video 3° sprint |     3     | João Pedro                                 | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+
 
 </p>
 </span>
