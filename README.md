@@ -169,6 +169,14 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
   <img src="https://github.com/octacodeteam/ABP3/blob/main/assets/Burndown_Sprint1.png">
 </p>
 
+<p align="center">
+  <img src="https://github.com/octacodeteam/ABP3/blob/main/assets/burndown_sprint2.jpg">
+</p>
+
+<p align="center">
+  <img src="https://github.com/octacodeteam/ABP3/blob/main/assets/burndown_sprint3.png">
+</p>
+
 </span>
   
 <br>
