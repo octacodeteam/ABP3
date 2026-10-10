@@ -154,7 +154,7 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 68 - IHC |Adição de legendas para os atributos  |     3     |João Pedro                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/e01c95dac2f9acb8f92ccd86910d206e313bb339) |
 | 69 - IHC  |Teste de usabilidade |     3     | Igor, Georgia, Alisson                        | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 | 70 - GA  |Subir o site |     3     | Gustavo                                                | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
-| 71 - GA  |Gravar o video 3° sprint |     3     | João Pedro                                 | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 71 - GA  |Gravar o vídeo 3° sprint |     3     | João Pedro                                 | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 
 
 </p>
