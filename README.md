@@ -136,7 +136,7 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 051 - GA |Diagrama de sequência|     3     | Georgia Mantchev                          | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/144510f695e9465a121a9511f6d2c3f8dcac152d) |
 | 052 - TP | Função de exportar dados para planilha|     3     | Alisson, Igor                                 | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/86dfe36f0c53bb087f644999713141d8ee2f1b48) |
 | 053 - GA | Testes e analise do site|     3     | João Pedro, Gustavo                                 | ✅ Concluído  | [🔗 Ver](https://github.com/) |
-| 054 - GA | Gravar o video sprint2                                                                    |     3     | João Pedro                                            | ✅ Concluído  | [🔗 Ver](https://youtu.be/iqorYPgTSvY) |
+| 054 - GA | Gravar o vídeo sprint2                                                                    |     3     | João Pedro                                            | ✅ Concluído  | [🔗 Ver](https://youtu.be/iqorYPgTSvY) |
 
 ### Tasks - Sprint 3
 
