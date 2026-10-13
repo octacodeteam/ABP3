@@ -107,7 +107,7 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 026 - DW  |Implementar a renderização do mapa base| 5 | Georgia | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/f35cb7d7ecef29101dd85b596ac7d15ed48f806e) |
 | 027 - DW  |Estilizar o mapa e os controles de zoom| 3 | Gustavo | ✅ Concluído                                      | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
 | 028 - DW  |Exibir a resolução espacial e temporal| 5 | Alisson | ✅ Concluído                                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
-| 029 - TP  |Implementação de graficos para comparação| 3 | Alisson | ✅ Concluído                                    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
+| 029 - TP  |Implementação de gráficos para comparação| 3 | Alisson | ✅ Concluído                                    | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
 | 030 - GA  |Criar a documentação inicial README| 3 | João Pedro | ✅ Concluído                                       | [🔗 Ver](https://github.com/) |
 | 031 - GA  |Preparar o ambiente de apresentação da Sprint Review| 2 | João Pedro | ✅ Concluído                      | [🔗 Ver](https://github.com/) |
 | 032 - DW  |Refinamento do CSS| 2 | Gustavo | ✅ Concluído                                                           | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/14710351d926288a9302263d6318ee8dbd96250e) |
@@ -135,7 +135,7 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 050 - GA | Diagrama de Classe |     3     | Georgia Mantchev                           | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/0388f549c8e6245aec2026c7971f5ba0adbcfa17) |
 | 051 - GA |Diagrama de sequência|     3     | Georgia Mantchev                          | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/144510f695e9465a121a9511f6d2c3f8dcac152d) |
 | 052 - TP | Função de exportar dados para planilha|     3     | Alisson, Igor                                 | ✅ Concluído  | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/86dfe36f0c53bb087f644999713141d8ee2f1b48) |
-| 053 - GA | Testes e analise do site|     3     | João Pedro, Gustavo                                 | ✅ Concluído  | [🔗 Ver](https://github.com/) |
+| 053 - GA | Testes e análise do site|     3     | João Pedro, Gustavo                                 | ✅ Concluído  | [🔗 Ver](https://github.com/) |
 | 054 - GA | Gravar o vídeo sprint2                                                                    |     3     | João Pedro                                            | ✅ Concluído  | [🔗 Ver](https://youtu.be/iqorYPgTSvY) |
 
 ### Tasks - Sprint 3
@@ -148,8 +148,8 @@ O foco principal é oferecer uma **ferramenta simples, intuitiva e acessível**,
 | 62 - GA  |Organizar trello  |     3     | Georgia                                           | ✅ Concluído                       | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) |
 | 63 - GA  |Finalizar o GITHUB da 3° sprint  |     3     | João Pedro                         | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 | 64 - DW  |Otimizaqção e melhoria visual  |     3     | Alisson                              | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/c318231d8905ea8a0fe010a6d0f7af412669a29a) |
-| 65 - GA  |Analisar quais tasks foram concluidas e marcar  |     3     | Georgia             | ✅ Concluído                       | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) |
-| 66 - DW  |Revisão do codigo para subir  |     3     | Gustavo                               | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
+| 65 - GA  |Analisar quais tasks foram concluídas e marcar  |     3     | Georgia             | ✅ Concluído                       | [🔗 Ver](https://trello.com/b/XUPTasD9/octacode-3sem) |
+| 66 - DW  |Revisão do código para subir  |     3     | Gustavo                               | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 | 67 - GA  |Roteiro apresentação sprint 3°  |     3     | João Pedro                          | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
 | 68 - IHC |Adição de legendas para os atributos  |     3     |João Pedro                     | ✅ Concluído                       | [🔗 Ver](https://github.com/octacodeteam/ABP3/commit/e01c95dac2f9acb8f92ccd86910d206e313bb339) |
 | 69 - IHC  |Teste de usabilidade |     3     | Igor, Georgia, Alisson                        | ✅ Concluído                       | [🔗 Ver](https://github.com/) |
